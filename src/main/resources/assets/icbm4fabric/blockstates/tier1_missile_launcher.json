@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "icbm4fabric:block/tier1_missile_launcher.json" }
+    }
+}
