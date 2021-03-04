@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "icbm4fabric",
+  "version": "${version}",
+
+  "name": "Icbm4fabric",
+  "description": "",
+  "authors": [
+    "SebaSphere"
+  ],
+  "contact": {},
+
+  "license": "MIT",
+  "icon": "assets/icbm4fabric/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "dev.sebastianb.icbm4fabric.client.Icbm4fabricClient"
+    ],
+    "main": [
+      "dev.sebastianb.icbm4fabric.ICBM4Fabric"
+    ]
+  },
+
+          "mixins": [
+        "icbm4fabric.mixins.json"
+      ],
+    
+  "depends": {
+    "fabricloader": ">=0.11.2",
+              "fabric": "*",
+          "minecraft": "1.16.5"
+  },
+    "suggests": {
+      "modmenu": "*"
+    }
+}
