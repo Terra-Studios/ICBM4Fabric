@@ -1,1 +1,0 @@
-package dev.sebastianb.icbm4fabric.client.entity.render;

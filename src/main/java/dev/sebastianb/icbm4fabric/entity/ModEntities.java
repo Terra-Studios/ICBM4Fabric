@@ -25,7 +25,7 @@ public class ModEntities {
     public static final BlockEntityType<GenericRocketLauncherEntity> TIER2_ROCKET_LAUNCHER =
             Registry.register(Registry.BLOCK_ENTITY_TYPE,
                     new Identifier(Constants.MOD_ID, Constants.Blocks.TIER2_MISSILE_LAUNCHER),
-                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER1_ROCKET_LAUNCHER).build(null));
+                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER2_ROCKET_LAUNCHER).build(null));
 
     public static final BlockEntityType<GenericRocketLauncherEntity> TIER3_ROCKET_LAUNCHER =
             Registry.register(Registry.BLOCK_ENTITY_TYPE,
