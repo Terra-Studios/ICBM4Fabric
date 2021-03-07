@@ -6,6 +6,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.blast.DesertBlast;
 import dev.sebastianb.icbm4fabric.blast.TNTBlast;
+import dev.sebastianb.icbm4fabric.blast.TaterBlast;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
@@ -40,7 +41,7 @@ public class ModCommands {
             player = commandContext.getSource().getPlayer();
             HitResult looked = player.raycast(40, 0, false);
             BlockPos lookPos = new BlockPos(looked.getPos());
-            new DesertBlast(player.getEntityWorld(), lookPos);
+            new TaterBlast(player.getEntityWorld(), lookPos);
 
         } catch (CommandSyntaxException e) {
             ICBM4Fabric.LOGGER.log(Level.WARNING, e.getMessage());
