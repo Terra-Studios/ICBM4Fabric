@@ -41,7 +41,7 @@ public class ModCommands {
             player = commandContext.getSource().getPlayer();
             HitResult looked = player.raycast(40, 0, false);
             BlockPos lookPos = new BlockPos(looked.getPos());
-            new TaterBlast(player.getEntityWorld(), lookPos);
+            new DesertBlast(player.getEntityWorld(), lookPos);
 
         } catch (CommandSyntaxException e) {
             ICBM4Fabric.LOGGER.log(Level.WARNING, e.getMessage());
