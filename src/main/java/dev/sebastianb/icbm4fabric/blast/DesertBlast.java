@@ -57,13 +57,13 @@ public class DesertBlast extends Blast {
     private void placeCactus(World world, BlockPos topBlockPositions) {
         BlockPos topLayer = topBlockPositions.up();
 
-        if (!(world.getBlockState(topLayer.north()).getBlock() instanceof AirBlock))
+        if (!(world.getBlockState(topLayer.north()).isAir()))
             return;
-        if (!(world.getBlockState(topLayer.east()).getBlock() instanceof AirBlock))
+        if (!(world.getBlockState(topLayer.east()).isAir()))
             return;
-        if (!(world.getBlockState(topLayer.south()).getBlock() instanceof AirBlock))
+        if (!(world.getBlockState(topLayer.south()).isAir()))
             return;
-        if (!(world.getBlockState(topLayer.west()).getBlock() instanceof AirBlock))
+        if (!(world.getBlockState(topLayer.west()).isAir()))
             return;
 
 
