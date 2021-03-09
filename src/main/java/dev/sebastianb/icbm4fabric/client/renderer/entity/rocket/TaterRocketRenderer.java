@@ -10,7 +10,7 @@ import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 
-public class TaterRocketRenderer extends LivingEntityRenderer<TaterRocketEntity, TaterRocketModel> {
+public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, TaterRocketModel> {
 
 
     public TaterRocketRenderer(EntityRenderDispatcher dispatcher) {

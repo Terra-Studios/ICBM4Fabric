@@ -12,10 +12,10 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.Arm;
 import net.minecraft.world.World;
 
-public class TaterRocketEntity extends LivingEntity {
+public class TaterRocketEntity extends MobEntity {
 
 
-    public TaterRocketEntity(EntityType<? extends LivingEntity> entityType, World world) {
+    public TaterRocketEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 
