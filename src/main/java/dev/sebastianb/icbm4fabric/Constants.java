@@ -13,8 +13,6 @@ public class Constants {
         TIER3
     }
 
-
-
     public static class Blocks {
         public static final String ITEM_GROUP_BLOCKS = "blocks";
         public static final String TIER_1_MISSILE_LAUNCHER = "tier1_missile_launcher";
@@ -22,6 +20,10 @@ public class Constants {
         public static final String TIER3_MISSILE_LAUNCHER = "tier3_missile_launcher";
 
 
+    }
+
+    public static class Entity {
+        public static final String TATER_MISSILE = "tater_missile";
     }
 
 }

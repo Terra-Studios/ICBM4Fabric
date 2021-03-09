@@ -1,7 +1,7 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
 import dev.sebastianb.icbm4fabric.Constants;
-import dev.sebastianb.icbm4fabric.entity.ModEntities;
+import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.entity.BlockEntity;
@@ -23,13 +23,13 @@ public class GenericRocketLauncher extends Block implements BlockEntityProvider 
         switch (launcherType) {
             case TIER1:
                 System.out.println("t1");
-                return new GenericRocketLauncherEntity(ModEntities.TIER1_ROCKET_LAUNCHER);
+                return new GenericRocketLauncherEntity(ModBlockEntities.TIER1_ROCKET_LAUNCHER);
             case TIER2:
                 System.out.println("t2");
-                return new GenericRocketLauncherEntity(ModEntities.TIER2_ROCKET_LAUNCHER);
+                return new GenericRocketLauncherEntity(ModBlockEntities.TIER2_ROCKET_LAUNCHER);
             case TIER3:
                 System.out.println("t3");
-                return new GenericRocketLauncherEntity(ModEntities.TIER3_ROCKET_LAUNCHER);
+                return new GenericRocketLauncherEntity(ModBlockEntities.TIER3_ROCKET_LAUNCHER);
             default:
                 return null; // TODO: fix with a failsafe later lol
         }
