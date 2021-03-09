@@ -14,28 +14,8 @@ import net.minecraft.world.World;
 
 public class TaterRocketEntity extends MobEntity {
 
-
     public TaterRocketEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    @Override
-    public Iterable<ItemStack> getArmorItems() {
-        return null;
-    }
-
-    @Override
-    public ItemStack getEquippedStack(EquipmentSlot slot) {
-        return null;
-    }
-
-    @Override
-    public void equipStack(EquipmentSlot slot, ItemStack stack) {
-
-    }
-
-    @Override
-    public Arm getMainArm() {
-        return null;
-    }
 }
