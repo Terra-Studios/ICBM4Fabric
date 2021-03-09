@@ -29,9 +29,5 @@ public class TaterRocketEntity extends MobEntity {
             // this.updatePosition(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ());
             this.setVelocity(0, 0.1, 0);
         }
-
     }
-
-
-
 }
