@@ -17,7 +17,7 @@ public class ModEntityTypes {
                 Registry.ENTITY_TYPE,
                 new Identifier(Constants.MOD_ID, Constants.Entity.TATER_MISSILE),
                 FabricEntityTypeBuilder.create(SpawnGroup.MISC, TaterRocketEntity::new)
-                        .dimensions(EntityDimensions.fixed(0.75f, 0.75f)).build()
+                        .dimensions(EntityDimensions.fixed(0.75f, 2.5f)).build()
 
     );
 

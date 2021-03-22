@@ -3,6 +3,7 @@ package dev.sebastianb.icbm4fabric;
 import dev.sebastianb.icbm4fabric.block.ModBlocks;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
+import dev.sebastianb.icbm4fabric.network.ModPackets;
 import dev.sebastianb.icbm4fabric.server.command.ModCommands;
 import net.fabricmc.api.ModInitializer;
 
@@ -19,6 +20,7 @@ public class ICBM4Fabric implements ModInitializer {
         ModBlockEntities.register();
         ModEntityTypes.register();
         ModBlocks.register();
+        ModPackets.register();
 
     }
 }

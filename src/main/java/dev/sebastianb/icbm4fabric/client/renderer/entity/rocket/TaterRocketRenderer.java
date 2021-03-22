@@ -14,7 +14,7 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
 
 
     public TaterRocketRenderer(EntityRenderDispatcher dispatcher) {
-        super(dispatcher, new TaterRocketModel(), 0.5f);
+        super(dispatcher, new TaterRocketModel(), 0.0f);
     }
 
     @Override

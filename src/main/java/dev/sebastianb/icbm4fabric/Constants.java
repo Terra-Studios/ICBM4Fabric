@@ -1,5 +1,7 @@
 package dev.sebastianb.icbm4fabric;
 
+import net.minecraft.util.Identifier;
+
 public class Constants {
     public static String MOD_ID = "icbm4fabric";
 
@@ -24,6 +26,11 @@ public class Constants {
 
     public static class Entity {
         public static final String TATER_MISSILE = "tater_missile";
+    }
+
+    public static class Packets {
+        public static final Identifier SUMMON_MISSILE = new Identifier(Constants.MOD_ID, "summon_missile");
+
     }
 
 }
