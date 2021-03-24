@@ -6,6 +6,7 @@ import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
 import dev.sebastianb.icbm4fabric.blast.DesertBlast;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
 import io.netty.buffer.Unpooled;
+import net.minecraft.client.render.entity.ArrowEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -115,6 +116,7 @@ public class TaterRocketEntity extends MobEntity implements MissileEntity {
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, 0); // get rid of when on launched
                 summonParticles(ParticleTypes.FLAME, 10, 0.5, -0.3);
                 this.setVelocity(0,0,0);
+                setRotation();
                 if (timeSinceStage >= 200) {
                     setStage(LaunchStage.LAUNCHED);
                 }
@@ -122,10 +124,16 @@ public class TaterRocketEntity extends MobEntity implements MissileEntity {
             case LAUNCHED:
                 summonParticles(ParticleTypes.FIREWORK, 15, 0.1, -0.04);
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, -0.2);
-                this.setVelocity(0,0.4,0);
+                //this.setVelocity(0.2,0.4,0);
+                this.setVelocity(0,0,0);
 
+                setRotation();
+                if (timeSinceStage >= Integer.MAX_VALUE) {
+                    setStage(LaunchStage.EXPLODED);
+                }
                 break;
             case EXPLODED:
+                setRotation();
                 break;
             default:
         }
@@ -149,6 +157,14 @@ public class TaterRocketEntity extends MobEntity implements MissileEntity {
         }
     }
 
+    private void setRotation() {
+
+//        if (this.getVelocity().getX() == 0 && this.getVelocity().getY() == 0 && this.getVelocity().getZ() == 0) // could be better
+//            return;
+        System.out.println(this.getVelocity());
+        this.setRotation(this.prevYaw + 1F, 45F);
+
+    }
 
     @Override
     public LaunchStage getStage() {
