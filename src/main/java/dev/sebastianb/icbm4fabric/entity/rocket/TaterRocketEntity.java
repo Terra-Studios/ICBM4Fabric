@@ -19,6 +19,7 @@ import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
@@ -30,6 +31,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.registry.Registry;
@@ -110,6 +112,7 @@ public class TaterRocketEntity extends MobEntity implements MissileEntity {
         switch (getStage()) {
             case IDLE:
                 this.setVelocity(0,0,0);
+                setStage(LaunchStage.LIGHTED);
                 break;
             case LIGHTED:
                 summonParticles(ParticleTypes.FIREWORK, 15, 0.1, -0.04);
@@ -124,11 +127,11 @@ public class TaterRocketEntity extends MobEntity implements MissileEntity {
             case LAUNCHED:
                 summonParticles(ParticleTypes.FIREWORK, 15, 0.1, -0.04);
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, -0.2);
-                //this.setVelocity(0.2,0.4,0);
-                this.setVelocity(0,0,0);
+                this.setVelocity(0.3,0.2,0);
+                //this.setVelocity(0,0,0);
 
                 setRotation();
-                if (timeSinceStage >= Integer.MAX_VALUE) {
+                if (timeSinceStage >= 250) {
                     setStage(LaunchStage.EXPLODED);
                 }
                 break;
@@ -159,10 +162,25 @@ public class TaterRocketEntity extends MobEntity implements MissileEntity {
 
     private void setRotation() {
 
-//        if (this.getVelocity().getX() == 0 && this.getVelocity().getY() == 0 && this.getVelocity().getZ() == 0) // could be better
-//            return;
-        System.out.println(this.getVelocity());
-        this.setRotation(this.prevYaw + 1F, 45F);
+        if (this.getVelocity().getX() == 0 && this.getVelocity().getY() == 0 && this.getVelocity().getZ() == 0) // could be better
+            return;
+
+
+        double vX = this.getVelocity().getX();
+        double vY = this.getVelocity().getY();
+        double vZ = this.getVelocity().getZ();
+
+
+        // below is in radians
+        double yaw = Math.atan2(vX, vZ);
+        double pitch = Math.atan2(Math.sqrt(Math.pow(vX, 2) + Math.pow(vZ, 2)), vY);
+
+        // radians to degrees
+        float realYaw = (float) Math.toDegrees(yaw);
+        float realPitch = (float) Math.toDegrees(pitch);
+
+
+        this.setRotation(realYaw, realPitch);
 
     }
 
