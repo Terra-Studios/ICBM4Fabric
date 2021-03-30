@@ -25,32 +25,16 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
         return new Identifier(Constants.MOD_ID, "textures/entity/missile/tater_missile.png");
     }
 
-//    @Override
-//    protected void setupTransforms(TaterRocketEntity entity, MatrixStack matrices, float animationProgress, float bodyYaw, float tickDelta) {
-//        super.setupTransforms(entity, matrices, animationProgress, bodyYaw, tickDelta);
-//
-//        matrices.push();
-//
-//        float normalYaw = (float) Math.toRadians(entity.yaw);
-//        float normalPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch));
-//
-//        matrices.multiply(Vector3f.POSITIVE_Z.getRadialQuaternion(90));
-//        matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion(90));
-//
-//        matrices.pop();
-//
-//    }
-
 
     // pain
     @Override
     public void render(TaterRocketEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int light) {
 
-        float normalYaw = (float) Math.toRadians(entity.yaw);
-        float normalPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch));
+        float radianYaw = (float) Math.toRadians(entity.yaw);
+        float radianPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch));
 
-        matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion(normalYaw));
-        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion(normalPitch));
+        matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion(radianYaw));
+        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion(radianPitch));
 
         super.render(entity, tickDelta, yaw, matrices, vertexConsumerProvider, light);
 
