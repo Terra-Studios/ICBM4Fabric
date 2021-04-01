@@ -32,4 +32,5 @@ public class Constants {
         public static final Identifier SUMMON_MISSILE = new Identifier(Constants.MOD_ID, "summon_missile");
 
     }
+
 }
