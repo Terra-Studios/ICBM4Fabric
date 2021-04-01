@@ -12,13 +12,19 @@ import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GravityField;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public abstract class AbstractEntityProjectile extends MobEntity {
 
-    private float gravity = 0.007F;
+    private float gravity = 0.035F;
+    // private float gravity = 0.3f;
+
+    public double timeSinceStage = 0;
+
+
 
     public BlockPos initialLocation;
     public Vector3d finalLocation = new Vector3d(0,69,0);
@@ -43,14 +49,24 @@ public abstract class AbstractEntityProjectile extends MobEntity {
 
     }
 
+
+
     private void updateMotion() {
 
-        vY -= gravity;
 
-        this.setVelocity(0.2, vY, 0.2);
+        this.setVelocity(Math.cos(this.timeSinceStage / 10) * 1,Math.sin(this.timeSinceStage / 10) * 1, 0);
 
-        this.velocityDirty = false;
-        this.velocityModified = true;
+//        vY -= gravity;
+//
+//        Vec3d vec = new Vec3d(0.2, vY, 0.2);
+//
+//        this.setVelocity(vec);
+//
+//        System.out.println(getVelocity());
+//        System.out.println(vec.multiply(1).distanceTo(new Vec3d(0,0,0)));
+//
+//        this.velocityDirty = false;
+//        this.velocityModified = false;
 
     }
 

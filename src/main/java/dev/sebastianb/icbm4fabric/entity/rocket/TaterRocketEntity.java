@@ -122,7 +122,6 @@ public class TaterRocketEntity extends AbstractEntityProjectile implements Missi
     }
 
 
-    int timeSinceStage = 0;
     @Override
     public void tick() {
         this.noClip = true;
@@ -141,7 +140,7 @@ public class TaterRocketEntity extends AbstractEntityProjectile implements Missi
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, 0); // get rid of when on launched
                 this.setVelocity(0,0,0);
                 if (timeSinceStage >= 200) {
-                    this.setVelocity(0,1,0);
+                    // this.setVelocity(0,8,0);
                     setStage(LaunchStage.LAUNCHED);
                 }
                 break;
