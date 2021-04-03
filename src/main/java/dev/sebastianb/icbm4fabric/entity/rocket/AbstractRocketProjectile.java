@@ -17,10 +17,8 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public abstract class AbstractEntityProjectile extends MobEntity {
+public abstract class AbstractRocketProjectile extends MobEntity {
 
-    private float gravity = 0.035F;
-    // private float gravity = 0.3f;
 
     public double timeSinceStage = 0;
 
@@ -33,7 +31,7 @@ public abstract class AbstractEntityProjectile extends MobEntity {
     public double vY;
     public double vZ;
 
-    protected AbstractEntityProjectile(EntityType<? extends MobEntity> entityType, World world) {
+    protected AbstractRocketProjectile(EntityType<? extends MobEntity> entityType, World world) {
 
         super(entityType, world);
     }
@@ -53,20 +51,18 @@ public abstract class AbstractEntityProjectile extends MobEntity {
 
     private void updateMotion() {
 
+        double speed = 2.4;
+        double diameter = 20;
 
-        this.setVelocity(Math.cos(this.timeSinceStage / 10) * 1,Math.sin(this.timeSinceStage / 10) * 1, 0);
 
-//        vY -= gravity;
-//
-//        Vec3d vec = new Vec3d(0.2, vY, 0.2);
-//
-//        this.setVelocity(vec);
-//
-//        System.out.println(getVelocity());
-//        System.out.println(vec.multiply(1).distanceTo(new Vec3d(0,0,0)));
-//
-//        this.velocityDirty = false;
-//        this.velocityModified = false;
+        this.setVelocity(
+                Math.sin(this.timeSinceStage / (diameter / speed)) * speed,
+                Math.cos(this.timeSinceStage / (diameter / speed)) * speed,
+                Math.sin(this.timeSinceStage / ((diameter / 2) / (speed / 2))) * (speed / 2));
+                // trying to understand how I can put Z in this but seems to work
+                // divided by 2 across everything seems to work. Maybe if I can get the X then do math with what I need to divide, it'd work.
+                // best approach I think is to get a velocity vector req to launch from superclass
+
 
     }
 

@@ -1,53 +1,28 @@
 package dev.sebastianb.icbm4fabric.entity.rocket;
 
-import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
-import dev.sebastianb.icbm4fabric.blast.Blast;
-import dev.sebastianb.icbm4fabric.blast.DesertBlast;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
-import io.netty.buffer.Unpooled;
-import net.minecraft.client.render.entity.ArrowEntityRenderer;
-import net.minecraft.client.util.math.Vector3d;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.BlazeEntity;
-import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
 
-public class TaterRocketEntity extends AbstractEntityProjectile implements MissileEntity {
+public class TaterRocketRocket extends AbstractRocketProjectile implements MissileEntity {
 
-    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(TaterRocketEntity.class, new TrackedDataHandler<LaunchStage>() {
+    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(TaterRocketRocket.class, new TrackedDataHandler<LaunchStage>() {
         @Override
         public void write(PacketByteBuf buf, LaunchStage stage) {
             buf.writeEnumConstant(stage);
@@ -91,13 +66,14 @@ public class TaterRocketEntity extends AbstractEntityProjectile implements Missi
     }
 
 
-    public TaterRocketEntity(EntityType<? extends MobEntity> entityType, World world) {
+    public TaterRocketRocket(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 
 
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
+        player.startRiding(this);
         if (player.isSneaking()) {
             setStage(LaunchStage.LIGHTED);
         }
@@ -105,10 +81,11 @@ public class TaterRocketEntity extends AbstractEntityProjectile implements Missi
     }
 
 
-    public void launch(BlockPos initialLocation) {
+    public void launch(BlockPos initialLocation, BlockPos finalLocation, double speed) {
         this.updatePosition(initialLocation.getX(), initialLocation.getY(), initialLocation.getZ());
         super.initialLocation = initialLocation;
     }
+
 
 
     @Override
@@ -163,6 +140,7 @@ public class TaterRocketEntity extends AbstractEntityProjectile implements Missi
         //Vec3d currentPos = this.getPos();
         timeSinceStage++;
     }
+
 
 
     private void summonParticles(ParticleEffect particleEffect, int times, double multiplier, double yVelocity) {
