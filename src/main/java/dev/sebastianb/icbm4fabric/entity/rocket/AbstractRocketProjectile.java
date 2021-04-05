@@ -54,15 +54,18 @@ public abstract class AbstractRocketProjectile extends MobEntity {
         double speed = 2.4;
         double diameter = 20;
 
+        double distanceX = 20;
+        double distanceY = 1;
+
 
         this.setVelocity(
                 Math.sin(this.timeSinceStage / (diameter / speed)) * speed,
                 Math.cos(this.timeSinceStage / (diameter / speed)) * speed,
+                //0);
                 Math.sin(this.timeSinceStage / ((diameter / 2) / (speed / 2))) * (speed / 2));
-                // trying to understand how I can put Z in this but seems to work
+                // trying to understand how I can put Z in this but seems to work somewhat. I just dunno how to control
                 // divided by 2 across everything seems to work. Maybe if I can get the X then do math with what I need to divide, it'd work.
-                // best approach I think is to get a velocity vector req to launch from superclass
-
+                // best approach I think is to get a velocity vector req to launch from superclass for later. Right now I just have these temp variables
 
     }
 
