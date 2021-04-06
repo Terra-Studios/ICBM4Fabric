@@ -81,6 +81,7 @@ public class TaterRocketRocket extends AbstractRocketProjectile implements Missi
     }
 
 
+
     public void launch(BlockPos initialLocation, BlockPos finalLocation, double speed) {
         this.updatePosition(initialLocation.getX(), initialLocation.getY(), initialLocation.getZ());
         super.initialLocation = initialLocation;
@@ -116,8 +117,10 @@ public class TaterRocketRocket extends AbstractRocketProjectile implements Missi
             case LIGHTED:
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, 0); // get rid of when on launched
                 this.setVelocity(0,0,0);
-                if (timeSinceStage >= 200) {
+                if (timeSinceStage >= 50) { // 200
                     // this.setVelocity(0,8,0);
+                    setInitialLocation(this.getBlockPos());
+                    System.out.println(this.initialLocation);
                     setStage(LaunchStage.LAUNCHED);
                 }
                 break;
@@ -155,6 +158,10 @@ public class TaterRocketRocket extends AbstractRocketProjectile implements Missi
         } else {
             return (-random.nextDouble() + 0.5) * multiplier;
         }
+    }
+
+    private void setInitialLocation(BlockPos summonedLocation) {
+        this.initialLocation = summonedLocation;
     }
 
 
