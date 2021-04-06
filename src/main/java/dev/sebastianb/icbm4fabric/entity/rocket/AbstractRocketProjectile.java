@@ -58,7 +58,8 @@ public abstract class AbstractRocketProjectile extends MobEntity {
         double dY = finalLocation.getY() - initialLocation.getY();
         double dZ = finalLocation.getZ() - initialLocation.getZ();
 
-        double dYaw = Math.atan(dX/dZ);
+
+        double dYaw = Math.atan2(dX, dZ);
 
         double groundDistTravelled = Math.sqrt(Math.pow(dX, 2) + Math.pow(dZ, 2)); // gets distance traveled horizontally
 
@@ -73,9 +74,9 @@ public abstract class AbstractRocketProjectile extends MobEntity {
 
 
         this.setVelocity(
-                Math.sin(dYaw)*hvel,
-                xfactor* ( (2*acc*this.timeSinceStage+b)/Math.sqrt(1+(2*acc*this.timeSinceStage+b)*(2*acc*this.timeSinceStage+b))),
-                Math.cos(dYaw)*hvel
+                (Math.sin(dYaw)*hvel),
+                xfactor* ((2*acc*this.timeSinceStage+b)/Math.sqrt(1+(2*acc*this.timeSinceStage+b)*(2*acc*this.timeSinceStage+b))),
+                (Math.cos(dYaw)*hvel)
         );
 
 //        this.setVelocity(

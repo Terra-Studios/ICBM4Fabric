@@ -121,6 +121,7 @@ public class TaterRocketRocket extends AbstractRocketProjectile implements Missi
                     // this.setVelocity(0,8,0);
                     setInitialLocation(this.getBlockPos());
                     System.out.println(this.initialLocation);
+                    this.setNoGravity(true);
                     setStage(LaunchStage.LAUNCHED);
                 }
                 break;
