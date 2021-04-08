@@ -20,9 +20,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TaterRocketRocket extends AbstractRocketProjectile implements MissileEntity {
+public class TaterRocketEntity extends AbstractRocketProjectile implements MissileEntity {
 
-    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(TaterRocketRocket.class, new TrackedDataHandler<LaunchStage>() {
+    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(TaterRocketEntity.class, new TrackedDataHandler<LaunchStage>() {
         @Override
         public void write(PacketByteBuf buf, LaunchStage stage) {
             buf.writeEnumConstant(stage);
@@ -66,7 +66,7 @@ public class TaterRocketRocket extends AbstractRocketProjectile implements Missi
     }
 
 
-    public TaterRocketRocket(EntityType<? extends MobEntity> entityType, World world) {
+    public TaterRocketEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 

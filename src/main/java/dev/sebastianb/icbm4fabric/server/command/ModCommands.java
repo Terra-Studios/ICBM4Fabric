@@ -4,7 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
-import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketRocket;
+import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
@@ -40,7 +40,7 @@ public class ModCommands {
             World world = player.getEntityWorld();
             //new DesertBlast(player.getEntityWorld(), lookPos);
 
-            TaterRocketRocket rocketEntity = new TaterRocketRocket(ModEntityTypes.TATER_ROCKET, world);
+            TaterRocketEntity rocketEntity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, world);
 
             world.spawnEntity(rocketEntity);
 

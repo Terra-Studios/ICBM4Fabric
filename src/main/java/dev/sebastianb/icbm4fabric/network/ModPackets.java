@@ -2,7 +2,7 @@ package dev.sebastianb.icbm4fabric.network;
 
 import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
-import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketRocket;
+import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -14,7 +14,7 @@ public class ModPackets {
             BlockPos missileBase = buf.readBlockPos();
             ServerWorld serverWorld = player.getServerWorld();
             server.execute((() -> {
-                TaterRocketRocket taterRocketEntity = new TaterRocketRocket(ModEntityTypes.TATER_ROCKET, serverWorld);
+                TaterRocketEntity taterRocketEntity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, serverWorld);
                 taterRocketEntity.updatePosition(missileBase.getX() + 0.5, missileBase.getY() + 0.2, missileBase.getZ() + 0.5);
                 serverWorld.spawnEntity(taterRocketEntity);
             }));
