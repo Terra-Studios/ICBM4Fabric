@@ -75,7 +75,7 @@ public class TaterRocketRocket extends AbstractRocketProjectile implements Missi
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         player.startRiding(this);
         if (player.isSneaking()) {
-            setStage(LaunchStage.LIGHTED);
+            setStage(LaunchStage.LIT);
         }
         return ActionResult.PASS;
     }
@@ -114,7 +114,7 @@ public class TaterRocketRocket extends AbstractRocketProjectile implements Missi
             case IDLE:
                 this.setVelocity(0,0,0);
                 break;
-            case LIGHTED:
+            case LIT:
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, 0); // get rid of when on launched
                 this.setVelocity(0,0,0);
                 if (timeSinceStage >= 50) { // 200
