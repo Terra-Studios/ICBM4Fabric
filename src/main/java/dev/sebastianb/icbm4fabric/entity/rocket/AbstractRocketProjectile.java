@@ -31,7 +31,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
 
     public double timeSinceStage = 0;
 
-    public BlockPos initialLocation = new BlockPos(0,68,300);
+    public BlockPos initialLocation = new BlockPos(0,0,0);
     public BlockPos finalLocation = new BlockPos(0,69,0);
 
     public double vX;
