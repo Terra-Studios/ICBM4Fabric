@@ -101,7 +101,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         int x = tag.getInt("iX");
         int y = tag.getInt("iY");
         int z = tag.getInt("iZ");
-        this.setInitialLocation(new BlockPos(x,y,z));
+        this.setInitialBlockPos(new BlockPos(x,y,z));
     }
 
     @Override
