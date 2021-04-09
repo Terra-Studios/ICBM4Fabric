@@ -115,18 +115,18 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         tag.putInt("iZ", initialLocation.getZ());
     }
 
-    static {
-        TrackedDataHandlerRegistry.register(STAGE.getType());
-        TrackedDataHandlerRegistry.register(TIME.getType());
-        TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType());
-    }
-
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
         dataTracker.startTracking(STAGE, LaunchStage.IDLE);
         dataTracker.startTracking(TIME, 0.0);
-        dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); //TODO: Get block pos saved
+        dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
+    }
+
+    static {
+        TrackedDataHandlerRegistry.register(STAGE.getType());
+        TrackedDataHandlerRegistry.register(TIME.getType());
+        TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above
     }
 
     protected AbstractRocketProjectile(EntityType<? extends MobEntity> entityType, World world) {
