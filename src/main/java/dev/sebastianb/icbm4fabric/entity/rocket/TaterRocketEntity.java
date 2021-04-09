@@ -20,50 +20,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TaterRocketEntity extends AbstractRocketProjectile implements MissileEntity {
+public class TaterRocketEntity extends AbstractRocketProjectile {
 
-    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(TaterRocketEntity.class, new TrackedDataHandler<LaunchStage>() {
-        @Override
-        public void write(PacketByteBuf buf, LaunchStage stage) {
-            buf.writeEnumConstant(stage);
-        }
-
-        @Override
-        public LaunchStage read(PacketByteBuf buf) {
-            return buf.readEnumConstant(LaunchStage.class);
-        }
-
-        @Override
-        public LaunchStage copy(LaunchStage stage) {
-            return stage;
-        }
-    });
-
-    @Override
-    public void readCustomDataFromTag(CompoundTag tag) {
-        if (tag.contains("Stage")) {
-            this.setStage(LaunchStage.valueOf(tag.getString("Stage")));
-        }
-
-    }
-
-    @Override
-    public void writeCustomDataToTag(CompoundTag tag) {
-        tag.putString("Stage", getStage().name());
-    }
-
-
-    @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        dataTracker.startTracking(STAGE, LaunchStage.IDLE);
-    }
-
-
-
-    static {
-        TrackedDataHandlerRegistry.register(STAGE.getType());
-    }
 
 
     public TaterRocketEntity(EntityType<? extends MobEntity> entityType, World world) {
@@ -79,7 +37,6 @@ public class TaterRocketEntity extends AbstractRocketProjectile implements Missi
         }
         return ActionResult.PASS;
     }
-
 
 
     public void launch(BlockPos initialLocation, BlockPos finalLocation, double speed) {
@@ -119,7 +76,7 @@ public class TaterRocketEntity extends AbstractRocketProjectile implements Missi
                 this.setVelocity(0,0,0);
                 if (timeSinceStage >= 50) { // 200
                     // this.setVelocity(0,8,0);
-                    setInitialLocation(this.getBlockPos());
+                    setInitialPosition(this.getBlockPos());
                     System.out.println(this.initialLocation);
                     this.setNoGravity(true);
                     setStage(LaunchStage.LAUNCHED);
@@ -135,6 +92,7 @@ public class TaterRocketEntity extends AbstractRocketProjectile implements Missi
                 break;
             case EXPLODED:
                 System.out.println("EXPLOSION!");
+                System.out.println(this.getBlockPos());
                 new TaterBlast(world, getBlockPos());
                 this.remove();
                 break;
@@ -158,24 +116,6 @@ public class TaterRocketEntity extends AbstractRocketProjectile implements Missi
             return (random.nextDouble() - 0.5) * multiplier;
         } else {
             return (-random.nextDouble() + 0.5) * multiplier;
-        }
-    }
-
-    private void setInitialLocation(BlockPos summonedLocation) {
-        this.initialLocation = summonedLocation;
-    }
-
-
-    @Override
-    public LaunchStage getStage() {
-        return this.dataTracker.get(STAGE);
-    }
-
-    @Override
-    public void setStage(LaunchStage stage) {
-        if (dataTracker.get(STAGE) != stage) {
-            this.dataTracker.set(STAGE, stage);
-            timeSinceStage = 0;
         }
     }
 }

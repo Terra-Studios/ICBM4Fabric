@@ -4,6 +4,7 @@
   "package": "dev.sebastianb.icbm4fabric.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ServerWorldMixin"
   ],
   "client": [
   ],
