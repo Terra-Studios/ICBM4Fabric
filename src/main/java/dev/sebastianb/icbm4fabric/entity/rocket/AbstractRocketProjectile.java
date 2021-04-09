@@ -2,15 +2,24 @@ package dev.sebastianb.icbm4fabric.entity.rocket;
 
 
 import dev.sebastianb.icbm4fabric.SebaUtils;
+import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
+import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.ElytraEntityModel;
 import net.minecraft.client.util.math.Vector3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandler;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GravityField;
 import net.minecraft.util.math.Vec3d;
@@ -18,26 +27,112 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public abstract class AbstractRocketProjectile extends MobEntity {
-
+public abstract class AbstractRocketProjectile extends MobEntity implements MissileEntity {
 
     public double timeSinceStage = 0;
 
-
-
-    public BlockPos initialLocation;
+    public BlockPos initialLocation = new BlockPos(0,68,300);
     public BlockPos finalLocation = new BlockPos(0,69,0);
 
     public double vX;
     public double vY;
     public double vZ;
 
+    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<LaunchStage>() {
+        @Override
+        public void write(PacketByteBuf buf, LaunchStage stage) {
+            buf.writeEnumConstant(stage);
+        }
+
+        @Override
+        public LaunchStage read(PacketByteBuf buf) {
+            return buf.readEnumConstant(LaunchStage.class);
+        }
+
+        @Override
+        public LaunchStage copy(LaunchStage stage) {
+            return stage;
+        }
+    });
+
+    private static final TrackedData<Double> TIME = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<Double>() {
+        @Override
+        public void write(PacketByteBuf buf, Double time) {
+            buf.writeDouble(time);
+        }
+
+        @Override
+        public Double read(PacketByteBuf buf) {
+            return buf.readDouble();
+        }
+
+        @Override
+        public Double copy(Double time) {
+            return time;
+        }
+    });
+
+    private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<BlockPos>() {
+        @Override
+        public void write(PacketByteBuf buf, BlockPos blockPos) {
+            buf.writeBlockPos(blockPos);
+        }
+
+        @Override
+        public BlockPos read(PacketByteBuf buf) {
+            return buf.readBlockPos();
+        }
+
+        @Override
+        public BlockPos copy(BlockPos blockPos) {
+            return blockPos;
+        }
+    });
+
+    @Override
+    public void readCustomDataFromTag(CompoundTag tag) {
+        if (tag.contains("Stage")) {
+            this.setStage(LaunchStage.valueOf(tag.getString("Stage")));
+        }
+        if (tag.contains("Time")) {
+            this.timeSinceStage = tag.getDouble("Time");
+        }
+
+        int x = tag.getInt("iX");
+        int y = tag.getInt("iY");
+        int z = tag.getInt("iZ");
+        this.setInitialLocation(new BlockPos(x,y,z));
+    }
+
+    @Override
+    public void writeCustomDataToTag(CompoundTag tag) {
+        tag.putString("Stage", getStage().name());
+
+        tag.putDouble("Time", this.timeSinceStage);
+
+        tag.putInt("iX", initialLocation.getX());
+        tag.putInt("iY", initialLocation.getY());
+        tag.putInt("iZ", initialLocation.getZ());
+    }
+
+    static {
+        TrackedDataHandlerRegistry.register(STAGE.getType());
+        TrackedDataHandlerRegistry.register(TIME.getType());
+        TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType());
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        dataTracker.startTracking(STAGE, LaunchStage.IDLE);
+        dataTracker.startTracking(TIME, 0.0);
+        dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); //TODO: Get block pos saved
+    }
+
     protected AbstractRocketProjectile(EntityType<? extends MobEntity> entityType, World world) {
 
         super(entityType, world);
     }
-
-
 
     @Override
     public void tick() {
@@ -45,11 +140,9 @@ public abstract class AbstractRocketProjectile extends MobEntity {
         this.updateMotion();
         this.setRotation();
 
-
     }
 
-
-
+    // TODO: Have some values fed upon init
     private void updateMotion() {
 
         double acc = -0.01;
@@ -90,9 +183,6 @@ public abstract class AbstractRocketProjectile extends MobEntity {
 
     }
 
-
-
-
     private void setRotation() {
         if (vX == 0 && vY == 0 && vZ == 0) // could be better
             return;
@@ -110,5 +200,24 @@ public abstract class AbstractRocketProjectile extends MobEntity {
 
     }
 
+    @Override
+    public LaunchStage getStage() {
+        return this.dataTracker.get(STAGE);
+    }
 
+    @Override
+    public void setStage(LaunchStage stage) {
+        if (dataTracker.get(STAGE) != stage) {
+            this.dataTracker.set(STAGE, stage);
+            timeSinceStage = 0;
+        }
+    }
+
+    public void setInitialLocation(BlockPos summonedLocation) {
+        this.initialLocation = summonedLocation;
+    }
+
+    public void setInitialBlockPos(BlockPos blockPos) {
+        this.dataTracker.set(INITIAL_BLOCK_POS, blockPos);
+    }
 }
