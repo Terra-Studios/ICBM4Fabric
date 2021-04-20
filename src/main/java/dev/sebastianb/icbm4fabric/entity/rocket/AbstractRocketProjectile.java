@@ -11,10 +11,12 @@ import net.minecraft.client.util.math.Vector3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -72,22 +74,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         }
     });
 
-    private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<BlockPos>() {
-        @Override
-        public void write(PacketByteBuf buf, BlockPos blockPos) {
-            buf.writeBlockPos(blockPos);
-        }
-
-        @Override
-        public BlockPos read(PacketByteBuf buf) {
-            return buf.readBlockPos();
-        }
-
-        @Override
-        public BlockPos copy(BlockPos blockPos) {
-            return blockPos;
-        }
-    });
+    private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractRocketProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
     @Override
     public void readCustomDataFromTag(CompoundTag tag) {
@@ -213,11 +200,13 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         }
     }
 
-    public void setInitialLocation(BlockPos summonedLocation) {
-        this.initialLocation = summonedLocation;
-    }
 
     public void setInitialBlockPos(BlockPos blockPos) {
+        this.initialLocation = blockPos;
         this.dataTracker.set(INITIAL_BLOCK_POS, blockPos);
+    }
+
+    public BlockPos getInitialBlockPos() {
+        return dataTracker.get(INITIAL_BLOCK_POS);
     }
 }

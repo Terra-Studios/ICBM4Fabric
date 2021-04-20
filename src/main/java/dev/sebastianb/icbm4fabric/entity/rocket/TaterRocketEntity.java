@@ -76,7 +76,7 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
                 this.setVelocity(0,0,0);
                 if (timeSinceStage >= 50) { // 200
                     // this.setVelocity(0,8,0);
-                    setInitialLocation(this.getBlockPos());
+                    setInitialBlockPos(this.getBlockPos());
                     this.setNoGravity(true);
                     setStage(LaunchStage.LAUNCHED);
                 }
