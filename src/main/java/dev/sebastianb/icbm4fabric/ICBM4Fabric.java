@@ -1,6 +1,7 @@
 package dev.sebastianb.icbm4fabric;
 
 import dev.sebastianb.icbm4fabric.block.ModBlocks;
+import dev.sebastianb.icbm4fabric.init.ModScreenRegister;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.network.ModPackets;
@@ -16,6 +17,7 @@ public class ICBM4Fabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ModScreenRegister.register();
         ModCommands.register();
         ModBlockEntities.register();
         ModEntityTypes.register();

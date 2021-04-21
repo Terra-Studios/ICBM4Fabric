@@ -7,9 +7,11 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -49,13 +51,22 @@ public class GenericRocketLauncher extends Block implements BlockEntityProvider 
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient) {
-            if (hand == Hand.OFF_HAND)
-                return ActionResult.FAIL;
-            PacketByteBuf buf = PacketByteBufs.create().writeBlockPos(pos);
-            ClientPlayNetworking.send(Constants.Packets.SUMMON_MISSILE, buf); // sends where the launcher is to the server
+        if (!world.isClient) {
+            System.out.println("test11");
+            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            if (screenHandlerFactory != null) {
+                System.out.println("test");
+                player.openHandledScreen(screenHandlerFactory);
+            }
+
         }
-        return ActionResult.PASS;
+//        if (world.isClient) {
+//            if (hand == Hand.OFF_HAND)
+//                return ActionResult.FAIL;
+//            PacketByteBuf buf = PacketByteBufs.create().writeBlockPos(pos);
+//            ClientPlayNetworking.send(Constants.Packets.SUMMON_MISSILE, buf); // sends where the launcher is to the server
+//        }
+        return ActionResult.SUCCESS;
     }
 
 

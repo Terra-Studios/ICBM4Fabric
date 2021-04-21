@@ -24,6 +24,10 @@ public class Constants {
 
     }
 
+    public static class GUI {
+        public static final String LAUNCHER_GUI = "launcher_gui";
+    }
+
     public static class Entity {
         public static final String TATER_MISSILE = "tater_missile";
 
