@@ -5,9 +5,7 @@ import dev.sebastianb.icbm4fabric.client.gui.LaunchScreen;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
@@ -23,7 +21,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class GenericRocketLauncher extends Block implements BlockEntityProvider {
+public class GenericRocketLauncher extends BlockWithEntity {
 
     private Constants.LauncherType launcherType = Constants.LauncherType.NOT_AVAILABLE;
 
@@ -56,13 +54,10 @@ public class GenericRocketLauncher extends Block implements BlockEntityProvider 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-
             if (screenHandlerFactory != null) {
                 player.openHandledScreen(screenHandlerFactory);
             }
         }
-
-
 //        if (world.isClient) {
 //            if (hand == Hand.OFF_HAND)
 //                return ActionResult.FAIL;
@@ -70,6 +65,12 @@ public class GenericRocketLauncher extends Block implements BlockEntityProvider 
 //            ClientPlayNetworking.send(Constants.Packets.SUMMON_MISSILE, buf); // sends where the launcher is to the server
 //        }
         return ActionResult.SUCCESS;
+    }
+
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
 
