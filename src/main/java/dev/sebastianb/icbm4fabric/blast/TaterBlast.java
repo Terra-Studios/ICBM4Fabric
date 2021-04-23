@@ -1,6 +1,7 @@
 package dev.sebastianb.icbm4fabric.blast;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CropBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
@@ -10,7 +11,7 @@ import java.util.Random;
 public class TaterBlast extends Blast {
 
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public TaterBlast(World world, BlockPos blockPos) {
         super(world, blockPos, 4, false, Explosion.DestructionType.NONE, true, 6);

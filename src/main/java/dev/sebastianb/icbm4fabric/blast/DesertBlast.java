@@ -1,16 +1,19 @@
 package dev.sebastianb.icbm4fabric.blast;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
 
 public class DesertBlast extends Blast {
 
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     private final HashSet<Block> blocksSetToSand = new HashSet<>(
             Arrays.asList(

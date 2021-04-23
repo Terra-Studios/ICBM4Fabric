@@ -4,8 +4,6 @@ import dev.sebastianb.icbm4fabric.registries.ModScreenHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import org.jetbrains.annotations.Nullable;
 
 public class LaunchScreenHandler extends ScreenHandler {
 
