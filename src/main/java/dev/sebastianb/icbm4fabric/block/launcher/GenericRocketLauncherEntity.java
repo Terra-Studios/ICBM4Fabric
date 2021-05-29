@@ -2,6 +2,7 @@ package dev.sebastianb.icbm4fabric.block.launcher;
 
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,19 +11,25 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class GenericRocketLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory {
 
 
 
-    public GenericRocketLauncherEntity(BlockEntityType<?> type) {
-        super(type);
+    public GenericRocketLauncherEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
-    public GenericRocketLauncherEntity() {
-        super(ModBlockEntities.GENERIC_ROCKET_LAUNCHER);
-    }
+
+//    public GenericRocketLauncherEntity(BlockEntityType<?> type) {
+//        super(type);
+//    }
+//
+//    public GenericRocketLauncherEntity() {
+//        super(ModBlockEntities.GENERIC_ROCKET_LAUNCHER);
+//    }
 
 
     @Override

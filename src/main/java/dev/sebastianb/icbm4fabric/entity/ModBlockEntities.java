@@ -12,25 +12,27 @@ public class ModBlockEntities {
 
 
 
-    public static final BlockEntityType<GenericRocketLauncherEntity> GENERIC_ROCKET_LAUNCHER =
-            Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                    new Identifier("minecraft", "barrier"),
-                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, Blocks.BARRIER).build(null));
+    // TODO: Port to 1.17! Block entities broken
 
-    public static final BlockEntityType<GenericRocketLauncherEntity> TIER1_ROCKET_LAUNCHER =
-            Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                    new Identifier(Constants.MOD_ID, Constants.Blocks.TIER_1_MISSILE_LAUNCHER),
-                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER1_ROCKET_LAUNCHER).build(null));
-
-    public static final BlockEntityType<GenericRocketLauncherEntity> TIER2_ROCKET_LAUNCHER =
-            Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                    new Identifier(Constants.MOD_ID, Constants.Blocks.TIER2_MISSILE_LAUNCHER),
-                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER2_ROCKET_LAUNCHER).build(null));
-
-    public static final BlockEntityType<GenericRocketLauncherEntity> TIER3_ROCKET_LAUNCHER =
-            Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                    new Identifier(Constants.MOD_ID, Constants.Blocks.TIER3_MISSILE_LAUNCHER),
-                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER3_ROCKET_LAUNCHER).build(null));
+//    public static final BlockEntityType<GenericRocketLauncherEntity> GENERIC_ROCKET_LAUNCHER =
+//            Registry.register(Registry.BLOCK_ENTITY_TYPE,
+//                    new Identifier("minecraft", "barrier"),
+//                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, Blocks.BARRIER).build(null));
+//
+//    public static final BlockEntityType<GenericRocketLauncherEntity> TIER1_ROCKET_LAUNCHER =
+//            Registry.register(Registry.BLOCK_ENTITY_TYPE,
+//                    new Identifier(Constants.MOD_ID, Constants.Blocks.TIER_1_MISSILE_LAUNCHER),
+//                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER1_ROCKET_LAUNCHER).build(null));
+//
+//    public static final BlockEntityType<GenericRocketLauncherEntity> TIER2_ROCKET_LAUNCHER =
+//            Registry.register(Registry.BLOCK_ENTITY_TYPE,
+//                    new Identifier(Constants.MOD_ID, Constants.Blocks.TIER2_MISSILE_LAUNCHER),
+//                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER2_ROCKET_LAUNCHER).build(null));
+//
+//    public static final BlockEntityType<GenericRocketLauncherEntity> TIER3_ROCKET_LAUNCHER =
+//            Registry.register(Registry.BLOCK_ENTITY_TYPE,
+//                    new Identifier(Constants.MOD_ID, Constants.Blocks.TIER3_MISSILE_LAUNCHER),
+//                    BlockEntityType.Builder.create(GenericRocketLauncherEntity::new, ModBlocks.TIER3_ROCKET_LAUNCHER).build(null));
 
 
     public static void register() {

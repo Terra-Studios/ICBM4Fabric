@@ -10,12 +10,15 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class AbstractRocketProjectile extends MobEntity implements MissileEntity {
+
+
 
     public double timeSinceStage = 0;
 
@@ -63,7 +66,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractRocketProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
     @Override
-    public void readCustomDataFromTag(CompoundTag tag) {
+    public void readCustomDataFromNbt(NbtCompound tag) {
         if (tag.contains("Stage")) {
             this.setStage(LaunchStage.valueOf(tag.getString("Stage")));
         }
@@ -78,7 +81,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag tag) {
+    public void writeCustomDataToNbt(NbtCompound tag) {
         tag.putString("Stage", getStage().name());
 
         tag.putDouble("Time", this.timeSinceStage);

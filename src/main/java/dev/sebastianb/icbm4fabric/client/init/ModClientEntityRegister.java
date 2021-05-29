@@ -6,7 +6,8 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 
 public class ModClientEntityRegister {
     public static void register() {
-        EntityRendererRegistry.INSTANCE.register(ModEntityTypes.TATER_ROCKET, (dispatcher, context)
-                -> new TaterRocketRenderer(dispatcher));
+        // TODO: Update to 1.17
+//        EntityRendererRegistry.INSTANCE.register(ModEntityTypes.TATER_ROCKET, (dispatcher, context)
+//                -> new TaterRocketRenderer());
     }
 }

@@ -44,10 +44,10 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
         super.setCustomNameVisible(true);
     }
 
-    @Override
-    public void takeKnockback(float f, double d, double e) {
-        super.takeKnockback(0, 0, 0);
-    }
+//    @Override
+//    public void takeKnockback(float f, double d, double e) {
+//        super.takeKnockback(0, 0, 0);
+//    }
 
 
     @Override
@@ -86,7 +86,7 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
                 System.out.println("EXPLOSION!");
                 System.out.println("LOCATION = " + getBlockPos());
                 new TaterBlast(world, getBlockPos());
-                this.remove();
+                this.remove(RemovalReason.DISCARDED);
                 break;
             default:
         }
