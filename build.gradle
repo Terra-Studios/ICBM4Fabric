@@ -10,6 +10,7 @@ targetCompatibility = JavaVersion.VERSION_16
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
+mod_id = project.mod_id
 
 
 
@@ -85,4 +86,8 @@ publishing {
         // uncomment to publish to the local maven
         // mavenLocal()
     }
+}
+
+loom {
+    accessWidener =  file("src/main/resources/icbm4fabric.accesswidener")
 }

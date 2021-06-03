@@ -27,24 +27,23 @@ public class GenericRocketLauncher extends BlockWithEntity {
         this.launcherType = type;
     }
 
-    // TODO: Update to 1.17
-//    @Nullable
-//    @Override
-//    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-//        switch (launcherType) {
-//            case TIER1:
-//                System.out.println("t1");
-//                return new GenericRocketLauncherEntity(ModBlockEntities.TIER1_ROCKET_LAUNCHER);
-//            case TIER2:
-//                System.out.println("t2");
-//                return new GenericRocketLauncherEntity(ModBlockEntities.TIER2_ROCKET_LAUNCHER);
-//            case TIER3:
-//                System.out.println("t3");
-//                return new GenericRocketLauncherEntity(ModBlockEntities.TIER3_ROCKET_LAUNCHER);
-//            default:
-//                return null; // TODO: fix with a failsafe later lol
-//        }
-//    }
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        switch (launcherType) {
+            case TIER1:
+                System.out.println("t1");
+                return new GenericRocketLauncherEntity(ModBlockEntities.TIER1_ROCKET_LAUNCHER, pos, state);
+            case TIER2:
+                System.out.println("t2");
+                return new GenericRocketLauncherEntity(ModBlockEntities.TIER2_ROCKET_LAUNCHER, pos, state);
+            case TIER3:
+                System.out.println("t3");
+                return new GenericRocketLauncherEntity(ModBlockEntities.TIER3_ROCKET_LAUNCHER, pos, state);
+            default:
+                return null; // TODO: fix with a failsafe later lol
+        }
+    }
 
 
     @Override
@@ -70,11 +69,4 @@ public class GenericRocketLauncher extends BlockWithEntity {
         return BlockRenderType.MODEL;
     }
 
-
-    // temp method until line 29 - 45 is fixed
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return null;
-    }
 }

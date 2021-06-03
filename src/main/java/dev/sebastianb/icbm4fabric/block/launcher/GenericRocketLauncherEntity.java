@@ -3,6 +3,7 @@ package dev.sebastianb.icbm4fabric.block.launcher;
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,13 +24,9 @@ public class GenericRocketLauncherEntity extends BlockEntity implements NamedScr
     }
 
 
-//    public GenericRocketLauncherEntity(BlockEntityType<?> type) {
-//        super(type);
-//    }
-//
-//    public GenericRocketLauncherEntity() {
-//        super(ModBlockEntities.GENERIC_ROCKET_LAUNCHER);
-//    }
+    public GenericRocketLauncherEntity(BlockPos blockPos, BlockState blockState) {
+        super(ModBlockEntities.GENERIC_ROCKET_LAUNCHER, blockPos, blockState);
+    }
 
 
     @Override

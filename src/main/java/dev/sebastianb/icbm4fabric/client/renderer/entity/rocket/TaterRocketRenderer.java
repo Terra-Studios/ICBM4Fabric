@@ -20,15 +20,10 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
         super(context, new TaterRocketModel(), 0.0f);
     }
 
-
-
-
     @Override
     public Identifier getTexture(TaterRocketEntity entity) {
         return new Identifier(Constants.MOD_ID, "textures/entity/missile/tater_missile.png");
     }
-
-
 
 
     // pain
