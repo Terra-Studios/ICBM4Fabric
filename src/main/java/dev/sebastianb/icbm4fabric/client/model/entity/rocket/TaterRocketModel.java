@@ -14,8 +14,7 @@ import net.minecraft.client.util.math.MatrixStack;
  */
 public class TaterRocketModel extends EntityModel<TaterRocketEntity> {
 
-
-    // whole class uncommented to "prevent compile errors"
+    // whole class commented to "prevent compile errors"
     // TODO: Port to 1.17
 
 
