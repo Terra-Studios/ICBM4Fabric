@@ -7,6 +7,7 @@ import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.impl.client.renderer.registry.EntityModelLayerImpl;
 
+@SuppressWarnings("all") // like every good programmer
 public class ModClientEntityRegister {
     public static void register() {
         EntityRendererRegistry.INSTANCE.register(ModEntityTypes.TATER_ROCKET, (context)
