@@ -24,7 +24,7 @@ public class ModBlocks {
             new Identifier(Constants.MOD_ID, Constants.Blocks.ITEM_GROUP_BLOCKS))
             .icon(() -> new ItemStack(ModBlocks.TIER1_ROCKET_LAUNCHER)).build();
 
-    public static final Block TIER1_ROCKET_LAUNCHER = registerBlock(new GenericRocketLauncher(FabricBlockSettings.of(Material.METAL).strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL), Constants.LauncherType.TIER1), Constants.Blocks.TIER_1_MISSILE_LAUNCHER);
+    public static final Block TIER1_ROCKET_LAUNCHER = registerBlock(new GenericRocketLauncher(FabricBlockSettings.of(Material.METAL).strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL), Constants.LauncherType.TIER1), Constants.Blocks.TIER1_MISSILE_LAUNCHER);
     public static final Block TIER2_ROCKET_LAUNCHER = registerBlock(new GenericRocketLauncher(FabricBlockSettings.of(Material.METAL).strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL), Constants.LauncherType.TIER2), Constants.Blocks.TIER2_MISSILE_LAUNCHER);
     public static final Block TIER3_ROCKET_LAUNCHER = registerBlock(new GenericRocketLauncher(FabricBlockSettings.of(Material.METAL).strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL), Constants.LauncherType.TIER3), Constants.Blocks.TIER3_MISSILE_LAUNCHER);
 

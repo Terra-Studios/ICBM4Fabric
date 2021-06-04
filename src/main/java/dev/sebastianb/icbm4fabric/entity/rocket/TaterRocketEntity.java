@@ -3,6 +3,8 @@ package dev.sebastianb.icbm4fabric.entity.rocket;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
@@ -44,11 +46,17 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
         super.setCustomNameVisible(true);
     }
 
-//    @Override
-//    public void takeKnockback(float f, double d, double e) {
-//        super.takeKnockback(0, 0, 0);
-//    }
 
+    @Override
+    public void takeKnockback(double strength, double x, double z) {
+        super.takeKnockback(0, 0, 0);
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        return false;
+        // return super.damage(source, amount);
+    }
 
     @Override
     public void tick() {
