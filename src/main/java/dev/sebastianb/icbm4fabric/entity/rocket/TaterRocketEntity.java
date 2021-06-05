@@ -48,17 +48,6 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
 
 
     @Override
-    public void takeKnockback(double strength, double x, double z) {
-        super.takeKnockback(0, 0, 0);
-    }
-
-    @Override
-    public boolean damage(DamageSource source, float amount) {
-        return false;
-        // return super.damage(source, amount);
-    }
-
-    @Override
     public void tick() {
         this.noClip = true;
         this.setCustomName(Text.of(getStage().name()));

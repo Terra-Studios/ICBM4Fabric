@@ -5,10 +5,7 @@ import dev.sebastianb.icbm4fabric.client.Icbm4fabricClient;
 import dev.sebastianb.icbm4fabric.client.model.entity.rocket.TaterRocketModel;
 import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.PhantomEntityRenderer;
+import net.minecraft.client.render.entity.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -26,11 +23,9 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
         return new Identifier(Constants.MOD_ID, "textures/entity/missile/tater_missile.png");
     }
 
-
     // pain
     @Override
     public void render(TaterRocketEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int light) {
-
         float radianYaw = (float) Math.toRadians(entity.getYaw()); // it was just the `yaw` variable b4
         float radianPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch())); // it was just the `pitch` variable b4
 
