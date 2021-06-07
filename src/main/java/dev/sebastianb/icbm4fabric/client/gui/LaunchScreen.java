@@ -36,15 +36,15 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     float bodyRotate = 180f;
     float bodyRotateDiff = 0f;
 
-    private boolean openedGUI = true; // if the GUI is in a opened state
+    private volatile boolean openedGUI; // if the GUI is in a opened state
 
 
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         entityGUIRotate = false;
+        openedGUI = true; // ik it's redundent but just for readablity
         long openedTime = System.currentTimeMillis();
 
-        // TODO: Weird as fuck bug where the thread doesn't close even tho GUI is closed. It does end up closing tho because of the "break;" but I guess garbage collection sees it's not being used and closes
         Runnable task = () -> {
             while (openedGUI) {
                 long currentTime = System.currentTimeMillis();
