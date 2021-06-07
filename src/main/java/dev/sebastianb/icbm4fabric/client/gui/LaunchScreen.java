@@ -22,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
-@SuppressWarnings("all") // like every good programmer
+@SuppressWarnings("FieldCanBeLocal")
 @Environment(EnvType.CLIENT)
 public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
@@ -30,7 +30,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     private static final Identifier TEXTURE = new Identifier(Constants.MOD_ID, "textures/gui/missile_launcher_screen.png");
     private final int textureWidth = 256;
     private final int textureHeight = 256;
-    private float textureScale = 0.87f;
+    private final float textureScale = 0.87f;
 
     private boolean entityGUIRotate;
     float bodyRotate = 180f;
@@ -42,14 +42,14 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         entityGUIRotate = false;
-        openedGUI = true; // ik it's redundent but just for readablity
+        openedGUI = true; // ik it's redundant but just for readability
         long openedTime = System.currentTimeMillis();
 
         Runnable task = () -> {
             while (openedGUI) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime >= openedTime + 3000) {
-                    float t = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10));
+                    float t = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10f));
                     float d = MathHelper.wrapDegrees(t + 180); // 180 faces toward the front
                     bodyRotateDiff = d;
                     entityGUIRotate = true;
@@ -142,7 +142,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         float l = entity.headYaw;
 
         if (entityGUIRotate) {
-            bodyRotate = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10) - bodyRotateDiff); // spins the entity based on a time
+            bodyRotate = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10f) - bodyRotateDiff); // spins the entity based on a time
         }
 
         entity.bodyYaw = bodyRotate; // yaw 180 default. Spins entity
