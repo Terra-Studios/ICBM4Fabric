@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
@@ -31,18 +32,46 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     private final int textureHeight = 256;
     private float textureScale = 0.87f;
 
+    private boolean entityGUIRotate;
+    float bodyRotate = 180f;
+    float bodyRotateDiff = 0f;
+
+    private boolean openedGUI = true; // if the GUI is in a opened state
+
 
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+        entityGUIRotate = false;
+        long openedTime = System.currentTimeMillis();
+
+        // TODO: Weird as fuck bug where the thread doesn't close even tho GUI is closed. It does end up closing tho because of the "break;" but I guess garbage collection sees it's not being used and closes
+        Runnable task = () -> {
+            while (openedGUI) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime >= openedTime + 3000) {
+                    float t = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10));
+                    float d = MathHelper.wrapDegrees(t + 180); // 180 faces toward the front
+                    bodyRotateDiff = d;
+                    entityGUIRotate = true;
+                    break;
+                }
+            }
+        };
+        new Thread(task).start();
     }
 
     @Override
     protected void init() {
         super.backgroundWidth = textureWidth;
         super.backgroundHeight = textureHeight;
-
         super.init();
-        // this.addButton();
+    }
+
+    @Override
+    public void onClose() {
+        super.onClose();
+        this.openedGUI = false;
+
     }
 
     @Override
@@ -102,7 +131,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         MatrixStack matrixStack2 = new MatrixStack();
         matrixStack2.translate(0.0D, 0.0D, 1000.0D);
         matrixStack2.scale((float)size, (float)size, (float)size);
-        Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+        Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180f);
         // Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0F);
         // quaternion.hamiltonProduct(quaternion2);
         matrixStack2.multiply(quaternion);
@@ -111,11 +140,17 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         float j = entity.getPitch();
         float k = entity.prevHeadYaw;
         float l = entity.headYaw;
-        entity.bodyYaw = 180.0F;
+
+        if (entityGUIRotate) {
+            bodyRotate = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10) - bodyRotateDiff); // spins the entity based on a time
+        }
+
+        entity.bodyYaw = bodyRotate; // yaw 180 default. Spins entity
         entity.setYaw(180.0F);
         entity.setPitch(20.0F);
-        entity.headYaw = entity.getYaw();
-        entity.prevHeadYaw = entity.getYaw();
+        entity.headYaw = bodyRotate;
+
+        entity.prevHeadYaw = bodyRotate;
         DiffuseLighting.method_34742();
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         // quaternion2.conjugate();
