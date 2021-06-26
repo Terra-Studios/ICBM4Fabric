@@ -238,6 +238,10 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
 
     @Override
     public boolean damage(DamageSource source, float amount) {
+        if (source.equals(DamageSource.OUT_OF_WORLD)) {
+            return super.damage(source, amount);
+        }
+
         return false;
         // return super.damage(source, amount);
     }
