@@ -4,8 +4,10 @@ package dev.sebastianb.icbm4fabric.entity.rocket;
 import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
-import net.minecraft.client.render.entity.ArrowEntityRenderer;
-import net.minecraft.client.util.math.Vector3d;
+import dev.sebastianb.icbm4fabric.entity.rocket.path.AbstractLaunchPath;
+import dev.sebastianb.icbm4fabric.entity.rocket.path.LaunchPaths;
+import dev.sebastianb.icbm4fabric.entity.rocket.path.MissingsPath;
+import dev.sebastianb.icbm4fabric.entity.rocket.path.VariableHeightPath;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -13,13 +15,9 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EulerAngle;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class AbstractRocketProjectile extends MobEntity implements MissileEntity {
@@ -128,7 +126,6 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     }
 
     protected AbstractRocketProjectile(EntityType<? extends MobEntity> entityType, World world) {
-
         super(entityType, world);
     }
 
@@ -143,7 +140,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     // TODO: Have some values fed upon init
     private void updateMotion() {
 
-        double acc = -0.01;
+        double acc = -0.01; // gravity acceleration. Should be negative
 
         double dX = finalLocation.getX() - initialLocation.getX();
         double dY = finalLocation.getY() - initialLocation.getY();
@@ -154,20 +151,20 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
 
         double groundDistTravelled = Math.sqrt(Math.pow(dX, 2) + Math.pow(dZ, 2)); // gets distance traveled horizontally
 
-        double b = -acc*groundDistTravelled + (dY/groundDistTravelled);
+        double b = - acc * groundDistTravelled + (dY / groundDistTravelled);
 
-        double temp1 = (1/(2*acc)) * SebaUtils.asinh(2*acc*groundDistTravelled+b);
-        double temp2 = (1/(2*acc)) * SebaUtils.asinh(b);
+        double temp1 = (1 / (2 * acc)) * SebaUtils.asinh(2 * acc * groundDistTravelled + b);
+        double temp2 = (1 / (2 * acc)) * SebaUtils.asinh(b);
 
-        double xfactor = groundDistTravelled/(temp1-temp2); // * by any num to adjust speed
+        double xfactor = groundDistTravelled / (temp1 - temp2); // * by any num to adjust speed.
 
-        double hvel = xfactor* ( 1/Math.sqrt(1+(2*acc*this.timeSinceStage+b)*(2*acc*this.timeSinceStage+b)));
+        double hvel = xfactor * (1 / Math.sqrt(1 + (2 * acc * this.timeSinceStage + b) * (2 * acc * this.timeSinceStage + b)));
 
 
         this.setVelocity(
-                (Math.sin(dYaw)*hvel),
-                xfactor* ((2*acc*this.timeSinceStage+b)/Math.sqrt(1+(2*acc*this.timeSinceStage+b)*(2*acc*this.timeSinceStage+b))),
-                (Math.cos(dYaw)*hvel)
+                (Math.sin(dYaw) * hvel),
+                xfactor * ((2 * acc * this.timeSinceStage + b) / Math.sqrt(1 + (2 * acc * this.timeSinceStage + b) * (2 * acc * this.timeSinceStage + b))),
+                (Math.cos(dYaw) * hvel)
         );
 
 //        this.setVelocity(
