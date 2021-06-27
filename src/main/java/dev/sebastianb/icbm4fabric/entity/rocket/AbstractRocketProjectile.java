@@ -22,7 +22,8 @@ import net.minecraft.world.World;
 
 public abstract class AbstractRocketProjectile extends MobEntity implements MissileEntity {
 
-
+    AbstractLaunchPath path;
+    LaunchPaths pathType;
 
     public double timeSinceStage = 0;
 
@@ -32,6 +33,8 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     public double vX;
     public double vY;
     public double vZ;
+
+    public boolean updateMotion;
 
     private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<LaunchStage>() {
         @Override
@@ -84,11 +87,18 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
 //        double vZ = tag.getDouble("vZ");
 //        this.setVelocity(new Vec3d(vX, vY, vZ));
 
+        if (tag.contains("Path")) {
+
+            setPath(LaunchPaths.valueOf(tag.getString("Path")));
+        }
+
 
         int x = tag.getInt("iX");
         int y = tag.getInt("iY");
         int z = tag.getInt("iZ");
         this.setInitialBlockPos(new BlockPos(x,y,z));
+
+
     }
 
     @Override
@@ -106,6 +116,10 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         tag.putInt("iX", initialLocation.getX());
         tag.putInt("iY", initialLocation.getY());
         tag.putInt("iZ", initialLocation.getZ());
+
+        if (pathType != null) {
+            tag.putString("Path", pathType.name());
+        }
     }
 
     @Override
@@ -132,8 +146,11 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     @Override
     public void tick() {
         super.tick();
-        this.updateMotion();
-        this.setRotation();
+
+        if (path != null && updateMotion) {
+            path.updateMotion();
+            path.updateRotation();
+        }
 
     }
 
@@ -176,25 +193,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
                 // divided by 2 across everything seems to work. Maybe if I can get the X then do math with what I need to divide, it'd work.
                 // best approach I think is to get a velocity vector req to launch from superclass for later. Right now I just have these temp variables
 
-    }
 
-    private void setRotation() {
-        if (vX == 0 && vY == 0 && vZ == 0) // could be better
-            return;
-
-        // below is in radians
-        double yaw = Math.atan2(vX, vZ);
-        double pitch = Math.atan2(Math.sqrt(Math.pow(vX, 2) + Math.pow(vZ, 2)), vY);
-
-        // radians to degrees
-        float realYaw = (float) Math.toDegrees(yaw);
-        float realPitch = (float) Math.toDegrees(pitch);
-
-        if (Double.isNaN(realYaw) || Double.isNaN(realPitch)) {
-            this.setRotation(prevYaw, prevPitch); // (To prevent) Invalid entity rotation: NaN, discarding.
-            return;
-        }
-        this.setRotation(realYaw, realPitch);
 
     }
 
@@ -211,6 +210,14 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         }
     }
 
+    @Override
+    public void setPath(LaunchPaths path) {
+        switch (path) {
+            case MissingsPath:
+                this.path = new MissingsPath(this);
+                pathType = LaunchPaths.MissingsPath;
+                break;
+    }
 
     public void setInitialBlockPos(BlockPos blockPos) {
         this.initialLocation = blockPos;
@@ -242,5 +249,11 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         return false;
         // return super.damage(source, amount);
     }
+
+    @Override
+    public void setRotation(float yaw, float pitch) {
+        super.setRotation(yaw, pitch);
+    }
+
 
 }

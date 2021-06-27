@@ -2,6 +2,7 @@ package dev.sebastianb.icbm4fabric.entity.rocket;
 
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
+import dev.sebastianb.icbm4fabric.entity.rocket.path.LaunchPaths;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -60,6 +61,7 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
         switch (getStage()) {
             case IDLE:
                 this.setVelocity(0,0,0);
+                updateMotion = false;
                 break;
             case LIT:
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, 0); // get rid of when on launched
@@ -68,13 +70,15 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
                     // this.setVelocity(0,8,0);
                     setInitialBlockPos(this.getBlockPos());
                     this.setNoGravity(true);
+                    setPath(LaunchPaths.VaribleHeightPath);
                     setStage(LaunchStage.LAUNCHED);
                 }
+                updateMotion = false;
                 break;
             case LAUNCHED:
                 this.noClip = false;
                 summonParticles(ParticleTypes.FLAME, 10, 0.07, 0);
-                super.tick();
+                updateMotion = true;
                 if (isInsideWall() || isOnGround()) {
                     setStage(LaunchStage.EXPLODED);
                 }
@@ -86,7 +90,10 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
                 this.remove(RemovalReason.DISCARDED);
                 break;
             default:
+                break;
         }
+
+        super.tick();
 
         //Vec3d currentPos = this.getPos();
         timeSinceStage++;
