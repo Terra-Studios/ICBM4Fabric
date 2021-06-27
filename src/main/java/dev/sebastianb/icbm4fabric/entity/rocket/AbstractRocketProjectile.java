@@ -217,6 +217,10 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
                 this.path = new MissingsPath(this);
                 pathType = LaunchPaths.MissingsPath;
                 break;
+            case VaribleHeightPath:
+                this.path = new VariableHeightPath(this, 100);
+                pathType = LaunchPaths.VaribleHeightPath;
+        }
     }
 
     public void setInitialBlockPos(BlockPos blockPos) {
