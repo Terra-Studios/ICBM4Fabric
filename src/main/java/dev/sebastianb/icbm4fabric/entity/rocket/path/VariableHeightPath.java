@@ -11,7 +11,7 @@ public class VariableHeightPath extends AbstractLaunchPath{
     double p;
 
     double dYaw;
-    final double SPEED = 15;
+    final double SPEED = 50;
 
     public VariableHeightPath(AbstractRocketProjectile rocket, double maxHeight) {
         super(rocket);
