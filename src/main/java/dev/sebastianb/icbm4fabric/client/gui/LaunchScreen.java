@@ -2,12 +2,18 @@ package dev.sebastianb.icbm4fabric.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.sebastianb.icbm4fabric.Constants;
+import dev.sebastianb.icbm4fabric.client.gui.info.BlockStringGUIPos;
+import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
+import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.ingame.*;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -21,11 +27,15 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Environment(EnvType.CLIENT)
 public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
-
 
     private static final Identifier TEXTURE = new Identifier(Constants.MOD_ID, "textures/gui/missile_launcher_screen.png");
     private final int textureWidth = 256;
@@ -36,21 +46,34 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     float bodyRotate = 180f;
     float bodyRotateDiff = 0f;
 
-    private volatile boolean openedGUI; // if the GUI is in a opened state
+    private volatile boolean openedGUI; // if the GUI is in an opened state
+    private volatile boolean clickedEntity = false;
 
+    private ArrayList<Drawable> drawables = new ArrayList<>();
+
+    private TextFieldWidget xMissileInput;
+    private TextFieldWidget zMissileInput;
+    private TextFieldWidget yMissileInput;
+
+    BlockStringGUIPos blockStringGUIPos = new BlockStringGUIPos();
 
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         entityGUIRotate = false;
         openedGUI = true; // ik it's redundant but just for readability
-        long openedTime = System.currentTimeMillis();
+        runRotationCountdown(bodyRotate);
+    }
 
+    private void runRotationCountdown(float bodyRotate) {
+        long openedTime = System.currentTimeMillis();
         Runnable task = () -> {
             while (openedGUI) {
+                if (clickedEntity)
+                    break;
                 long currentTime = System.currentTimeMillis();
                 if (currentTime >= openedTime + 3000) {
                     float t = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10f));
-                    float d = MathHelper.wrapDegrees(t + 180); // 180 faces toward the front
+                    float d = MathHelper.wrapDegrees(t + bodyRotate); // 180 faces toward the front
                     bodyRotateDiff = d;
                     entityGUIRotate = true;
                     break;
@@ -64,6 +87,23 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     protected void init() {
         super.backgroundWidth = textureWidth;
         super.backgroundHeight = textureHeight;
+
+        ArrayList<Drawable> oldDrawables = drawables;
+        drawables.clear(); // clear anything left behind
+
+        // add X detonator
+        TextFieldWidget xTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, ScreenTexts.YES);
+        // add Z detonator
+        TextFieldWidget zTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, ScreenTexts.YES);
+        // add Y detonator
+        TextFieldWidget yTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, ScreenTexts.YES);
+
+
+
+        addTextedButton(xTarget);
+        addTextedButton(zTarget);
+        addTextedButton(yTarget);
+
         super.init();
     }
 
@@ -75,9 +115,18 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     }
 
     @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return super.keyPressed(keyCode, scanCode, modifiers);
+//        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+//            super.keyPressed(keyCode, scanCode, modifiers);
+//        }
+//        return true;
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
         matrices.push(); {
+            this.renderBackground(matrices);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShaderTexture(0, TEXTURE);
@@ -90,12 +139,55 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
             drawTexture(matrices, 0, 0, 0, 0, backgroundWidth, backgroundHeight, 256, 256);
 
+            this.drawEntity(this.x + 71, this.y + 180, 40, (float)(this.x + 88 - mouseX), (float)(this.y + 45 - 30 - mouseY), new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, client.world)); // new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, this.client.world)
 
         }
         matrices.pop();
-        this.drawEntity
-                (this.x + 73, this.y + 170, 40, (float)(this.x + 88 - mouseX), (float)(this.y + 45 - 30 - mouseY), this.client.player);
+        matrices.push();
+        for (Drawable e : drawables) {
+            e.render(matrices, mouseX, mouseY, delta);
+        }
+        matrices.pop();
 
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if ((mouseX < 218 && mouseX > 145) && (mouseY < 201 && mouseY > 67)) {
+            entityGUIRotate = false;
+            clickedEntity = true;
+        }
+
+        // unfocuses all other text widgets
+        for (Drawable textFieldWidget : this.drawables) {
+            if (((TextFieldWidget) textFieldWidget).mouseClicked(mouseX, mouseY, button)) {
+                TextFieldWidget selectedWidget = ((TextFieldWidget) textFieldWidget);
+                for (Drawable otherTextWidgets : this.drawables) {
+                    if (!otherTextWidgets.equals(selectedWidget)) {
+                        ((TextFieldWidget) otherTextWidgets).setTextFieldFocused(false);
+                    }
+                }
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+
+        bodyRotate = (float) (bodyRotate + deltaX);
+
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (clickedEntity) {
+            runRotationCountdown(-bodyRotate);
+            clickedEntity = false;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
@@ -108,11 +200,10 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         return false;
     }
 
-
-    private void addButton() {
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.YES, (buttonWidget) -> {
-            this.client.openScreen(null);
-        }));
+    private void addTextedButton(TextFieldWidget textFieldWidget) {
+        textFieldWidget.setMaxLength(9);
+        drawables.add(textFieldWidget);
+        this.addSelectableChild(textFieldWidget);
     }
 
     @Override
@@ -147,10 +238,10 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
         entity.bodyYaw = bodyRotate; // yaw 180 default. Spins entity
         entity.setYaw(180.0F);
-        entity.setPitch(20.0F);
-        entity.headYaw = bodyRotate;
 
         entity.prevHeadYaw = bodyRotate;
+
+        entity.setYaw(bodyRotate); // = bodyRotate;
         DiffuseLighting.method_34742();
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         // quaternion2.conjugate();

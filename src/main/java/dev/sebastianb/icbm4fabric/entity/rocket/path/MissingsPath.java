@@ -13,10 +13,16 @@ public class MissingsPath extends AbstractLaunchPath{
 
     double dYaw;
 
+    double arcModifier;
+
     public MissingsPath(AbstractRocketProjectile rocket) {
         super(rocket);
+        if (!rocket.world.isClient)
+            System.out.println("Rocket Travel Distance: " + rocket.finalLocation.getManhattanDistance(rocket.initialLocation));
 
-        acc = -0.01; // gravity acceleration. Should be negative
+        arcModifier = 1; // need to figure out a way to take in the angle wanted and distance traveled. Then calc how high it should be
+
+        acc = -0.01 * arcModifier; // gravity acceleration. Should be negative
 
         dX = rocket.finalLocation.getX() - rocket.initialLocation.getX();
         dY = rocket.finalLocation.getY() - rocket.initialLocation.getY();
@@ -40,7 +46,7 @@ public class MissingsPath extends AbstractLaunchPath{
 
         rocket.setVelocity(
                 (Math.sin(dYaw) * hvel),
-                xfactor * ((2 * acc * rocket.timeSinceStage + b) / Math.sqrt(1 + (2 * acc * rocket.timeSinceStage + b) * (2 * acc * rocket.timeSinceStage + b))),
+                (xfactor * ((2 * acc * rocket.timeSinceStage + b) / Math.sqrt(1 + (2 * acc * rocket.timeSinceStage + b) * (2 * acc * rocket.timeSinceStage + b)))),
                 (Math.cos(dYaw) * hvel)
         );
     }
