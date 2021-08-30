@@ -13,6 +13,7 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.ingame.*;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.GameRenderer;
@@ -23,6 +24,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
@@ -51,17 +53,23 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
     private ArrayList<Drawable> drawables = new ArrayList<>();
 
-    private TextFieldWidget xMissileInput;
-    private TextFieldWidget zMissileInput;
-    private TextFieldWidget yMissileInput;
+    // add X detonator
+    TextFieldWidget xMissileInput = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, LiteralText.EMPTY);
 
-    BlockStringGUIPos blockStringGUIPos = new BlockStringGUIPos();
+    // add Z detonator
+    TextFieldWidget zMissileInput = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, LiteralText.EMPTY);
+
+    // add Y detonator
+    TextFieldWidget yMissileInput = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
+
 
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         entityGUIRotate = false;
         openedGUI = true; // ik it's redundant but just for readability
         runRotationCountdown(bodyRotate);
+
+
     }
 
     private void runRotationCountdown(float bodyRotate) {
@@ -87,24 +95,28 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     protected void init() {
         super.backgroundWidth = textureWidth;
         super.backgroundHeight = textureHeight;
-
-        ArrayList<Drawable> oldDrawables = drawables;
+        super.init();
         drawables.clear(); // clear anything left behind
 
         // add X detonator
-        TextFieldWidget xTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, ScreenTexts.YES);
+        TextFieldWidget xTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, LiteralText.EMPTY);
+        xTarget.setText(xMissileInput.getText()); // "fill" new box with old box
+        this.xMissileInput = xTarget;
+
         // add Z detonator
-        TextFieldWidget zTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, ScreenTexts.YES);
+        TextFieldWidget zTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, LiteralText.EMPTY);
+        zTarget.setText(zMissileInput.getText());
+        this.zMissileInput = zTarget;
+
         // add Y detonator
-        TextFieldWidget yTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, ScreenTexts.YES);
-
-
+        TextFieldWidget yTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
+        yTarget.setText(yMissileInput.getText());
+        this.yMissileInput = yTarget;
 
         addTextedButton(xTarget);
         addTextedButton(zTarget);
         addTextedButton(yTarget);
 
-        super.init();
     }
 
     @Override
@@ -114,13 +126,14 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
     }
 
+    // used to prevent close on "E" press
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return super.keyPressed(keyCode, scanCode, modifiers);
-//        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-//            super.keyPressed(keyCode, scanCode, modifiers);
-//        }
-//        return true;
+        if (keyCode == GLFW.GLFW_KEY_E) {
+            return true;
+        } else {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
     }
 
     @Override
