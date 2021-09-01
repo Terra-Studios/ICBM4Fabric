@@ -68,8 +68,6 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         entityGUIRotate = false;
         openedGUI = true; // ik it's redundant but just for readability
         runRotationCountdown(bodyRotate);
-
-
     }
 
     private void runRotationCountdown(float bodyRotate) {
