@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.8-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'maven-publish'
     id 'idea'
 }
@@ -89,5 +89,5 @@ publishing {
 }
 
 loom {
-    accessWidener =  file("src/main/resources/icbm4fabric.accesswidener")
+    accessWidenerPath =  file("src/main/resources/icbm4fabric.accesswidener")
 }

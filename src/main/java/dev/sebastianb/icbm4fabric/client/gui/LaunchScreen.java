@@ -104,14 +104,13 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     }
 
     @Override
-    public boolean isPauseScreen() {
+    public boolean shouldPause() {
         return false;
     }
 
-
     private void addButton() {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.YES, (buttonWidget) -> {
-            this.client.openScreen(null);
+            this.client.setScreen(null);
         }));
     }
 
