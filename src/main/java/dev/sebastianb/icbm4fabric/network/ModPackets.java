@@ -9,7 +9,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ModPackets {
 
@@ -19,7 +18,7 @@ public class ModPackets {
             ICBM4Fabric.LOGGER.log(Level.ALL, "HI");
 
             BlockPos missileBase = buf.readBlockPos();
-            ServerWorld serverWorld = player.getServerWorld();
+            ServerWorld serverWorld = player.getWorld();
             server.execute((() -> {
                 TaterRocketEntity taterRocketEntity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, serverWorld);
                 taterRocketEntity.updatePosition(missileBase.getX() + 0.5, missileBase.getY() + 0.2, missileBase.getZ() + 0.5);
