@@ -1,6 +1,7 @@
 package dev.sebastianb.icbm4fabric.client.renderer.entity.rocket;
 
 import dev.sebastianb.icbm4fabric.Constants;
+import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.client.Icbm4fabricClient;
 import dev.sebastianb.icbm4fabric.client.model.entity.rocket.TaterRocketModel;
 import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
@@ -30,8 +31,11 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
         float radianYaw = (float) Math.toRadians(entity.getYaw()); // it was just the `yaw` variable b4
         float radianPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch())); // it was just the `pitch` variable b4
 
-        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(radianYaw));
-        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(radianPitch));
+        // TODO: figure out why tf this goes "crazy" and spins like a madman
+        if (!entity.getStage().equals(LaunchStage.IDLE)) {
+            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(radianYaw));
+            matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(radianPitch));
+        }
 
         super.render(entity, tickDelta, yaw, matrices, vertexConsumerProvider, light);
     }

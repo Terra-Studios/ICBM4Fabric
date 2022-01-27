@@ -121,7 +121,6 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     public void onClose() {
         super.onClose();
         this.openedGUI = false;
-
     }
 
     // used to prevent close on "E" press

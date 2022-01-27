@@ -18,5 +18,6 @@ public class Icbm4fabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         ModClientEntityRegister.register();
         ModScreenRegistry.registerScreens();
+        MissileItemRenderer.register();
     }
 }

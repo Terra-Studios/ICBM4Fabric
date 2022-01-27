@@ -2,6 +2,10 @@ package dev.sebastianb.icbm4fabric;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 public class Constants {
@@ -18,22 +22,27 @@ public class Constants {
 
     }
 
-    public static class Blocks {
-        public static final String ITEM_GROUP_BLOCKS = "blocks";
-        public static final String TIER1_MISSILE_LAUNCHER = "tier1_missile_launcher";
-        public static final String TIER2_MISSILE_LAUNCHER = "tier2_missile_launcher";
-        public static final String TIER3_MISSILE_LAUNCHER = "tier3_missile_launcher";
+    public interface Blocks {
+        String ITEM_GROUP_BLOCKS = "blocks";
+        String TIER1_MISSILE_LAUNCHER = "tier1_missile_launcher";
+        String TIER2_MISSILE_LAUNCHER = "tier2_missile_launcher";
+        String TIER3_MISSILE_LAUNCHER = "tier3_missile_launcher";
+    }
+
+    public interface Items {
+        String ITEM_GROUP = "items";
+
+        // missiles
+        String TATER_MISSILE = "tater_missile";
 
     }
 
-    public static class Entity {
-        public static final String TATER_MISSILE = "tater_missile";
-
+    public interface Entity {
+        String TATER_MISSILE = "tater_missile";
     }
 
-    public static class Packets {
-        public static final Identifier SUMMON_MISSILE = new Identifier(Constants.MOD_ID, "summon_missile");
-
+    public interface Packets {
+        Identifier SUMMON_MISSILE = new Identifier(Constants.MOD_ID, "summon_missile");
     }
 
 }
