@@ -18,6 +18,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 public class MissileItemRenderer {
 
@@ -30,7 +31,14 @@ public class MissileItemRenderer {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         Entity entity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, MinecraftClient.getInstance().world);
         if (mode == ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND) {
+            matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(54));
+            matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(270));
+            matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-180));
 
+            RenderSystem.runAsFancy(() -> {
+                entityRenderDispatcher.render(entity, -0.17D, 0.2D, 0.38D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
+                        LightmapTextureManager.MAX_LIGHT_COORDINATE);
+            });
         } else {
             RenderSystem.runAsFancy(() -> {
                 entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
