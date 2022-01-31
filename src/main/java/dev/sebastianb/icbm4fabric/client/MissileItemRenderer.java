@@ -20,9 +20,10 @@ public class MissileItemRenderer {
 
     public static void register() {
         BuiltinItemRendererRegistry.DynamicItemRenderer itemRenderer = MissileItemRenderer::render;
-        BuiltinItemRendererRegistry.INSTANCE.register(ModItems.TATER_MISSILE, itemRenderer);
+        BuiltinItemRendererRegistry.INSTANCE.register(ModItems.Missiles.TATER, itemRenderer);
     }
 
+    @SuppressWarnings("resource")
     private static void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         AbstractRocketProjectile entity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, MinecraftClient.getInstance().world);

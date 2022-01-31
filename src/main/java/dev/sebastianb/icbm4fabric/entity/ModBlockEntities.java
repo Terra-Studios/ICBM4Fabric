@@ -11,5 +11,4 @@ public class ModBlockEntities {
   public static void register() {
 
   }
-
 }
