@@ -26,7 +26,7 @@ public class GenericRocketLauncher extends BlockWithEntity {
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-      return new GenericRocketLauncherEntity(pos, state);
+        return new GenericRocketLauncherEntity(pos, state);
     }
 
 

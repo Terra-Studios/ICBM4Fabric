@@ -25,4 +25,5 @@ public class ModEntityTypes {
     public static void register() {
         FabricDefaultAttributeRegistry.register(TATER_ROCKET, TaterRocketEntity.createMobAttributes());
     }
+
 }

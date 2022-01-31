@@ -8,7 +8,6 @@ import net.minecraft.util.Identifier;
 
 public class ModScreenHandlerRegistry {
 
-
     private static final Identifier identifier = new Identifier(Constants.MOD_ID, "launcher_gui");
 
     public static ScreenHandlerType<? extends LaunchScreenHandler> LAUNCHER_SCREEN =
@@ -18,8 +17,5 @@ public class ModScreenHandlerRegistry {
     public static void register() {
 
     }
-
-
-
 
 }
