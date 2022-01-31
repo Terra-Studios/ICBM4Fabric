@@ -184,7 +184,6 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
 //        }
         // below is in radians
         double yaw = Math.atan2(vX, vZ);
-        System.out.println(vX + " " + vY);
         double pitch = Math.atan2(Math.sqrt(Math.pow(vX, 2) + Math.pow(vZ, 2)), vY);
 
         // radians to degrees

@@ -28,10 +28,13 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
     // pain
     @Override
     public void render(TaterRocketEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int light) {
-        float radianYaw = (float) Math.toRadians(entity.getYaw()); // it was just the `yaw` variable b4
+        float radianYaw = (float) Math.toRadians(entity.prevYaw);
         float radianPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch())); // it was just the `pitch` variable b4
 
+        System.out.println("radianYaw: " + radianYaw + " radianPitch: " + radianPitch);
+
         // TODO: figure out why tf this goes "crazy" and spins like a madman
+        // ^ this is figured out inside the item now but on pathes, it goes crazy still
         matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(radianYaw));
         matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(radianPitch));
 

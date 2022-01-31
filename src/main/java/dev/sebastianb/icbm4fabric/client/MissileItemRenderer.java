@@ -2,6 +2,7 @@ package dev.sebastianb.icbm4fabric.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
+import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
 import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
 import dev.sebastianb.icbm4fabric.item.ModItems;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -29,7 +30,7 @@ public class MissileItemRenderer {
 
     private static void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        Entity entity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, MinecraftClient.getInstance().world);
+        AbstractRocketProjectile entity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, MinecraftClient.getInstance().world);
         if (mode == ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND) {
             matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(54));
             matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(270));
