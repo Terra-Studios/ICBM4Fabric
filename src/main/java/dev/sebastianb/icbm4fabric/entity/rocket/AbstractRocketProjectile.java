@@ -175,11 +175,16 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     }
 
     private void setRotation() {
-        if (vX == 0 && vY == 0 && vZ == 0) // could be better
-            return;
-
+//        if (vX == 0 && vY == 0 && vZ == 0) { // could be better
+//            System.out.println("hey fuck you");
+//            this.setRotation(0, 0);
+//            return;
+//        } else {
+//            System.out.println("hey fuck you too");
+//        }
         // below is in radians
         double yaw = Math.atan2(vX, vZ);
+        System.out.println(vX + " " + vY);
         double pitch = Math.atan2(Math.sqrt(Math.pow(vX, 2) + Math.pow(vZ, 2)), vY);
 
         // radians to degrees

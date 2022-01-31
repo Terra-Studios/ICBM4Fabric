@@ -32,10 +32,8 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
         float radianPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch())); // it was just the `pitch` variable b4
 
         // TODO: figure out why tf this goes "crazy" and spins like a madman
-        if (!entity.getStage().equals(LaunchStage.IDLE)) {
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(radianYaw));
-            matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(radianPitch));
-        }
+        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(radianYaw));
+        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(radianPitch));
 
         super.render(entity, tickDelta, yaw, matrices, vertexConsumerProvider, light);
     }
