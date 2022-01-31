@@ -2,18 +2,13 @@ package dev.sebastianb.icbm4fabric.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.sebastianb.icbm4fabric.Constants;
-import dev.sebastianb.icbm4fabric.client.gui.info.BlockStringGUIPos;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.ScreenTexts;
-import net.minecraft.client.gui.screen.ingame.*;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.GameRenderer;
@@ -24,7 +19,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
@@ -32,8 +26,6 @@ import net.minecraft.util.math.Vec3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Environment(EnvType.CLIENT)
@@ -207,7 +199,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     }
 
     @Override
-    public boolean isPauseScreen() {
+    public boolean shouldPause() {
         return false;
     }
 

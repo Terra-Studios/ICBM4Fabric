@@ -18,6 +18,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class AbstractRocketProjectile extends MobEntity implements MissileEntity {
@@ -67,6 +68,25 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         @Override
         public Double copy(Double time) {
             return time;
+        }
+    });
+
+    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<Vec3d>() {
+        @Override
+        public void write(PacketByteBuf buf, Vec3d value) {
+            buf.writeDouble(value.getX());
+            buf.writeDouble(value.getY());
+            buf.writeDouble(value.getZ());
+        }
+
+        @Override
+        public Vec3d read(PacketByteBuf buf) {
+            return new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        }
+
+        @Override
+        public Vec3d copy(Vec3d value) {
+            return value;
         }
     });
 
@@ -129,6 +149,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         dataTracker.startTracking(TIME, 0.0);
 //        dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d buffer and I'm lazy
         dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
+        dataTracker.startTracking(TARGET_POS, this.getPos());
     }
 
 
@@ -137,6 +158,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         TrackedDataHandlerRegistry.register(TIME.getType());
         // TrackedDataHandlerRegistry.register(VELOCITY.getType());
         TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above
+        TrackedDataHandlerRegistry.register(TARGET_POS.getType());
     }
 
     protected AbstractRocketProjectile(EntityType<? extends MobEntity> entityType, World world) {
@@ -148,7 +170,13 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         super.tick();
 
         if (path != null && updateMotion) {
-            path.updateMotion();
+            if (world.isClient) {
+                Vec3d targetPos = dataTracker.get(TARGET_POS);
+
+                setVelocity(targetPos.getX() - getX(), targetPos.getY() - getY(), targetPos.getZ() - getZ());
+            } else {
+                path.updateMotion();
+            }
             path.updateRotation();
         }
 
@@ -218,7 +246,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
                 pathType = LaunchPaths.MissingsPath;
                 break;
             case VaribleHeightPath:
-                this.path = new VariableHeightPath(this, 100);
+                this.path = new VariableHeightPath(this, 120);
                 pathType = LaunchPaths.VaribleHeightPath;
         }
     }
@@ -259,5 +287,12 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         super.setRotation(yaw, pitch);
     }
 
+    @Override
+    public void setVelocity(Vec3d velocity) {
+        super.setVelocity(velocity);
 
+        if (!world.isClient) {
+            dataTracker.set(TARGET_POS, velocity);
+        }
+    }
 }

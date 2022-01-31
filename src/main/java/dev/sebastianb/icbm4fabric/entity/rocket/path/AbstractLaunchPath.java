@@ -5,7 +5,6 @@ import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
 public class AbstractLaunchPath {
     AbstractRocketProjectile rocket;
     public AbstractLaunchPath(AbstractRocketProjectile rocket) {
-        System.out.println(rocket);
         this.rocket = rocket;
     }
 
