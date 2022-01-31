@@ -194,6 +194,9 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
             this.setRotation(prevYaw, prevPitch); // (To prevent) Invalid entity rotation: NaN, discarding.
             return;
         }
+
+        prevPitch = getPitch();
+        prevYaw = getYaw();
         this.setRotation(realYaw, realPitch);
 
     }

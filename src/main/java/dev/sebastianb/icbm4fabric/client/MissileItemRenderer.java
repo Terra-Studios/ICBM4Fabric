@@ -32,22 +32,32 @@ public class MissileItemRenderer {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         AbstractRocketProjectile entity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, MinecraftClient.getInstance().world);
         entity.setYaw(0); // used so the entity doesn't freak out when rendering
-        if (mode == ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND) {
-            matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(54));
-            matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(270));
-            matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-180));
 
-            RenderSystem.runAsFancy(() -> {
-                entityRenderDispatcher.render(entity, -0.17D, 0.2D, 0.38D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
-                        LightmapTextureManager.MAX_LIGHT_COORDINATE);
-            });
-        } else {
-            RenderSystem.runAsFancy(() -> {
-                entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
-                        LightmapTextureManager.MAX_LIGHT_COORDINATE);
-            });
+        switch (mode) {
+            case THIRD_PERSON_RIGHT_HAND:
+                matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(54));
+                matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(270));
+                matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-180));
+
+                RenderSystem.runAsFancy(() -> {
+                    entityRenderDispatcher.render(entity, -0.17D, 0.2D, 0.38D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
+                            LightmapTextureManager.MAX_LIGHT_COORDINATE);
+                });
+                break;
+            case GROUND:
+                RenderSystem.runAsFancy(() -> {
+                    entityRenderDispatcher.render(entity, 0.5, 0, 0.5, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
+                            LightmapTextureManager.MAX_LIGHT_COORDINATE);
+                });
+                break;
+            default:
+                RenderSystem.runAsFancy(() -> {
+                    entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
+                            LightmapTextureManager.MAX_LIGHT_COORDINATE);
+                });
         }
-
     }
 
 }
+
+
