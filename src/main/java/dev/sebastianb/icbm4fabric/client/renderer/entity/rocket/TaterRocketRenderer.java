@@ -28,7 +28,7 @@ public class TaterRocketRenderer extends MobEntityRenderer<TaterRocketEntity, Ta
     // pain
     @Override
     public void render(TaterRocketEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int light) {
-        float radianYaw = (float) Math.toRadians(entity.prevYaw);
+        float radianYaw = (float) Math.toRadians(entity.getYaw());
         float radianPitch = (float) Math.toRadians(MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch())); // it was just the `pitch` variable b4
 
         System.out.println("radianYaw: " + radianYaw + " radianPitch: " + radianPitch);

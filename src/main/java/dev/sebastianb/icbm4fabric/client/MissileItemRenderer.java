@@ -31,6 +31,7 @@ public class MissileItemRenderer {
     private static void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         AbstractRocketProjectile entity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, MinecraftClient.getInstance().world);
+        entity.setYaw(0); // used so the entity doesn't freak out when rendering
         if (mode == ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND) {
             matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(54));
             matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(270));
