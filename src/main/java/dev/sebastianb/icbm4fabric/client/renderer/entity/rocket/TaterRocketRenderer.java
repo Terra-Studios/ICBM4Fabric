@@ -1,12 +1,10 @@
 package dev.sebastianb.icbm4fabric.client.renderer.entity.rocket;
 
 import dev.sebastianb.icbm4fabric.Constants;
-import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.client.Icbm4fabricClient;
 import dev.sebastianb.icbm4fabric.client.model.entity.rocket.TaterRocketModel;
 import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.ArrowEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;

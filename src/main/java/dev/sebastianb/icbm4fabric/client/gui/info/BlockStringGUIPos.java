@@ -1,7 +1,5 @@
 package dev.sebastianb.icbm4fabric.client.gui.info;
 
-import net.minecraft.util.math.BlockPos;
-
 public class BlockStringGUIPos {
     String x = "", y = "", z = "";
 
