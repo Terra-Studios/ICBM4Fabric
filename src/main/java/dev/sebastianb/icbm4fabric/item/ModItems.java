@@ -1,6 +1,7 @@
 package dev.sebastianb.icbm4fabric.item;
 
 import dev.sebastianb.icbm4fabric.Constants;
+import dev.sebastianb.icbm4fabric.item.missile.MissileItem;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -20,8 +21,8 @@ public class ModItems {
             .build();
 
     // missiles
-    public static final Item TATER_MISSILE = registerItem(Constants.Items.TATER_MISSILE,
-            new Item(new Item.Settings().group(ITEMS_GROUP).maxCount(1)));
+    public static final MissileItem TATER_MISSILE = registerItem(Constants.Items.TATER_MISSILE,
+            new MissileItem(new Item.Settings().group(ITEMS_GROUP).maxCount(1)));
 
 
 
