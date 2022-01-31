@@ -68,7 +68,7 @@ public class TaterRocketEntity extends AbstractRocketProjectile {
                     // this.setVelocity(0,8,0);
                     setInitialBlockPos(this.getBlockPos());
                     this.setNoGravity(true);
-                    setPath(LaunchPaths.VaribleHeightPath);
+                    setPath(LaunchPaths.BezierPath);
                     setStage(LaunchStage.LAUNCHED);
                 }
                 updateMotion = false;

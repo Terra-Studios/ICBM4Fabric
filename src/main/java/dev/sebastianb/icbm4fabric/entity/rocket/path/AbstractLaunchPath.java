@@ -2,15 +2,13 @@ package dev.sebastianb.icbm4fabric.entity.rocket.path;
 
 import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
 
-public class AbstractLaunchPath {
+public abstract class AbstractLaunchPath {
     AbstractRocketProjectile rocket;
     public AbstractLaunchPath(AbstractRocketProjectile rocket) {
         this.rocket = rocket;
     }
 
-    public void updateMotion() {
-
-    }
+    public abstract void updateMotion();
 
     public void updateRotation() {
         double vX = rocket.vX;

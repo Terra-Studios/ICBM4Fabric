@@ -4,10 +4,7 @@ package dev.sebastianb.icbm4fabric.entity.rocket;
 import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
-import dev.sebastianb.icbm4fabric.entity.rocket.path.AbstractLaunchPath;
-import dev.sebastianb.icbm4fabric.entity.rocket.path.LaunchPaths;
-import dev.sebastianb.icbm4fabric.entity.rocket.path.MissingsPath;
-import dev.sebastianb.icbm4fabric.entity.rocket.path.VariableHeightPath;
+import dev.sebastianb.icbm4fabric.entity.rocket.path.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -248,6 +245,10 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
             case VaribleHeightPath:
                 this.path = new VariableHeightPath(this, 120);
                 pathType = LaunchPaths.VaribleHeightPath;
+                break;
+            case BezierPath:
+                this.path = new BezierLaunchPath(this, 100);
+                pathType = LaunchPaths.BezierPath;
         }
     }
 
