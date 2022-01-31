@@ -1,4 +1,4 @@
-package dev.sebastianb.icbm4fabric.entity.rocket;
+package dev.sebastianb.icbm4fabric.entity.missile;
 
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
@@ -13,10 +13,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TaterRocketEntity extends AbstractRocketProjectile {
+public class TaterMissileEntity extends AbstractMissileProjectile {
 
 
-    public TaterRocketEntity(EntityType<? extends MobEntity> entityType, World world) {
+    public TaterMissileEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 

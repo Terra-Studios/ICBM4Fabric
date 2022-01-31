@@ -3,10 +3,9 @@ package dev.sebastianb.icbm4fabric.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
-import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
-import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
-import dev.sebastianb.icbm4fabric.item.ModItems;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
+import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry.DynamicItemRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,17 +15,18 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3f;
 
-public class MissileItemRenderer {
+public class MissileItemRenderer implements DynamicItemRenderer {
 
-    public static void register() {
-        BuiltinItemRendererRegistry.DynamicItemRenderer itemRenderer = MissileItemRenderer::render;
-        BuiltinItemRendererRegistry.INSTANCE.register(ModItems.Missiles.TATER, itemRenderer);
+    public MissileItemRenderer() {
+        
     }
 
     @SuppressWarnings("resource")
-    private static void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
+    public void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStack,
+            VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        AbstractRocketProjectile entity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, MinecraftClient.getInstance().world);
+        AbstractMissileProjectile entity = new TaterMissileEntity(ModEntityTypes.TATER_MISSILE,
+                MinecraftClient.getInstance().world);
         entity.setYaw(0); // used so the entity doesn't freak out when rendering
 
         switch (mode) {
@@ -36,7 +36,8 @@ public class MissileItemRenderer {
                 matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-180));
 
                 RenderSystem.runAsFancy(() -> {
-                    entityRenderDispatcher.render(entity, -0.17D, 0.2D, 0.38D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
+                    entityRenderDispatcher.render(entity, -0.17D, 0.2D, 0.38D, 0.0F, 1.0F, matrixStack,
+                            vertexConsumerProvider,
                             LightmapTextureManager.MAX_LIGHT_COORDINATE);
                 });
                 break;
@@ -48,12 +49,11 @@ public class MissileItemRenderer {
                 break;
             default:
                 RenderSystem.runAsFancy(() -> {
-                    entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
+                    entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack,
+                            vertexConsumerProvider,
                             LightmapTextureManager.MAX_LIGHT_COORDINATE);
                 });
         }
     }
 
 }
-
-

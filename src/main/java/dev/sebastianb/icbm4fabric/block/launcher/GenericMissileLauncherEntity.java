@@ -14,9 +14,9 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-public class GenericRocketLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory {
-    public GenericRocketLauncherEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.ROCKET_LAUNCHER, pos, state);
+public class GenericMissileLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory {
+    public GenericMissileLauncherEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.MISSILE_LAUNCHER, pos, state);
     }
 
     @Override

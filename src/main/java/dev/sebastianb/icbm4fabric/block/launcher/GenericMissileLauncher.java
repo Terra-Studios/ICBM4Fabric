@@ -18,15 +18,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 // TODO: Update to 1.17
-public class GenericRocketLauncher extends BlockWithEntity {
-    public GenericRocketLauncher() {
+public class GenericMissileLauncher extends BlockWithEntity {
+    public GenericMissileLauncher() {
         super(FabricBlockSettings.of(Material.METAL).strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL));
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new GenericRocketLauncherEntity(pos, state);
+        return new GenericMissileLauncherEntity(pos, state);
     }
 
 

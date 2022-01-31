@@ -23,7 +23,7 @@ public class BipedEntityModelMixin<T extends LivingEntity> {
     @Shadow @Final public ModelPart rightArm;
 
     @Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At(value = "RETURN"))
-    private void rotateArmsToMatchRocket(T entity, float f, float g, float h, float i, float j, CallbackInfo ci) {
+    private void rotateArmsToMatchMissile(T entity, float f, float g, float h, float i, float j, CallbackInfo ci) {
         if (entity.getMainHandStack().isOf(ModItems.Missiles.TATER.asItem())) {
             this.rightArm.roll = 90.5F;
             this.rightArm.pitch = 0;
