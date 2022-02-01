@@ -35,7 +35,6 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
 
     @Override
     public void tick() {
-        super.tick();
         this.noClip = true;
         this.setCustomName(Text.of(getStage().name()));
 

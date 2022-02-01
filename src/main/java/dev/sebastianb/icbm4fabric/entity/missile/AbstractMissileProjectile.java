@@ -5,6 +5,7 @@ import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandler;
@@ -31,6 +32,11 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     }
 
     @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
+    }
+
+    @Override
     public boolean collides() {
         return true;
     }
@@ -38,6 +44,12 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     @Override
     public boolean isAttackable() {
         return true;
+    }
+
+    @Override
+    public void setVelocity(Vec3d velocity) {
+        super.setVelocity(velocity);
+        velocityDirty = true;
     }
 
     @Override
@@ -167,9 +179,9 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
 
     @Override
     public void tick() {
+        super.tick();
         this.updateMotion();
         this.setRotation();
-        super.tick();
     }
 
     // TODO: Have some values fed upon init
@@ -196,12 +208,12 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         double hvel = xfactor
                 * (1 / Math.sqrt(1 + (2 * acc * this.timeSinceStage + b) * (2 * acc * this.timeSinceStage + b)));
 
+        this.move(MovementType.SELF, this.getVelocity());
         this.setVelocity(
                 (Math.sin(dYaw) * hvel),
                 xfactor * ((2 * acc * this.timeSinceStage + b)
                         / Math.sqrt(1 + (2 * acc * this.timeSinceStage + b) * (2 * acc * this.timeSinceStage + b))),
                 (Math.cos(dYaw) * hvel));
-
         // this.setVelocity(
         // Math.sin(this.timeSinceStage / (diameter / speed)) * speed,
         // Math.cos(this.timeSinceStage / (diameter / speed)) * speed,
@@ -219,6 +231,9 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
 
     private void setRotation() {
         Vec3d vec3d = this.getVelocity();
+        if (Double.isNaN(vec3d.x) || Double.isNaN(vec3d.y) || Double.isNaN(vec3d.z)) {
+            return;
+        }
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
             double d = vec3d.horizontalLength();
             this.setYaw((float)(MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875));
@@ -234,19 +249,6 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         this.setPitch((float)(MathHelper.atan2(f, l) * 57.2957763671875));
         this.setPitch(PersistentProjectileEntity.updateRotation(this.prevPitch, this.getPitch()));
         this.setYaw(PersistentProjectileEntity.updateRotation(this.prevYaw, this.getYaw()));
-
-        /*
-        this.prevYaw = this.getYaw();
-        this.prevPitch = this.getPitch();
-        double yaw = Math.atan2(vX, vZ);
-        double pitch = Math.atan2(Math.sqrt(Math.pow(vX, 2) + Math.pow(vZ, 2)), vY);
-
-        // radians to degrees
-        float realYaw = (float) Math.toDegrees(yaw);
-        float realPitch = (float) Math.toDegrees(pitch);
-
-
-        this.setRotation(realYaw, realPitch);*/
 
     }
 
