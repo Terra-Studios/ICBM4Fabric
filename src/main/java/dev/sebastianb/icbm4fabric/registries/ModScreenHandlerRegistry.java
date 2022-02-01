@@ -11,7 +11,8 @@ public class ModScreenHandlerRegistry {
     private static final Identifier identifier = new Identifier(Constants.MOD_ID, "launcher_gui");
 
     public static ScreenHandlerType<? extends LaunchScreenHandler> LAUNCHER_SCREEN =
-            ScreenHandlerRegistry.registerExtended(identifier, LaunchScreenHandler::new);
+            ScreenHandlerRegistry.registerSimple(identifier, LaunchScreenHandler::new);
+
 
     public static void register() {
 
