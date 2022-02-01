@@ -1,10 +1,9 @@
-package dev.sebastianb.icbm4fabric.entity.rocket;
+package dev.sebastianb.icbm4fabric.entity.missile;
 
 
 import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
-import dev.sebastianb.icbm4fabric.entity.rocket.path.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -18,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public abstract class AbstractRocketProjectile extends MobEntity implements MissileEntity {
+public abstract class AbstractMissileProjectile extends MobEntity implements MissileEntity {
 
     AbstractLaunchPath path;
     LaunchPaths pathType;
@@ -34,7 +33,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
 
     public boolean updateMotion;
 
-    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<LaunchStage>() {
+    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<LaunchStage>() {
         @Override
         public void write(PacketByteBuf buf, LaunchStage stage) {
             buf.writeEnumConstant(stage);
@@ -51,7 +50,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         }
     });
 
-    private static final TrackedData<Double> TIME = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<Double>() {
+    private static final TrackedData<Double> TIME = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<Double>() {
         @Override
         public void write(PacketByteBuf buf, Double time) {
             buf.writeDouble(time);
@@ -88,7 +87,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     });
 
 //    private static final TrackedData<BlockPos> VELOCITY = DataTracker.registerData(AbstractRocketProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
-    private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractRocketProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
+    private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
     @Override
     public void readCustomDataFromNbt(NbtCompound tag) {
@@ -158,7 +157,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         TrackedDataHandlerRegistry.register(TARGET_POS.getType());
     }
 
-    protected AbstractRocketProjectile(EntityType<? extends MobEntity> entityType, World world) {
+    protected AbstractMissileProjectile(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -218,7 +217,32 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
                 // divided by 2 across everything seems to work. Maybe if I can get the X then do math with what I need to divide, it'd work.
                 // best approach I think is to get a velocity vector req to launch from superclass for later. Right now I just have these temp variables
 
+    }
 
+    private void setRotation() {
+//        if (vX == 0 && vY == 0 && vZ == 0) { // could be better
+//            System.out.println("hey fuck you");
+//            this.setRotation(0, 0);
+//            return;
+//        } else {
+//            System.out.println("hey fuck you too");
+//        }
+        // below is in radians
+        double yaw = Math.atan2(vX, vZ);
+        double pitch = Math.atan2(Math.sqrt(Math.pow(vX, 2) + Math.pow(vZ, 2)), vY);
+
+        // radians to degrees
+        float realYaw = (float) Math.toDegrees(yaw);
+        float realPitch = (float) Math.toDegrees(pitch);
+
+        if (Double.isNaN(realYaw) || Double.isNaN(realPitch)) {
+            this.setRotation(prevYaw, prevPitch); // (To prevent) Invalid entity rotation: NaN, discarding.
+            return;
+        }
+
+        prevPitch = getPitch();
+        prevYaw = getYaw();
+        this.setRotation(realYaw, realPitch);
 
     }
 

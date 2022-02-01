@@ -1,9 +1,14 @@
 package dev.sebastianb.icbm4fabric.client.gui;
 
+import java.util.ArrayList;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import org.lwjgl.glfw.GLFW;
+
 import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
-import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
+import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -113,7 +118,16 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     public void onClose() {
         super.onClose();
         this.openedGUI = false;
+    }
 
+    // used to prevent close on "E" press
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_E) {
+            return true;
+        } else {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
     }
 
     // used to prevent close on "E" press
@@ -142,7 +156,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
             drawTexture(matrices, 0, 0, 0, 0, backgroundWidth, backgroundHeight, 256, 256);
 
-            this.drawEntity(this.x + 71, this.y + 180, 40, (float)(this.x + 88 - mouseX), (float)(this.y + 45 - 30 - mouseY), new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, client.world)); // new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, this.client.world)
+            this.drawEntity(this.x + 71, this.y + 180, 40, (float)(this.x + 88 - mouseX), (float)(this.y + 45 - 30 - mouseY), new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, client.world)); // new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, this.client.world)
 
         }
         matrices.pop();

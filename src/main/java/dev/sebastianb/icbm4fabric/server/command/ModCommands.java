@@ -1,22 +1,21 @@
 package dev.sebastianb.icbm4fabric.server.command;
 
+import java.util.logging.Level;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
-import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
-import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
+import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.logging.Level;
 
 public class ModCommands {
 
@@ -43,9 +42,9 @@ public class ModCommands {
             World world = player.getEntityWorld();
             //new DesertBlast(player.getEntityWorld(), lookPos);
 
-            TaterRocketEntity rocketEntity = new TaterRocketEntity(ModEntityTypes.TATER_ROCKET, world);
+            TaterMissileEntity missileEntity = new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, world);
 
-            world.spawnEntity(rocketEntity);
+            world.spawnEntity(missileEntity);
 
         } catch (CommandSyntaxException e) {
             ICBM4Fabric.LOGGER.log(Level.WARNING, e.getMessage());
