@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -21,6 +23,5 @@ public class ModEntityTypes {
     );
 
     public static void register() {
-        FabricDefaultAttributeRegistry.register(TATER_MISSILE, TaterMissileEntity.createMobAttributes());
     }
 }

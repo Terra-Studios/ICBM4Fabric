@@ -3,47 +3,24 @@ package dev.sebastianb.icbm4fabric.entity.missile;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class TaterMissileEntity extends AbstractMissileProjectile {
 
 
-    public TaterMissileEntity(EntityType<? extends MobEntity> entityType, World world) {
+    public TaterMissileEntity(EntityType<? extends AbstractMissileProjectile> entityType, World world) {
         super(entityType, world);
     }
-
-
-    @Override
-    protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-        player.startRiding(this);
-        if (player.isSneaking()) {
-            setStage(LaunchStage.LIT);
-        }
-        return ActionResult.PASS;
-    }
-
 
 
     public void launch(BlockPos initialLocation, BlockPos finalLocation, double speed) {
         this.updatePosition(initialLocation.getX(), initialLocation.getY(), initialLocation.getZ());
         super.initialLocation = initialLocation;
     }
-
-
-
-    @Override
-    public void setCustomNameVisible(boolean visible) {
-        super.setCustomNameVisible(true);
-    }
-
 
     @Override
     public void tick() {

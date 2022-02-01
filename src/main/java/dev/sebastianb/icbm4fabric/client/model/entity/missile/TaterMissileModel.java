@@ -8,17 +8,15 @@ import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class TaterMissileModel extends EntityModel<TaterMissileEntity> {
+public class TaterMissileModel extends MissileModel<TaterMissileEntity> {
 
     private final ModelPart root;
 
     public TaterMissileModel(ModelPart root) {
         this.root = root;
         this.root.setPivot(0.0F, 24.0F, 0.0F);
-
     }
 
     public static TexturedModelData getTextureModelData() {

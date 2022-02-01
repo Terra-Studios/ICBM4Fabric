@@ -7,7 +7,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import org.lwjgl.glfw.GLFW;
 
 import dev.sebastianb.icbm4fabric.Constants;
+import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -215,7 +217,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         return LiteralText.EMPTY;
     }
 
-    private void drawEntity(int x, int y, int size, float mouseX, float mouseY, LivingEntity entity) {
+    private void drawEntity(int x, int y, int size, float mouseX, float mouseY, AbstractMissileProjectile entity) {
         // float f = (float)Math.atan((double)(mouseX / 40.0F));
         // float g = (float)Math.atan((double)(mouseY / 40.0F));
         MatrixStack matrixStack = RenderSystem.getModelViewStack();
@@ -230,20 +232,15 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         // Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0F);
         // quaternion.hamiltonProduct(quaternion2);
         matrixStack2.multiply(quaternion);
-        float h = entity.bodyYaw;
         float i = entity.getYaw();
         float j = entity.getPitch();
-        float k = entity.prevHeadYaw;
-        float l = entity.headYaw;
 
         if (entityGUIRotate) {
             bodyRotate = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10f) - bodyRotateDiff); // spins the entity based on a time
         }
 
-        entity.bodyYaw = bodyRotate; // yaw 180 default. Spins entity
         entity.setYaw(180.0F);
 
-        entity.prevHeadYaw = bodyRotate;
 
         entity.setYaw(bodyRotate); // = bodyRotate;
         DiffuseLighting.method_34742();
@@ -257,11 +254,8 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         });
         immediate.draw();
         entityRenderDispatcher.setRenderShadows(true);
-        entity.bodyYaw = h;
         entity.setYaw(i);
         entity.setPitch(j);
-        entity.prevHeadYaw = k;
-        entity.headYaw = l;
         matrixStack.pop();
         RenderSystem.applyModelViewMatrix();
         DiffuseLighting.enableGuiDepthLighting();
