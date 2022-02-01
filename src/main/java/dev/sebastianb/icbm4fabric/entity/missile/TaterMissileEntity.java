@@ -3,9 +3,13 @@ package dev.sebastianb.icbm4fabric.entity.missile;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -34,6 +38,7 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
 
         switch (getStage()) {
             case IDLE:
+                this.setPitch(90);
                 this.setVelocity(0,0,0);
                 break;
             case LIT:

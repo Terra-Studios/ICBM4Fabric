@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
@@ -42,7 +43,7 @@ public class ModCommands {
             World world = player.getEntityWorld();
             //new DesertBlast(player.getEntityWorld(), lookPos);
 
-            TaterMissileEntity missileEntity = new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, world);
+            AbstractMissileProjectile missileEntity = ModEntityTypes.Missiles.TATER.getType().create(world);
 
             world.spawnEntity(missileEntity);
 

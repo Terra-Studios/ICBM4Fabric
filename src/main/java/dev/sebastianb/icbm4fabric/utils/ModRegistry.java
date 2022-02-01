@@ -3,9 +3,12 @@ package dev.sebastianb.icbm4fabric.utils;
 import java.util.Arrays;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -48,4 +51,8 @@ public class ModRegistry {
     public <T extends BlockEntity> BlockEntityType<T> blockEntity(FabricBlockEntityTypeBuilder.Factory<T> factory, String name, BlockEnum... blocks) {
 		return blockEntity(factory, name, Arrays.stream(blocks).map(i -> i.asBlock()).toArray(Block[]::new));
 	}
+
+    public <T extends Entity> EntityType<T> entityType(FabricEntityTypeBuilder<T> builder, String name) {
+        return Registry.register(Registry.ENTITY_TYPE, new Identifier(mod_id, name), builder.build());
+    }
 }

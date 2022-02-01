@@ -16,30 +16,38 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class AbstractMissileProjectile extends PersistentProjectileEntity implements MissileEntity {
 
     @Override
+    public boolean collides() {
+        return true;
+    }
+
+    @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
+        if (!this.isAlive()) {
+            return ActionResult.PASS;
+        }
         player.startRiding(this);
         if (player.isSneaking()) {
             setStage(LaunchStage.LIT);
         }
-        return ActionResult.PASS;
+        return super.interact(player, hand);
     }
-
 
     @Override
     public void setCustomNameVisible(boolean visible) {
         super.setCustomNameVisible(true);
     }
 
-
     public double timeSinceStage = 0;
 
     public BlockPos initialLocation = new BlockPos(0, 0, 0);
-    public BlockPos finalLocation = new BlockPos(0, 69, 0);
+    public BlockPos finalLocation = new BlockPos(0, 69, 0); // nice
 
     public double vX;
     public double vY;
@@ -150,7 +158,6 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
         super.tick();
         this.updateMotion();
         this.setRotation();
-
     }
 
     // TODO: Have some values fed upon init
@@ -207,6 +214,27 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
         // System.out.println("hey fuck you too");
         // }
         // below is in radians
+
+
+        Vec3d vec3d = this.getVelocity();
+        if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
+            double d = vec3d.horizontalLength();
+            this.setYaw((float)(MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875));
+            this.setPitch((float)(MathHelper.atan2(vec3d.y, d) * 57.2957763671875));
+            this.prevYaw = this.getYaw();
+            this.prevPitch = this.getPitch();
+        }
+        double e = vec3d.x;
+        double f = vec3d.y;
+        double g = vec3d.z;
+        double l = vec3d.horizontalLength();
+        this.setYaw((float)(MathHelper.atan2(e, g) * 57.2957763671875));
+        this.setPitch((float)(MathHelper.atan2(f, l) * 57.2957763671875));
+        this.setPitch(PersistentProjectileEntity.updateRotation(this.prevPitch, this.getPitch()));
+        this.setYaw(PersistentProjectileEntity.updateRotation(this.prevYaw, this.getYaw()));
+/*
+        this.prevYaw = this.getYaw();
+        this.prevPitch = this.getPitch();
         double yaw = Math.atan2(vX, vZ);
         double pitch = Math.atan2(Math.sqrt(Math.pow(vX, 2) + Math.pow(vZ, 2)), vY);
 
@@ -215,13 +243,10 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
         float realPitch = (float) Math.toDegrees(pitch);
 
         if (Double.isNaN(realYaw) || Double.isNaN(realPitch)) {
-            this.setRotation(prevYaw, prevPitch); // (To prevent) Invalid entity rotation: NaN, discarding.
-            return;
+            return;// (To prevent) Invalid entity rotation: NaN, discarding.
         }
 
-        prevPitch = getPitch();
-        prevYaw = getYaw();
-        this.setRotation(realYaw, realPitch);
+        this.setRotation(realYaw, realPitch);*/
 
     }
 

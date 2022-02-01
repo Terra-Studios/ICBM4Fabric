@@ -1,14 +1,14 @@
 package dev.sebastianb.icbm4fabric.network;
 
+import java.util.logging.Level;
+
 import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
-import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.logging.Level;
 
 public class ModPackets {
 
@@ -20,9 +20,9 @@ public class ModPackets {
             BlockPos missileBase = buf.readBlockPos();
             ServerWorld serverWorld = player.getWorld();
             server.execute((() -> {
-                TaterMissileEntity taterMissileEntity = new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, serverWorld);
-                taterMissileEntity.updatePosition(missileBase.getX() + 0.5, missileBase.getY() + 0.2, missileBase.getZ() + 0.5);
-                serverWorld.spawnEntity(taterMissileEntity);
+                AbstractMissileProjectile missileEntity = ModEntityTypes.Missiles.TATER.getType().create(serverWorld);
+                missileEntity.updatePosition(missileBase.getX() + 0.5, missileBase.getY() + 0.2, missileBase.getZ() + 0.5);
+                serverWorld.spawnEntity(missileEntity);
             }));
         }));
     }

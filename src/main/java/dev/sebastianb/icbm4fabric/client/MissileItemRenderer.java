@@ -26,7 +26,7 @@ public class MissileItemRenderer implements DynamicItemRenderer {
     public void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStack,
             VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        AbstractMissileProjectile entity = new TaterMissileEntity(ModEntityTypes.TATER_MISSILE,
+        AbstractMissileProjectile entity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(),
                 MinecraftClient.getInstance().world);
         entity.setYaw(0); // used so the entity doesn't freak out when rendering
 
