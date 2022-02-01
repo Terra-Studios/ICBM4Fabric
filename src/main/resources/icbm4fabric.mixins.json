@@ -2,12 +2,10 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dev.sebastianb.icbm4fabric.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_8",
   "mixins": [
-
   ],
   "client": [
-    "BipedEntityModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
