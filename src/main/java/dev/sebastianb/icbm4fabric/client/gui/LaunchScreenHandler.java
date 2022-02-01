@@ -1,5 +1,6 @@
 package dev.sebastianb.icbm4fabric.client.gui;
 
+import dev.sebastianb.icbm4fabric.item.ModItems;
 import dev.sebastianb.icbm4fabric.registries.ModScreenHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -14,6 +15,6 @@ public class LaunchScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return true;
+        return !player.isHolding(ModItems.Missiles.TATER.asItem());
     }
 }

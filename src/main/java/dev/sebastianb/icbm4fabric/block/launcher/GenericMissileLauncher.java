@@ -1,5 +1,6 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
+import dev.sebastianb.icbm4fabric.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -17,7 +18,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-// TODO: Update to 1.17
 public class GenericMissileLauncher extends BlockWithEntity {
     public GenericMissileLauncher() {
         super(FabricBlockSettings.of(Material.METAL).strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL));
@@ -35,7 +35,9 @@ public class GenericMissileLauncher extends BlockWithEntity {
         if (!world.isClient) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
             if (screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+                if (!player.isHolding(ModItems.Missiles.TATER.asItem())) {
+                    player.openHandledScreen(screenHandlerFactory);
+                }
             }
         }
 //        if (world.isClient) {
