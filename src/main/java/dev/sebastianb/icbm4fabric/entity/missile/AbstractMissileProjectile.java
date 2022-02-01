@@ -14,11 +14,13 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class AbstractMissileProjectile extends MobEntity implements MissileEntity {
 
-
+    AbstractLaunchPath path;
+    LaunchPaths pathType;
 
     public double timeSinceStage = 0;
 
@@ -28,6 +30,8 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
     public double vX;
     public double vY;
     public double vZ;
+
+    public boolean updateMotion;
 
     private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<LaunchStage>() {
         @Override
@@ -63,6 +67,25 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
         }
     });
 
+    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<Vec3d>() {
+        @Override
+        public void write(PacketByteBuf buf, Vec3d value) {
+            buf.writeDouble(value.getX());
+            buf.writeDouble(value.getY());
+            buf.writeDouble(value.getZ());
+        }
+
+        @Override
+        public Vec3d read(PacketByteBuf buf) {
+            return new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        }
+
+        @Override
+        public Vec3d copy(Vec3d value) {
+            return value;
+        }
+    });
+
 //    private static final TrackedData<BlockPos> VELOCITY = DataTracker.registerData(AbstractRocketProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
     private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
@@ -80,11 +103,18 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
 //        double vZ = tag.getDouble("vZ");
 //        this.setVelocity(new Vec3d(vX, vY, vZ));
 
+        if (tag.contains("Path")) {
+
+            setPath(LaunchPaths.valueOf(tag.getString("Path")));
+        }
+
 
         int x = tag.getInt("iX");
         int y = tag.getInt("iY");
         int z = tag.getInt("iZ");
         this.setInitialBlockPos(new BlockPos(x,y,z));
+
+
     }
 
     @Override
@@ -102,6 +132,10 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
         tag.putInt("iX", initialLocation.getX());
         tag.putInt("iY", initialLocation.getY());
         tag.putInt("iZ", initialLocation.getZ());
+
+        if (pathType != null) {
+            tag.putString("Path", pathType.name());
+        }
     }
 
     @Override
@@ -111,6 +145,7 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
         dataTracker.startTracking(TIME, 0.0);
 //        dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d buffer and I'm lazy
         dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
+        dataTracker.startTracking(TARGET_POS, this.getPos());
     }
 
 
@@ -119,6 +154,7 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
         TrackedDataHandlerRegistry.register(TIME.getType());
         // TrackedDataHandlerRegistry.register(VELOCITY.getType());
         TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above
+        TrackedDataHandlerRegistry.register(TARGET_POS.getType());
     }
 
     protected AbstractMissileProjectile(EntityType<? extends MobEntity> entityType, World world) {
@@ -128,8 +164,17 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
     @Override
     public void tick() {
         super.tick();
-        this.updateMotion();
-        this.setRotation();
+
+        if (path != null && updateMotion) {
+            if (world.isClient) {
+                Vec3d targetPos = dataTracker.get(TARGET_POS);
+
+                setVelocity(targetPos.getX() - getX(), targetPos.getY() - getY(), targetPos.getZ() - getZ());
+            } else {
+                path.updateMotion();
+            }
+            path.updateRotation();
+        }
 
     }
 
@@ -214,6 +259,22 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
         }
     }
 
+    @Override
+    public void setPath(LaunchPaths path) {
+        switch (path) {
+            case MissingsPath:
+                this.path = new MissingsPath(this);
+                pathType = LaunchPaths.MissingsPath;
+                break;
+            case VaribleHeightPath:
+                this.path = new VariableHeightPath(this, 120);
+                pathType = LaunchPaths.VaribleHeightPath;
+                break;
+            case BezierPath:
+                this.path = new BezierLaunchPath(this, 100);
+                pathType = LaunchPaths.BezierPath;
+        }
+    }
 
     public void setInitialBlockPos(BlockPos blockPos) {
         this.initialLocation = blockPos;
@@ -246,4 +307,17 @@ public abstract class AbstractMissileProjectile extends MobEntity implements Mis
         // return super.damage(source, amount);
     }
 
+    @Override
+    public void setRotation(float yaw, float pitch) {
+        super.setRotation(yaw, pitch);
+    }
+
+    @Override
+    public void setVelocity(Vec3d velocity) {
+        super.setVelocity(velocity);
+
+        if (!world.isClient) {
+            dataTracker.set(TARGET_POS, velocity);
+        }
+    }
 }

@@ -28,6 +28,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Environment(EnvType.CLIENT)
@@ -115,6 +118,16 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     public void onClose() {
         super.onClose();
         this.openedGUI = false;
+    }
+
+    // used to prevent close on "E" press
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_E) {
+            return true;
+        } else {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
     }
 
     // used to prevent close on "E" press
