@@ -10,8 +10,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 @SuppressWarnings("all") // like every good programmer
 public class ModClientEntityRegister {
     public static void register() {
-        EntityRendererRegistry.INSTANCE.register(ModEntityTypes.TATER_MISSILE, (context)
-                -> new TaterMissileRenderer(context));
+        EntityRendererRegistry.INSTANCE.register(ModEntityTypes.TATER_MISSILE, TaterMissileRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(Icbm4fabricClient.TATER_LAYER, TaterMissileModel::getTextureModelData);
     }
