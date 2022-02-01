@@ -1,4 +1,4 @@
-package dev.sebastianb.icbm4fabric.entity.rocket.path;
+package dev.sebastianb.icbm4fabric.entity.missile.path;
 
 public enum LaunchPaths {
     MissingsPath,

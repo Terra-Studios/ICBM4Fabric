@@ -1,6 +1,6 @@
-package dev.sebastianb.icbm4fabric.entity.rocket.path;
+package dev.sebastianb.icbm4fabric.entity.missile.path;
 
-import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import net.minecraft.util.math.Vec3d;
 
 public class BezierLaunchPath extends AbstractLaunchPath {
@@ -15,7 +15,7 @@ public class BezierLaunchPath extends AbstractLaunchPath {
 
     double timeToTake;
 
-    public BezierLaunchPath(AbstractRocketProjectile rocket, double maxHeight) {
+    public BezierLaunchPath(AbstractMissileProjectile rocket, double maxHeight) {
         super(rocket);
 
         initialPos = Vec3d.ofCenter(rocket.initialLocation);

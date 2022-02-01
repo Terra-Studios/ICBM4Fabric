@@ -1,10 +1,10 @@
-package dev.sebastianb.icbm4fabric.entity.rocket.path;
+package dev.sebastianb.icbm4fabric.entity.missile.path;
 
-import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 
 public abstract class AbstractLaunchPath {
-    AbstractRocketProjectile rocket;
-    public AbstractLaunchPath(AbstractRocketProjectile rocket) {
+    AbstractMissileProjectile rocket;
+    public AbstractLaunchPath(AbstractMissileProjectile rocket) {
         this.rocket = rocket;
     }
 

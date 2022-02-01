@@ -1,6 +1,6 @@
-package dev.sebastianb.icbm4fabric.entity.rocket.path;
+package dev.sebastianb.icbm4fabric.entity.missile.path;
 
-import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import net.minecraft.util.math.Vec3d;
 
 public class VariableHeightPath extends AbstractLaunchPath{
@@ -17,7 +17,7 @@ public class VariableHeightPath extends AbstractLaunchPath{
     final double SPEED = 7;
     final int NUMBER_OF_DISTANCE_CHECKS = 4;
 
-    public VariableHeightPath(AbstractRocketProjectile rocket, double maxHeight) {
+    public VariableHeightPath(AbstractMissileProjectile rocket, double maxHeight) {
         super(rocket);
         this.height = maxHeight;
 

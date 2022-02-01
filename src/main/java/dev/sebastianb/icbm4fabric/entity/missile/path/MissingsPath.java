@@ -1,7 +1,7 @@
-package dev.sebastianb.icbm4fabric.entity.rocket.path;
+package dev.sebastianb.icbm4fabric.entity.missile.path;
 
 import dev.sebastianb.icbm4fabric.SebaUtils;
-import dev.sebastianb.icbm4fabric.entity.rocket.AbstractRocketProjectile;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 
 public class MissingsPath extends AbstractLaunchPath{
 
@@ -15,7 +15,7 @@ public class MissingsPath extends AbstractLaunchPath{
 
     double arcModifier;
 
-    public MissingsPath(AbstractRocketProjectile rocket) {
+    public MissingsPath(AbstractMissileProjectile rocket) {
         super(rocket);
         if (!rocket.world.isClient)
             System.out.println("Rocket Travel Distance: " + rocket.finalLocation.getManhattanDistance(rocket.initialLocation));

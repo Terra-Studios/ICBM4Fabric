@@ -1,16 +1,13 @@
 package dev.sebastianb.icbm4fabric.client.model.entity.rocket;
 
-import com.ibm.icu.text.Normalizer2;
-import dev.sebastianb.icbm4fabric.entity.rocket.TaterRocketEntity;
+import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.BatEntityModel;
-import net.minecraft.client.render.entity.model.CreeperEntityModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
 
-public class TaterRocketModel extends EntityModel<TaterRocketEntity> {
+public class TaterRocketModel extends EntityModel<TaterMissileEntity> {
 
     private final ModelPart root;
 
@@ -121,7 +118,7 @@ public class TaterRocketModel extends EntityModel<TaterRocketEntity> {
     }
 
     @Override
-    public void setAngles(TaterRocketEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+    public void setAngles(TaterMissileEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
 
     }
 

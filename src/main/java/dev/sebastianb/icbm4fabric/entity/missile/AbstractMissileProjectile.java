@@ -1,10 +1,10 @@
-package dev.sebastianb.icbm4fabric.entity.rocket;
+package dev.sebastianb.icbm4fabric.entity.missile;
 
 
 import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
-import dev.sebastianb.icbm4fabric.entity.rocket.path.*;
+import dev.sebastianb.icbm4fabric.entity.missile.path.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public abstract class AbstractRocketProjectile extends MobEntity implements MissileEntity {
+public abstract class AbstractMissileProjectile extends MobEntity implements MissileEntity {
 
     AbstractLaunchPath path;
     LaunchPaths pathType;
@@ -34,7 +34,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
 
     public boolean updateMotion;
 
-    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<LaunchStage>() {
+    private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<LaunchStage>() {
         @Override
         public void write(PacketByteBuf buf, LaunchStage stage) {
             buf.writeEnumConstant(stage);
@@ -51,7 +51,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         }
     });
 
-    private static final TrackedData<Double> TIME = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<Double>() {
+    private static final TrackedData<Double> TIME = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<Double>() {
         @Override
         public void write(PacketByteBuf buf, Double time) {
             buf.writeDouble(time);
@@ -68,7 +68,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         }
     });
 
-    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractRocketProjectile.class, new TrackedDataHandler<Vec3d>() {
+    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<Vec3d>() {
         @Override
         public void write(PacketByteBuf buf, Vec3d value) {
             buf.writeDouble(value.getX());
@@ -88,7 +88,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
     });
 
 //    private static final TrackedData<BlockPos> VELOCITY = DataTracker.registerData(AbstractRocketProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
-    private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractRocketProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
+    private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
     @Override
     public void readCustomDataFromNbt(NbtCompound tag) {
@@ -158,7 +158,7 @@ public abstract class AbstractRocketProjectile extends MobEntity implements Miss
         TrackedDataHandlerRegistry.register(TARGET_POS.getType());
     }
 
-    protected AbstractRocketProjectile(EntityType<? extends MobEntity> entityType, World world) {
+    protected AbstractMissileProjectile(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 
