@@ -3,14 +3,21 @@ package dev.sebastianb.icbm4fabric.entity.missile;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class TaterMissileEntity extends AbstractMissileProjectile {
@@ -28,9 +35,9 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
 
     @Override
     public void tick() {
+        super.tick();
         this.noClip = true;
         this.setCustomName(Text.of(getStage().name()));
-
 
         vX = this.getVelocity().getX();
         vY = this.getVelocity().getY();
@@ -71,7 +78,6 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
         //Vec3d currentPos = this.getPos();
         timeSinceStage++;
     }
-
 
 
     private void summonParticles(ParticleEffect particleEffect, int times, double multiplier, double yVelocity) {

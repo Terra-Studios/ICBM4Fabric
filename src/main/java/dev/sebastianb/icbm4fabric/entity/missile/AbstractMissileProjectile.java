@@ -3,6 +3,7 @@ package dev.sebastianb.icbm4fabric.entity.missile;
 import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -12,7 +13,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -20,10 +23,20 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public abstract class AbstractMissileProjectile extends PersistentProjectileEntity implements MissileEntity {
+public abstract class AbstractMissileProjectile extends Entity implements MissileEntity {
+
+    @Override
+    public Packet<?> createSpawnPacket() {
+        return new EntitySpawnS2CPacket(this);
+    }
 
     @Override
     public boolean collides() {
+        return true;
+    }
+
+    @Override
+    public boolean isAttackable() {
         return true;
     }
 
@@ -134,7 +147,6 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
 
     @Override
     protected void initDataTracker() {
-        super.initDataTracker();
         dataTracker.startTracking(STAGE, LaunchStage.IDLE);
         dataTracker.startTracking(TIME, 0.0);
         // dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d
@@ -155,9 +167,9 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
 
     @Override
     public void tick() {
-        super.tick();
         this.updateMotion();
         this.setRotation();
+        super.tick();
     }
 
     // TODO: Have some values fed upon init
@@ -206,16 +218,6 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
     }
 
     private void setRotation() {
-        // if (vX == 0 && vY == 0 && vZ == 0) { // could be better
-        // System.out.println("hey fuck you");
-        // this.setRotation(0, 0);
-        // return;
-        // } else {
-        // System.out.println("hey fuck you too");
-        // }
-        // below is in radians
-
-
         Vec3d vec3d = this.getVelocity();
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
             double d = vec3d.horizontalLength();
@@ -232,7 +234,8 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
         this.setPitch((float)(MathHelper.atan2(f, l) * 57.2957763671875));
         this.setPitch(PersistentProjectileEntity.updateRotation(this.prevPitch, this.getPitch()));
         this.setYaw(PersistentProjectileEntity.updateRotation(this.prevYaw, this.getYaw()));
-/*
+
+        /*
         this.prevYaw = this.getYaw();
         this.prevPitch = this.getPitch();
         double yaw = Math.atan2(vX, vZ);
@@ -242,9 +245,6 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
         float realYaw = (float) Math.toDegrees(yaw);
         float realPitch = (float) Math.toDegrees(pitch);
 
-        if (Double.isNaN(realYaw) || Double.isNaN(realPitch)) {
-            return;// (To prevent) Invalid entity rotation: NaN, discarding.
-        }
 
         this.setRotation(realYaw, realPitch);*/
 
@@ -279,8 +279,4 @@ public abstract class AbstractMissileProjectile extends PersistentProjectileEnti
         return dataTracker.get(INITIAL_BLOCK_POS);
     }
 
-    @Override
-    public ItemStack asItemStack() {
-        return ItemStack.EMPTY;
-    }
 }
