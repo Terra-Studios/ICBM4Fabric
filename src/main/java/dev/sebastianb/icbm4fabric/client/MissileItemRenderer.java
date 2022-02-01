@@ -21,6 +21,7 @@ public class MissileItemRenderer implements DynamicItemRenderer {
         
     }
 
+    @Override
     @SuppressWarnings("resource")
     public void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStack,
             VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
@@ -45,6 +46,15 @@ public class MissileItemRenderer implements DynamicItemRenderer {
                 RenderSystem.runAsFancy(() -> {
                     entityRenderDispatcher.render(entity, 0.5, 0, 0.5, 0.0F, 1.0F, matrixStack, vertexConsumerProvider,
                             LightmapTextureManager.MAX_LIGHT_COORDINATE);
+                });
+                break;
+            case FIRST_PERSON_RIGHT_HAND:
+                matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90));
+                matrixStack.scale(1.6F,1.6F,1.6F);
+                RenderSystem.runAsFancy(() -> {
+                entityRenderDispatcher.render(entity, 1.8, -0.6, -0.2D, 0.0F, 1.0F, matrixStack,
+                        vertexConsumerProvider,
+                        LightmapTextureManager.MAX_LIGHT_COORDINATE);
                 });
                 break;
             default:
