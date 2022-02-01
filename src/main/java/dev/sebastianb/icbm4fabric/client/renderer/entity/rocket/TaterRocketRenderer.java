@@ -2,7 +2,7 @@ package dev.sebastianb.icbm4fabric.client.renderer.entity.rocket;
 
 import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.client.Icbm4fabricClient;
-import dev.sebastianb.icbm4fabric.client.model.entity.rocket.TaterRocketModel;
+import dev.sebastianb.icbm4fabric.client.model.entity.missile.TaterMissileModel;
 import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -12,11 +12,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
-public class TaterRocketRenderer extends MobEntityRenderer<TaterMissileEntity, TaterRocketModel> {
+public class TaterRocketRenderer extends MobEntityRenderer<TaterMissileEntity, TaterMissileModel> {
 
 
     public TaterRocketRenderer(EntityRendererFactory.Context context) {
-        super(context, new TaterRocketModel(context.getPart(Icbm4fabricClient.TATER_LAYER)), 0.0f);
+        super(context, new TaterMissileModel(context.getPart(Icbm4fabricClient.TATER_LAYER)), 0.0f);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package dev.sebastianb.icbm4fabric.client.model.entity.rocket;
+package dev.sebastianb.icbm4fabric.client.model.entity.missile;
 
 import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.minecraft.client.model.*;
@@ -7,11 +7,11 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
 
-public class TaterRocketModel extends EntityModel<TaterMissileEntity> {
+public class TaterMissileModel extends EntityModel<TaterMissileEntity> {
 
     private final ModelPart root;
 
-    public TaterRocketModel(ModelPart root) {
+    public TaterMissileModel(ModelPart root) {
         this.root = root;
         this.root.setPivot(0.0F, 24.0F, 0.0F);
 
