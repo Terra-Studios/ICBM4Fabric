@@ -180,8 +180,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     @Override
     public void tick() {
         super.tick();
-        this.updateMotion();
-        this.setRotation();
+        if (!world.isClient) {
+            this.updateMotion();
+            this.setRotation();
+        }
     }
 
     // TODO: Have some values fed upon init

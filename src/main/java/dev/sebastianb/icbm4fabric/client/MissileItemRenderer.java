@@ -28,7 +28,8 @@ public class MissileItemRenderer implements DynamicItemRenderer {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         AbstractMissileProjectile entity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(),
                 MinecraftClient.getInstance().world);
-        entity.setYaw(0); // used so the entity doesn't freak out when rendering
+        entity.setYaw(270); // used to adjust the missile in GUI to fix what atakku did
+        entity.setPitch(90); // yes, I know this is a hack
 
         switch (mode) {
             case THIRD_PERSON_RIGHT_HAND:
