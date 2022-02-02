@@ -27,8 +27,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
-    modImplementation "rs.neko.mc:nekolib:1.18.1-0.1.0"
-    include "rs.neko.mc:nekolib:1.18.1-0.1.0"
+    modImplementation "rs.neko.mc:nekolib:1.18.1-0.1.+"
+    include "rs.neko.mc:nekolib:1.18.1-0.1.+"
 }
 
 processResources {
