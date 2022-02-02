@@ -6,12 +6,12 @@ import java.util.Locale;
 import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.item.missile.MissileItem;
+import dev.sebastianb.icbm4fabric.utils.ItemRegistry;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import rs.neko.mc.ItemRegistry;
 
 public class ModItems {
     public static ItemGroup ITEMS_GROUP = FabricItemGroupBuilder
