@@ -2,22 +2,12 @@ package dev.sebastianb.icbm4fabric.entity.missile;
 
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
+import dev.sebastianb.icbm4fabric.entity.missile.path.LaunchPaths;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.MovementType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class TaterMissileEntity extends AbstractMissileProjectile {
@@ -46,6 +36,7 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
             case IDLE:
                 this.setPitch(90);
                 this.setVelocity(0,0,0);
+                updateMotion = false;
                 break;
             case LIT:
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, 0); // get rid of when on launched
@@ -54,10 +45,12 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
                     // this.setVelocity(0,8,0);
                     setInitialBlockPos(this.getBlockPos());
                     this.setNoGravity(true);
+                    setPath(LaunchPaths.BezierPath);
                     setStage(LaunchStage.LAUNCHED);
                 }
                 break;
             case LAUNCHED:
+                updateMotion = true;
                 this.noClip = false;
                 summonParticles(ParticleTypes.FLAME, 10, 0.07, 0);
                 super.tick();
@@ -84,6 +77,7 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
             this.world.addImportantParticle(particleEffect, true, getX(),getY(),getZ(), randomDouble(multiplier),yVelocity,randomDouble(multiplier));
         }
     }
+
 
     private double randomDouble(double multiplier) {
         if (random.nextBoolean()) {

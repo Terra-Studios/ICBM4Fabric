@@ -6,6 +6,9 @@ import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
+import dev.sebastianb.icbm4fabric.entity.missile.path.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandler;
@@ -36,6 +39,9 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         super.onSpawnPacket(packet);
     }
 
+    AbstractLaunchPath path;
+    LaunchPaths pathType;
+
     @Override
     public boolean collides() {
         return true;
@@ -46,11 +52,6 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         return true;
     }
 
-    @Override
-    public void setVelocity(Vec3d velocity) {
-        super.setVelocity(velocity);
-        velocityDirty = true;
-    }
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
@@ -77,6 +78,8 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     public double vX;
     public double vY;
     public double vZ;
+
+    public boolean updateMotion;
 
     private static final TrackedData<LaunchStage> STAGE = DataTracker.registerData(AbstractMissileProjectile.class,
             new TrackedDataHandler<LaunchStage>() {
@@ -120,6 +123,25 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker
             .registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
+    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<Vec3d>() {
+        @Override
+        public void write(PacketByteBuf buf, Vec3d value) {
+            buf.writeDouble(value.getX());
+            buf.writeDouble(value.getY());
+            buf.writeDouble(value.getZ());
+        }
+
+        @Override
+        public Vec3d read(PacketByteBuf buf) {
+            return new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        }
+
+        @Override
+        public Vec3d copy(Vec3d value) {
+            return value;
+        }
+    });
+
     @Override
     public void readCustomDataFromNbt(NbtCompound tag) {
         if (tag.contains("Stage")) {
@@ -127,6 +149,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         }
         if (tag.contains("Time")) {
             this.timeSinceStage = tag.getDouble("Time");
+        }
+
+        if (tag.contains("Path")) {
+            setPath(LaunchPaths.valueOf(tag.getString("Path")));
         }
 
         // double vX = tag.getDouble("vX");
@@ -155,6 +181,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         tag.putInt("iX", initialLocation.getX());
         tag.putInt("iY", initialLocation.getY());
         tag.putInt("iZ", initialLocation.getZ());
+
+        if (pathType != null) {
+            tag.putString("Path", pathType.name());
+        }
     }
 
     @Override
@@ -164,6 +194,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         // dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d
         // buffer and I'm lazy
         dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
+        dataTracker.startTracking(TARGET_POS, this.getPos());
     }
 
     static {
@@ -171,6 +202,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         TrackedDataHandlerRegistry.register(TIME.getType());
         // TrackedDataHandlerRegistry.register(VELOCITY.getType());
         TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above
+        TrackedDataHandlerRegistry.register(TARGET_POS.getType());
     }
 
     protected AbstractMissileProjectile(EntityType<? extends AbstractMissileProjectile> entityType, World world) {
@@ -180,9 +212,15 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     @Override
     public void tick() {
         super.tick();
-        if (!world.isClient) {
-            this.updateMotion();
-            this.setRotation();
+        if (path != null && updateMotion) {
+            if (world.isClient) {
+                Vec3d targetPos = dataTracker.get(TARGET_POS);
+
+                setVelocity(targetPos.getX() - getX(), targetPos.getY() - getY(), targetPos.getZ() - getZ());
+            } else {
+                path.updateMotion();
+            }
+            path.updateRotation();
         }
     }
 
@@ -238,8 +276,8 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         }
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
             double d = vec3d.horizontalLength();
-            this.setYaw((float)(MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875));
-            this.setPitch((float)(MathHelper.atan2(vec3d.y, d) * 57.2957763671875));
+            this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875));
+            this.setPitch((float) (MathHelper.atan2(vec3d.y, d) * 57.2957763671875));
             this.prevYaw = this.getYaw();
             this.prevPitch = this.getPitch();
         }
@@ -247,10 +285,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         double f = vec3d.y;
         double g = vec3d.z;
         double l = vec3d.horizontalLength();
-        this.setYaw((float)(MathHelper.atan2(e, g) * 57.2957763671875));
-        this.setPitch((float)(MathHelper.atan2(f, l) * 57.2957763671875));
-        this.setPitch(PersistentProjectileEntity.updateRotation(this.prevPitch, this.getPitch()));
-        this.setYaw(PersistentProjectileEntity.updateRotation(this.prevYaw, this.getYaw()));
+        this.setYaw((float) (MathHelper.atan2(e, g) * 57.2957763671875));
+        this.setPitch((float) (MathHelper.atan2(f, l) * 57.2957763671875));
+//        this.setPitch(PersistentProjectileEntity.updateRotation(this.prevPitch, this.getPitch()));
+//        this.setYaw(PersistentProjectileEntity.updateRotation(this.prevYaw, this.getYaw()));
 
     }
 
@@ -264,6 +302,22 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         if (dataTracker.get(STAGE) != stage) {
             this.dataTracker.set(STAGE, stage);
             timeSinceStage = 0;
+        }
+    }
+
+    public void setPath(LaunchPaths path) {
+        switch (path) {
+            case MissingsPath:
+                this.path = new MissingsPath(this);
+                pathType = LaunchPaths.MissingsPath;
+                break;
+            case VaribleHeightPath:
+                this.path = new VariableHeightPath(this, 120);
+                pathType = LaunchPaths.VaribleHeightPath;
+                break;
+            case BezierPath:
+                this.path = new BezierLaunchPath(this, 100);
+                pathType = LaunchPaths.BezierPath;
         }
     }
 
@@ -283,4 +337,29 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         return dataTracker.get(INITIAL_BLOCK_POS);
     }
 
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        if (source.equals(DamageSource.OUT_OF_WORLD)) {
+            return super.damage(source, amount);
+        }
+
+        return false;
+        // return super.damage(source, amount);
+    }
+
+    @Override
+    public void setVelocity(Vec3d velocity) {
+        super.setVelocity(velocity);
+
+        if (!world.isClient) {
+            dataTracker.set(TARGET_POS, velocity);
+        }
+
+        velocityDirty = true;
+    }
+
+    @Override
+    public void setRotation(float yaw, float pitch) {
+        super.setRotation(yaw, pitch);
+    }
 }
