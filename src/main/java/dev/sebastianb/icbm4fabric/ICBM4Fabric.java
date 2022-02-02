@@ -1,5 +1,7 @@
 package dev.sebastianb.icbm4fabric;
 
+import java.util.logging.Logger;
+
 import dev.sebastianb.icbm4fabric.block.ModBlocks;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
@@ -7,10 +9,8 @@ import dev.sebastianb.icbm4fabric.item.ModItems;
 import dev.sebastianb.icbm4fabric.network.ModPackets;
 import dev.sebastianb.icbm4fabric.registries.ModScreenHandlerRegistry;
 import dev.sebastianb.icbm4fabric.server.command.ModCommands;
-import dev.sebastianb.icbm4fabric.utils.ModRegistry;
 import net.fabricmc.api.ModInitializer;
-
-import java.util.logging.Logger;
+import rs.neko.mc.ModRegistry;
 
 public class ICBM4Fabric implements ModInitializer {
 

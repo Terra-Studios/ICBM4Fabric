@@ -13,7 +13,6 @@ group = project.maven_group
 mod_id = project.mod_id
 
 repositories {
-    mavenLocal()
     maven { url 'https://mc.neko.rs/maven/releases' }
     maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
 }
@@ -29,9 +28,8 @@ dependencies {
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
 
-    // atakku fix ur maven
-    // modImplementation "rs.neko.mc:nekolib:1.18.1-0.1.+"
-    // include "rs.neko.mc:nekolib:1.18.1-0.1.+"
+    modImplementation "rs.neko.mc:nekolib:0.1.+"
+    include "rs.neko.mc:nekolib:0.1.+"
 }
 
 processResources {
