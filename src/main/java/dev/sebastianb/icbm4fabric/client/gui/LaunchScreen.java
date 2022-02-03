@@ -238,11 +238,10 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         if (entityGUIRotate) {
             bodyRotate = MathHelper.wrapDegrees(((System.currentTimeMillis() % 3600) / 10f) - bodyRotateDiff); // spins the entity based on a time
         }
+        entity.setPitch(90);
+        // correct rotation
+        matrixStack2.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(270 + bodyRotate));
 
-        entity.setYaw(180.0F);
-
-
-        entity.setYaw(bodyRotate); // = bodyRotate;
         DiffuseLighting.method_34742();
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         // quaternion2.conjugate();
