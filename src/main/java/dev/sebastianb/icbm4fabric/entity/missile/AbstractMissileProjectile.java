@@ -3,20 +3,16 @@ package dev.sebastianb.icbm4fabric.entity.missile;
 import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
+import dev.sebastianb.icbm4fabric.entity.missile.path.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
-import dev.sebastianb.icbm4fabric.entity.missile.path.*;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
@@ -217,7 +213,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
             if (world.isClient) {
                 Vec3d targetPos = dataTracker.get(TARGET_POS);
 
-                setVelocity(targetPos.getX() - getX(), targetPos.getY() - getY(), targetPos.getZ() - getZ());
+                setVelocity(targetPos);
             } else {
                 path.updateMotion();
             }
