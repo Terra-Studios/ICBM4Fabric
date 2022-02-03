@@ -1,4 +1,4 @@
-package dev.sebastianb.icbm4fabric;
+package dev.sebastianb.icbm4fabric.utils;
 
 public class SebaUtils {
     public static double asinh(double a) {

@@ -1,6 +1,6 @@
 package dev.sebastianb.icbm4fabric.entity.missile.path;
 
-import dev.sebastianb.icbm4fabric.SebaUtils;
+import dev.sebastianb.icbm4fabric.utils.SebaUtils;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import net.minecraft.entity.MovementType;
 

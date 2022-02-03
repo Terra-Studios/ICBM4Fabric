@@ -1,12 +1,11 @@
 package dev.sebastianb.icbm4fabric.entity.missile;
 
-import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
 import dev.sebastianb.icbm4fabric.entity.missile.path.*;
+import dev.sebastianb.icbm4fabric.utils.TrackedDataHandlers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MovementType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -20,7 +19,6 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -96,48 +94,12 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
                 }
             });
 
-    private static final TrackedData<Double> TIME = DataTracker.registerData(AbstractMissileProjectile.class,
-            new TrackedDataHandler<Double>() {
-                @Override
-                public void write(PacketByteBuf buf, Double time) {
-                    buf.writeDouble(time);
-                }
+    private static final TrackedData<Double> TIME = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlers.DOUBLE);
 
-                @Override
-                public Double read(PacketByteBuf buf) {
-                    return buf.readDouble();
-                }
-
-                @Override
-                public Double copy(Double time) {
-                    return time;
-                }
-            });
-
-    // private static final TrackedData<BlockPos> VELOCITY =
-    // DataTracker.registerData(AbstractRocketProjectile.class,
-    // TrackedDataHandlerRegistry.BLOCK_POS);
     private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker
             .registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
-    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractMissileProjectile.class, new TrackedDataHandler<Vec3d>() {
-        @Override
-        public void write(PacketByteBuf buf, Vec3d value) {
-            buf.writeDouble(value.getX());
-            buf.writeDouble(value.getY());
-            buf.writeDouble(value.getZ());
-        }
-
-        @Override
-        public Vec3d read(PacketByteBuf buf) {
-            return new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
-        }
-
-        @Override
-        public Vec3d copy(Vec3d value) {
-            return value;
-        }
-    });
+    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlers.VEC_3D);
 
     @Override
     public void readCustomDataFromNbt(NbtCompound tag) {
