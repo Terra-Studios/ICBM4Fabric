@@ -4,7 +4,7 @@
   "package": "dev.sebastianb.icbm4fabric.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-
+    "EntityTrackerEntryMixin"
   ],
   "client": [
     "BipedEntityModelMixin"

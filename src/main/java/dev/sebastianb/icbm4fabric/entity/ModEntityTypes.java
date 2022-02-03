@@ -6,6 +6,7 @@ import java.util.Locale;
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -25,7 +26,7 @@ public class ModEntityTypes {
             entityType = ICBM4Fabric.REGISTRY.entityType(FabricEntityTypeBuilder.create(SpawnGroup.MISC, factory)
                             .dimensions(EntityDimensions.fixed(width, height))
                             .forceTrackedVelocityUpdates(true)
-                            .trackedUpdateRate(10)
+                            .trackedUpdateRate(20)
                             .trackRangeBlocks(256)
                     , name);
         }
