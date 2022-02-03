@@ -1,5 +1,7 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
@@ -15,6 +17,21 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 public class GenericMissileLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory {
+
+    public GenericMissileLauncherEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+    }
+
+    @Override
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+    }
+
     public GenericMissileLauncherEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MISSILE_LAUNCHER, pos, state);
     }

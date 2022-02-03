@@ -1,6 +1,9 @@
 package dev.sebastianb.icbm4fabric.item.missile;
 
 import dev.sebastianb.icbm4fabric.block.launcher.GenericMissileLauncher;
+import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
+import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.EndCrystalItem;
 import net.minecraft.item.FlintAndSteelItem;
@@ -29,5 +32,9 @@ public class MissileItem extends Item {
         }
 
         return super.useOnBlock(context);
+    }
+
+    public AbstractMissileProjectile getMissile(World world) {
+        return new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world);
     }
 }

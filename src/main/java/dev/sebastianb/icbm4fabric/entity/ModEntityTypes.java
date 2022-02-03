@@ -22,7 +22,12 @@ public class ModEntityTypes {
 
         Missiles(EntityFactory<AbstractMissileProjectile> factory, float width, float height) {
             name = this.toString().toLowerCase(Locale.ROOT) + "_missile";
-            entityType = ICBM4Fabric.REGISTRY.entityType(FabricEntityTypeBuilder.create(SpawnGroup.MISC, factory).dimensions(EntityDimensions.fixed(width, height)), name);
+            entityType = ICBM4Fabric.REGISTRY.entityType(FabricEntityTypeBuilder.create(SpawnGroup.MISC, factory)
+                            .dimensions(EntityDimensions.fixed(width, height))
+                            .forceTrackedVelocityUpdates(true)
+                            .trackedUpdateRate(10)
+                            .trackRangeBlocks(256)
+                    , name);
         }
 
         public EntityType<AbstractMissileProjectile> getType() {

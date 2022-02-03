@@ -1,6 +1,10 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import dev.sebastianb.icbm4fabric.item.ModItems;
+import dev.sebastianb.icbm4fabric.item.missile.MissileItem;
+import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -19,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GenericMissileLauncher extends BlockWithEntity {
+
     public GenericMissileLauncher() {
         super(FabricBlockSettings.of(Material.METAL).strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL));
     }
@@ -29,14 +34,20 @@ public class GenericMissileLauncher extends BlockWithEntity {
         return new GenericMissileLauncherEntity(pos, state);
     }
 
-
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
             if (screenHandlerFactory != null) {
                 if (!player.isHolding(ModItems.Missiles.TATER.asItem())) {
+                    // allow player to open screen handler without missile
                     player.openHandledScreen(screenHandlerFactory);
+                } else {
+                    // sets the missile launcher should be holding
+                    MissileItem missileItem = (MissileItem) player.getStackInHand(hand).getItem();
+                    AbstractMissileProjectile missileEntity = missileItem.getMissile(world);
+                    missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+
                 }
             }
         }

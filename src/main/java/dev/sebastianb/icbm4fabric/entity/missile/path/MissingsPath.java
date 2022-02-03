@@ -2,6 +2,7 @@ package dev.sebastianb.icbm4fabric.entity.missile.path;
 
 import dev.sebastianb.icbm4fabric.SebaUtils;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
+import net.minecraft.entity.MovementType;
 
 public class MissingsPath extends AbstractLaunchPath {
     double acc;
@@ -48,5 +49,6 @@ public class MissingsPath extends AbstractLaunchPath {
                 (xfactor * ((2 * acc * rocket.timeSinceStage + b) / Math.sqrt(1 + (2 * acc * rocket.timeSinceStage + b) * (2 * acc * rocket.timeSinceStage + b)))),
                 (Math.cos(dYaw) * hvel)
         );
+        rocket.move(MovementType.SELF, rocket.getVelocity());
     }
 }
