@@ -114,11 +114,6 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
             setPath(LaunchPaths.valueOf(tag.getString("Path")));
         }
 
-        // double vX = tag.getDouble("vX");
-        // double vY = tag.getDouble("vX");
-        // double vZ = tag.getDouble("vZ");
-        // this.setVelocity(new Vec3d(vX, vY, vZ));
-
         int x = tag.getInt("iX");
         int y = tag.getInt("iY");
         int z = tag.getInt("iZ");
@@ -130,11 +125,6 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         tag.putString("Stage", getStage().name());
 
         tag.putDouble("Time", this.timeSinceStage);
-
-        // // velocity saved
-        // tag.putDouble("vX", this.vX);
-        // tag.putDouble("vY", this.vY);
-        // tag.putDouble("vZ", this.vZ);
 
         // initial block pos
         tag.putInt("iX", initialLocation.getX());
@@ -172,84 +162,15 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     public void tick() {
         super.tick();
         if (path != null && updateMotion) {
-            if (world.isClient) {
-                Vec3d targetPos = dataTracker.get(TARGET_POS);
-
-                setVelocity(targetPos);
-            } else {
+            if (!world.isClient) {
                 path.updateMotion();
+                path.updateRotation();
+            } else {
+                this.setVelocity(dataTracker.get(TARGET_POS));
             }
-            path.updateRotation();
         }
     }
 
-    // TODO: Have some values fed upon init
-    private void updateMotion() {
-
-        double acc = -0.01; // gravity acceleration. Should be negative
-
-        double dX = finalLocation.getX() - initialLocation.getX();
-        double dY = finalLocation.getY() - initialLocation.getY();
-        double dZ = finalLocation.getZ() - initialLocation.getZ();
-
-        double dYaw = Math.atan2(dX, dZ);
-
-        double groundDistTravelled = Math.sqrt(Math.pow(dX, 2) + Math.pow(dZ, 2)); // gets distance traveled
-                                                                                   // horizontally
-
-        double b = -acc * groundDistTravelled + (dY / groundDistTravelled);
-
-        double temp1 = (1 / (2 * acc)) * SebaUtils.asinh(2 * acc * groundDistTravelled + b);
-        double temp2 = (1 / (2 * acc)) * SebaUtils.asinh(b);
-
-        double xfactor = groundDistTravelled / (temp1 - temp2); // * by any num to adjust speed.
-
-        double hvel = xfactor
-                * (1 / Math.sqrt(1 + (2 * acc * this.timeSinceStage + b) * (2 * acc * this.timeSinceStage + b)));
-
-        this.move(MovementType.SELF, this.getVelocity());
-        this.setVelocity(
-                (Math.sin(dYaw) * hvel),
-                xfactor * ((2 * acc * this.timeSinceStage + b)
-                        / Math.sqrt(1 + (2 * acc * this.timeSinceStage + b) * (2 * acc * this.timeSinceStage + b))),
-                (Math.cos(dYaw) * hvel));
-        // this.setVelocity(
-        // Math.sin(this.timeSinceStage / (diameter / speed)) * speed,
-        // Math.cos(this.timeSinceStage / (diameter / speed)) * speed,
-        // 0);
-        // Math.sin(this.timeSinceStage / ((diameter / 2) / (speed / 2))) * (speed /
-        // 2));
-        // trying to understand how I can put Z in this but seems to work somewhat. I
-        // just dunno how to control
-        // divided by 2 across everything seems to work. Maybe if I can get the X then
-        // do math with what I need to divide, it'd work.
-        // best approach I think is to get a velocity vector req to launch from
-        // superclass for later. Right now I just have these temp variables
-
-    }
-
-    private void setRotation() {
-        Vec3d vec3d = this.getVelocity();
-        if (Double.isNaN(vec3d.x) || Double.isNaN(vec3d.y) || Double.isNaN(vec3d.z)) {
-            return;
-        }
-        if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
-            double d = vec3d.horizontalLength();
-            this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875));
-            this.setPitch((float) (MathHelper.atan2(vec3d.y, d) * 57.2957763671875));
-            this.prevYaw = this.getYaw();
-            this.prevPitch = this.getPitch();
-        }
-        double e = vec3d.x;
-        double f = vec3d.y;
-        double g = vec3d.z;
-        double l = vec3d.horizontalLength();
-        this.setYaw((float) (MathHelper.atan2(e, g) * 57.2957763671875));
-        this.setPitch((float) (MathHelper.atan2(f, l) * 57.2957763671875));
-//        this.setPitch(PersistentProjectileEntity.updateRotation(this.prevPitch, this.getPitch()));
-//        this.setYaw(PersistentProjectileEntity.updateRotation(this.prevYaw, this.getYaw()));
-
-    }
 
     @Override
     public LaunchStage getStage() {
@@ -285,12 +206,6 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         this.dataTracker.set(INITIAL_BLOCK_POS, blockPos);
     }
 
-    // public void setVelocity(Vec3d vector) {
-    // this.vX = vector.x;
-    // this.vY = vector.y;
-    // this.vZ = vector.z;
-    // this.dataTracker.set(INITIAL_BLOCK_POS, new BlockPos(vector));
-    // }
 
     public BlockPos getInitialBlockPos() {
         return dataTracker.get(INITIAL_BLOCK_POS);
