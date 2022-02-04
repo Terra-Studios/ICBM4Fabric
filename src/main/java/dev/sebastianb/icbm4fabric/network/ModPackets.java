@@ -1,14 +1,15 @@
 package dev.sebastianb.icbm4fabric.network;
 
-import java.util.logging.Level;
-
 import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
+import dev.sebastianb.icbm4fabric.block.launcher.GenericMissileLauncherEntity;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.logging.Level;
 
 public class ModPackets {
 
@@ -25,5 +26,19 @@ public class ModPackets {
                 serverWorld.spawnEntity(missileEntity);
             }));
         }));
+
+        ServerPlayNetworking.registerGlobalReceiver(Constants.Packets.UPDATE_LAUNCH_SCREEN_FIELD, (((server, player, handler, buf, responseSender) -> {
+
+            BlockPos target = buf.readBlockPos();
+            BlockPos pos = buf.readBlockPos();
+            ServerWorld serverWorld = player.getWorld();
+            server.execute(() -> {
+                if (serverWorld.getBlockEntity(pos) instanceof GenericMissileLauncherEntity) {
+                    GenericMissileLauncherEntity blockEntity = (GenericMissileLauncherEntity) serverWorld.getBlockEntity(pos);
+
+                    blockEntity.setTarget(target);
+                }
+            });
+        })));
     }
 }

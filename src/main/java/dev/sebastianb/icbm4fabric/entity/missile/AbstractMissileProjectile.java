@@ -99,7 +99,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker
             .registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
-    private static final TrackedData<Vec3d> TARGET_POS = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlers.VEC_3D);
+    private static final TrackedData<Vec3d> VELOCITY = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlers.VEC_3D);
 
     @Override
     public void readCustomDataFromNbt(NbtCompound tag) {
@@ -143,7 +143,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         // dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d
         // buffer and I'm lazy
         dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
-        dataTracker.startTracking(TARGET_POS, this.getPos());
+        dataTracker.startTracking(VELOCITY, this.getPos());
     }
 
     static {
@@ -151,7 +151,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         TrackedDataHandlerRegistry.register(TIME.getType());
         // TrackedDataHandlerRegistry.register(VELOCITY.getType());
         TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above
-        TrackedDataHandlerRegistry.register(TARGET_POS.getType());
+        TrackedDataHandlerRegistry.register(VELOCITY.getType());
     }
 
     protected AbstractMissileProjectile(EntityType<? extends AbstractMissileProjectile> entityType, World world) {
@@ -166,11 +166,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
                 path.updateMotion();
                 path.updateRotation();
             } else {
-                this.setVelocity(dataTracker.get(TARGET_POS));
+                this.setVelocity(dataTracker.get(VELOCITY));
             }
         }
     }
-
 
     @Override
     public LaunchStage getStage() {
@@ -226,7 +225,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         super.setVelocity(velocity);
 
         if (!world.isClient) {
-            dataTracker.set(TARGET_POS, velocity);
+            dataTracker.set(VELOCITY, velocity);
         }
 
         velocityDirty = false;

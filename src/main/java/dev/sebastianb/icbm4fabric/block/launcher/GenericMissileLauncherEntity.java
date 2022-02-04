@@ -1,7 +1,11 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
@@ -16,7 +20,9 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-public class GenericMissileLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory {
+public class GenericMissileLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory, ExtendedScreenHandlerFactory {
+
+    AbstractMissileProjectile missile;
 
     public GenericMissileLauncherEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -45,5 +51,22 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
         return new LaunchScreenHandler(syncId, inv);
+    }
+
+    public void setMissile(AbstractMissileProjectile missile) {
+        this.missile = missile;
+    }
+
+    public AbstractMissileProjectile getMissile() {
+        return missile;
+    }
+
+    public void setTarget(BlockPos pos) {
+        System.out.println(pos);
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+        buf.writeBlockPos(getPos());
     }
 }

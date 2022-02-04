@@ -1,18 +1,16 @@
 package dev.sebastianb.icbm4fabric.client.gui;
 
-import java.util.ArrayList;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import org.lwjgl.glfw.GLFW;
-
 import dev.sebastianb.icbm4fabric.Constants;
-import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
+import dev.sebastianb.icbm4fabric.block.launcher.GenericMissileLauncherEntity;
+import dev.sebastianb.icbm4fabric.client.gui.widget.NumberFieldWidget;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
-import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -22,14 +20,18 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Environment(EnvType.CLIENT)
@@ -47,23 +49,27 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     private volatile boolean openedGUI; // if the GUI is in an opened state
     private volatile boolean clickedEntity = false;
 
+    private boolean valuesChanged;
+
     private ArrayList<Drawable> drawables = new ArrayList<>();
 
     // add X detonator
-    TextFieldWidget xMissileInput = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, LiteralText.EMPTY);
+    NumberFieldWidget xMissileInput = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, LiteralText.EMPTY);
 
     // add Z detonator
-    TextFieldWidget zMissileInput = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, LiteralText.EMPTY);
+    NumberFieldWidget zMissileInput = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, LiteralText.EMPTY);
 
     // add Y detonator
-    TextFieldWidget yMissileInput = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
+    NumberFieldWidget yMissileInput = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
 
 
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+
         entityGUIRotate = false;
         openedGUI = true; // ik it's redundant but just for readability
         runRotationCountdown(bodyRotate);
+        valuesChanged = false;
     }
 
     private void runRotationCountdown(float bodyRotate) {
@@ -93,17 +99,17 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         drawables.clear(); // clear anything left behind
 
         // add X detonator
-        TextFieldWidget xTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, LiteralText.EMPTY);
+        NumberFieldWidget xTarget = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 70, 70, 14, LiteralText.EMPTY);
         xTarget.setText(xMissileInput.getText()); // "fill" new box with old box
         this.xMissileInput = xTarget;
 
         // add Z detonator
-        TextFieldWidget zTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, LiteralText.EMPTY);
+        NumberFieldWidget zTarget = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 53, 70, 14, LiteralText.EMPTY);
         zTarget.setText(zMissileInput.getText());
         this.zMissileInput = zTarget;
 
         // add Y detonator
-        TextFieldWidget yTarget = new TextFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
+        NumberFieldWidget yTarget = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
         yTarget.setText(yMissileInput.getText());
         this.yMissileInput = yTarget;
 
@@ -117,16 +123,44 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     public void onClose() {
         super.onClose();
         this.openedGUI = false;
+
+        if (valuesChanged) {
+            PacketByteBuf buf = PacketByteBufs.create();
+
+            int x = xMissileInput.getInt();
+            int y = yMissileInput.getInt();
+            int z = zMissileInput.getInt();
+
+            BlockPos target = new BlockPos(x, y, z);
+
+            BlockEntity entity = client.world.getBlockEntity(handler.getPos());
+
+            if (entity instanceof GenericMissileLauncherEntity) {
+                GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) entity;
+                launcherEntity.setTarget(target);
+            }
+
+            buf.writeBlockPos(target);
+            buf.writeBlockPos(handler.getPos());
+
+            ClientPlayNetworking.send(Constants.Packets.UPDATE_LAUNCH_SCREEN_FIELD, buf);
+        }
     }
 
     // used to prevent close on "E" press
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_E) {
+        valuesChanged = true;
+        if (keyCode == GLFW.GLFW_KEY_E && !(getFocused() == null)) {
             return true;
         } else {
             return super.keyPressed(keyCode, scanCode, modifiers);
         }
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers) {
+        return super.charTyped(chr, modifiers);
     }
 
     @Override

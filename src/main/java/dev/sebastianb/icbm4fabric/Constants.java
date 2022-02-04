@@ -19,6 +19,7 @@ public class Constants {
 
     public interface Packets {
         Identifier SUMMON_MISSILE = new Identifier(Constants.MOD_ID, "summon_missile");
+        Identifier UPDATE_LAUNCH_SCREEN_FIELD = new Identifier(Constants.MOD_ID, "launch_field");
     }
 
 }
