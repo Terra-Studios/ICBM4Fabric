@@ -57,6 +57,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         if (player.isSneaking()) {
             setStage(LaunchStage.LIT);
         }
+
         return super.interact(player, hand);
     }
 

@@ -1,34 +1,32 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
-import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
-import org.jetbrains.annotations.Nullable;
-
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
+import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 public class GenericMissileLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory, ExtendedScreenHandlerFactory {
 
-    AbstractMissileProjectile missile;
+    private AbstractMissileProjectile missile;
+
+    private int missileId;
+
+    public boolean hasMissile;
 
     BlockPos target;
-
-    public GenericMissileLauncherEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-    }
 
     @Override
     public void readNbt(NbtCompound nbt) {
@@ -36,7 +34,9 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
         int y = nbt.getInt("targetY");
         int z = nbt.getInt("targetZ");
 
-        setTarget(new BlockPos(x, y, z));
+        target = new BlockPos(x, y, z);
+
+        missileId = nbt.getInt("missileId");
 
         super.readNbt(nbt);
     }
@@ -69,10 +69,13 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
     public void setMissile(AbstractMissileProjectile missile) {
         this.missile = missile;
+
+        markDirty();
     }
 
     public AbstractMissileProjectile getMissile() {
-        return missile;
+
+        return this.missile;
     }
 
     public void setTarget(BlockPos pos) {
