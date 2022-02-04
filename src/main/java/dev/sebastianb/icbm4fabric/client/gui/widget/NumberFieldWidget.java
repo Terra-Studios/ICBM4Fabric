@@ -11,7 +11,7 @@ public class NumberFieldWidget extends TextFieldWidget {
 
     @Override
     public boolean charTyped(char chr, int modifiers) {
-        if (!Character.isDigit(chr)) {
+        if (!(Character.isDigit(chr) || (chr == '-' && getText().length() == 0))) {
             return false;
         }
 
