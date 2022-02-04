@@ -11,17 +11,20 @@ import net.minecraft.util.math.BlockPos;
 public class LaunchScreenHandler extends ScreenHandler {
 
     private BlockPos pos;
+    private BlockPos target;
 
     public LaunchScreenHandler(int syncID, Inventory inventory, PacketByteBuf buf) {
         super(ModScreenHandlerRegistry.LAUNCHER_SCREEN, syncID);
 
         pos = buf.readBlockPos();
+        target = buf.readBlockPos();
     }
 
     public LaunchScreenHandler(int syncID, Inventory inventory) {
         super(ModScreenHandlerRegistry.LAUNCHER_SCREEN, syncID);
 
         pos = BlockPos.ORIGIN;
+        target = BlockPos.ORIGIN;
     }
 
     @Override
@@ -31,5 +34,9 @@ public class LaunchScreenHandler extends ScreenHandler {
 
     public BlockPos getPos() {
         return pos;
+    }
+
+    public BlockPos getTarget() {
+        return target;
     }
 }

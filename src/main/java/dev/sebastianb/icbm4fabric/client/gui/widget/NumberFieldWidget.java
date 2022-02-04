@@ -18,11 +18,15 @@ public class NumberFieldWidget extends TextFieldWidget {
         return super.charTyped(chr, modifiers);
     }
 
-    public int getInt() {
+    public Integer getInt() {
+        if (getText().length() == 0) {
+            return 0;
+        }
+
         try {
             return Integer.parseInt(getText());
         } catch (Exception e) {
-            return -1;
+            return null;
         }
     }
 }

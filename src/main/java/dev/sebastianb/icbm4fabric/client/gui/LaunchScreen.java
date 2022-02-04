@@ -70,6 +70,12 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         openedGUI = true; // ik it's redundant but just for readability
         runRotationCountdown(bodyRotate);
         valuesChanged = false;
+
+        BlockPos target = handler.getTarget();
+
+        xMissileInput.setText(String.valueOf(target.getX()));
+        yMissileInput.setText(String.valueOf(target.getY()));
+        zMissileInput.setText(String.valueOf(target.getZ()));
     }
 
     private void runRotationCountdown(float bodyRotate) {
@@ -127,9 +133,15 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         if (valuesChanged) {
             PacketByteBuf buf = PacketByteBufs.create();
 
-            int x = xMissileInput.getInt();
-            int y = yMissileInput.getInt();
-            int z = zMissileInput.getInt();
+            Integer x = xMissileInput.getInt();
+            Integer y = yMissileInput.getInt();
+            Integer z = zMissileInput.getInt();
+
+            System.out.println(x + ", " + y + ", " + z);
+
+            if (x == null || y == null || z == null) {
+                return;
+            }
 
             BlockPos target = new BlockPos(x, y, z);
 
@@ -137,7 +149,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
             if (entity instanceof GenericMissileLauncherEntity) {
                 GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) entity;
-                launcherEntity.setTarget(target);
+//                launcherEntity.setTarget(target);
             }
 
             buf.writeBlockPos(target);

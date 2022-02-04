@@ -24,22 +24,36 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
     AbstractMissileProjectile missile;
 
+    BlockPos target;
+
     public GenericMissileLauncherEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
+        int x = nbt.getInt("targetX");
+        int y = nbt.getInt("targetY");
+        int z = nbt.getInt("targetZ");
+
+        setTarget(new BlockPos(x, y, z));
+
         super.readNbt(nbt);
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt) {
+        nbt.putInt("targetX", target.getX());
+        nbt.putInt("targetY", target.getY());
+        nbt.putInt("targetZ", target.getZ());
+
         super.writeNbt(nbt);
     }
 
     public GenericMissileLauncherEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MISSILE_LAUNCHER, pos, state);
+
+        target = BlockPos.ORIGIN;
     }
 
     @Override
@@ -62,11 +76,15 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     }
 
     public void setTarget(BlockPos pos) {
-        System.out.println(pos);
+        target = pos;
+
+        markDirty();
     }
 
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
         buf.writeBlockPos(getPos());
+
+        buf.writeBlockPos(target);
     }
 }
