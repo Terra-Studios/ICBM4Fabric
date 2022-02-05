@@ -21,7 +21,7 @@ public class VariableHeightPath extends AbstractLaunchPath {
         this.height = maxHeight;
 
         initialPosVec = new Vec3d(rocket.initialLocation.getX() + .5, rocket.initialLocation.getY(), rocket.initialLocation.getZ() + .5);
-        targetPosVec = new Vec3d(rocket.finalLocation.getX() + .5, rocket.finalLocation.getY(), rocket.finalLocation.getZ() + .5);
+        targetPosVec = new Vec3d(rocket.getFinalLocation().getX() + .5, rocket.getFinalLocation().getY(), rocket.getFinalLocation().getZ() + .5);
 
 
         Vec3d change = new Vec3d(initialPosVec.getX() - targetPosVec.getX(),

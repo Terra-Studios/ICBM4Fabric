@@ -69,7 +69,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     public double timeSinceStage = 0;
 
     public BlockPos initialLocation = new BlockPos(0, 0, 0);
-    public BlockPos finalLocation = new BlockPos(0, 69, 0); // nice
+//    public BlockPos finalLocation = new BlockPos(0, 69, 0); // nice
 
     public double vX;
     public double vY;
@@ -99,6 +99,8 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
 
     private static final TrackedData<BlockPos> INITIAL_BLOCK_POS = DataTracker
             .registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
+    private static final TrackedData<BlockPos> FINAL_BLOCK_POS = DataTracker
+            .registerData(AbstractMissileProjectile.class, TrackedDataHandlerRegistry.BLOCK_POS);
 
     private static final TrackedData<Vec3d> VELOCITY = DataTracker.registerData(AbstractMissileProjectile.class, TrackedDataHandlers.VEC_3D);
 
@@ -119,6 +121,11 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         int y = tag.getInt("iY");
         int z = tag.getInt("iZ");
         this.setInitialBlockPos(new BlockPos(x, y, z));
+
+        int fX = tag.getInt("fX");
+        int fY = tag.getInt("fY");
+        int fZ = tag.getInt("fZ");
+        setFinalBlockPos(new BlockPos(fX, fY, fZ));
     }
 
     @Override
@@ -132,6 +139,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         tag.putInt("iY", initialLocation.getY());
         tag.putInt("iZ", initialLocation.getZ());
 
+        tag.putInt("fX", getFinalLocation().getX());
+        tag.putInt("fY", getFinalLocation().getY());
+        tag.putInt("fZ", getFinalLocation().getZ());
+
         if (pathType != null) {
             tag.putString("Path", pathType.name());
         }
@@ -144,6 +155,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         // dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d
         // buffer and I'm lazy
         dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
+        dataTracker.startTracking(FINAL_BLOCK_POS, BlockPos.ORIGIN);
         dataTracker.startTracking(VELOCITY, this.getPos());
     }
 
@@ -152,6 +164,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         TrackedDataHandlerRegistry.register(TIME.getType());
         // TrackedDataHandlerRegistry.register(VELOCITY.getType());
         TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above
+        TrackedDataHandlerRegistry.register(FINAL_BLOCK_POS.getType());
         TrackedDataHandlerRegistry.register(VELOCITY.getType());
     }
 
@@ -235,5 +248,15 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     @Override
     public void setRotation(float yaw, float pitch) {
         super.setRotation(yaw, pitch);
+    }
+
+    public void setFinalBlockPos(BlockPos target) {
+        if (dataTracker.get(STAGE) == LaunchStage.IDLE) {
+            dataTracker.set(FINAL_BLOCK_POS, target);
+        }
+    }
+
+    public BlockPos getFinalLocation() {
+        return dataTracker.get(FINAL_BLOCK_POS);
     }
 }

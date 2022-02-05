@@ -20,7 +20,7 @@ public class BezierLaunchPath extends AbstractLaunchPath {
         super(rocket);
 
         initialPos = Vec3d.ofCenter(rocket.initialLocation);
-        finalPos = Vec3d.ofCenter(rocket.finalLocation);
+        finalPos = Vec3d.ofCenter(rocket.getFinalLocation());
 
         double height = initialPos.getY() > finalPos.getY() ? initialPos.getY() + maxHeight : finalPos.getY() + maxHeight;
 

@@ -123,7 +123,18 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         this.yMissileInput = yTarget;
 
         button = new ButtonWidget(this.width / 2 + 4, this.height / 2 + 35, 80, 20, new LiteralText("Launch"), btn -> {
-            System.out.println("hi");
+            sendLaunchCords();
+
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeBlockPos(handler.getPos());
+
+            ClientPlayNetworking.send(Constants.Packets.LAUNCH_MISSILE, buf);
+
+            BlockEntity be = MinecraftClient.getInstance().world.getBlockEntity(handler.getPos());
+            if (be instanceof GenericMissileLauncherEntity) {
+                GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) be;
+                launcherEntity.hasMissile = false;
+            }
         });
         this.addDrawableChild(button);
 
@@ -135,37 +146,35 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         addTextedButton(yTarget);
     }
 
+    private void sendLaunchCords() {
+
+        PacketByteBuf buf = PacketByteBufs.create();
+
+        Integer x = xMissileInput.getInt();
+        Integer y = yMissileInput.getInt();
+        Integer z = zMissileInput.getInt();
+
+        System.out.println(x + ", " + y + ", " + z);
+
+        if (x == null || y == null || z == null) {
+            return;
+        }
+
+        BlockPos target = new BlockPos(x, y, z);
+
+        buf.writeBlockPos(target);
+        buf.writeBlockPos(handler.getPos());
+
+        ClientPlayNetworking.send(Constants.Packets.NEW_LAUNCH_CORDS, buf);
+    }
+
     @Override
     public void onClose() {
         super.onClose();
         this.openedGUI = false;
 
         if (valuesChanged) {
-            PacketByteBuf buf = PacketByteBufs.create();
-
-            Integer x = xMissileInput.getInt();
-            Integer y = yMissileInput.getInt();
-            Integer z = zMissileInput.getInt();
-
-            System.out.println(x + ", " + y + ", " + z);
-
-            if (x == null || y == null || z == null) {
-                return;
-            }
-
-            BlockPos target = new BlockPos(x, y, z);
-
-            BlockEntity entity = client.world.getBlockEntity(handler.getPos());
-
-            if (entity instanceof GenericMissileLauncherEntity) {
-                GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) entity;
-//                launcherEntity.setTarget(target);
-            }
-
-            buf.writeBlockPos(target);
-            buf.writeBlockPos(handler.getPos());
-
-            ClientPlayNetworking.send(Constants.Packets.UPDATE_LAUNCH_SCREEN_FIELD, buf);
+            sendLaunchCords();
         }
     }
 

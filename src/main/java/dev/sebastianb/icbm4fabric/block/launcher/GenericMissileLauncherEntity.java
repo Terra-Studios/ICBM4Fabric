@@ -1,8 +1,11 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
+import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
+import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
+import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -36,7 +39,7 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
         target = new BlockPos(x, y, z);
 
-        missileId = nbt.getInt("missileId");
+        hasMissile = nbt.getBoolean("hasMissile");
 
         super.readNbt(nbt);
     }
@@ -46,6 +49,8 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
         nbt.putInt("targetX", target.getX());
         nbt.putInt("targetY", target.getY());
         nbt.putInt("targetZ", target.getZ());
+
+        nbt.putBoolean("hasMissile", hasMissile);
 
         super.writeNbt(nbt);
     }
@@ -89,5 +94,19 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
         buf.writeBlockPos(getPos());
 
         buf.writeBlockPos(target);
+    }
+
+    public void launchMissile() {
+        if (hasMissile) {
+            hasMissile = false;
+
+            AbstractMissileProjectile missileEntity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world);
+            missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+
+            world.spawnEntity(missileEntity);
+            missileEntity.setFinalBlockPos(target);
+
+            missileEntity.setStage(LaunchStage.LIT);
+        }
     }
 }

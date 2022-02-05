@@ -27,7 +27,7 @@ public class ModPackets {
             }));
         }));
 
-        ServerPlayNetworking.registerGlobalReceiver(Constants.Packets.UPDATE_LAUNCH_SCREEN_FIELD, (((server, player, handler, buf, responseSender) -> {
+        ServerPlayNetworking.registerGlobalReceiver(Constants.Packets.NEW_LAUNCH_CORDS, (server, player, handler, buf, responseSender) -> {
 
             BlockPos target = buf.readBlockPos();
             BlockPos pos = buf.readBlockPos();
@@ -39,6 +39,19 @@ public class ModPackets {
                     blockEntity.setTarget(target);
                 }
             });
-        })));
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(Constants.Packets.LAUNCH_MISSILE, (server, player, handler, buf, responseSender) -> {
+
+            BlockPos pos = buf.readBlockPos();
+            ServerWorld serverWorld = player.getWorld();
+            server.execute(() -> {
+                if (serverWorld.getBlockEntity(pos) instanceof GenericMissileLauncherEntity) {
+                    GenericMissileLauncherEntity blockEntity = (GenericMissileLauncherEntity) serverWorld.getBlockEntity(pos);
+
+                    blockEntity.launchMissile();
+                }
+            });
+        });
     }
 }
