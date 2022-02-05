@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.GameRenderer;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
     private static final Identifier TEXTURE = new Identifier(Constants.MOD_ID, "textures/gui/missile_launcher_screen.png");
-    private final int textureWidth = 256;
+    private final int textureWidth = 512;
     private final int textureHeight = 256;
     private final float textureScale = 0.87f;
 
@@ -61,6 +62,8 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
     // add Y detonator
     NumberFieldWidget yMissileInput = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
+
+    ButtonWidget button;
 
 
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -99,8 +102,8 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
     @Override
     protected void init() {
-        super.backgroundWidth = textureWidth;
-        super.backgroundHeight = textureHeight;
+        super.backgroundWidth = 256;
+        super.backgroundHeight = 256;
         super.init();
         drawables.clear(); // clear anything left behind
 
@@ -119,10 +122,17 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         yTarget.setText(yMissileInput.getText());
         this.yMissileInput = yTarget;
 
+        button = new ButtonWidget(this.width / 2 + 4, this.height / 2 + 35, 80, 20, new LiteralText("Launch"), btn -> {
+            System.out.println("hi");
+        });
+        this.addDrawableChild(button);
+
+//        drawables.add(launchButton);
+//        this.addSelectableChild(launchButton);
+
         addTextedButton(xTarget);
         addTextedButton(zTarget);
         addTextedButton(yTarget);
-
     }
 
     @Override
@@ -177,28 +187,31 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        matrices.push(); {
-            this.renderBackground(matrices);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        matrices.push();
 
-            int x = (int) ((width / 2) - ((backgroundWidth / 2) * textureScale));
-            int y = (int) ((height/ 2) - ((backgroundHeight / 2) * textureScale));
+        this.renderBackground(matrices);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, TEXTURE);
 
-            matrices.translate(x, y, 0);
-            matrices.scale(textureScale, textureScale, textureScale);
+        int x = (int) ((width / 2) - ((backgroundWidth / 2) * textureScale));
+        int y = (int) ((height / 2) - ((backgroundHeight / 2) * textureScale));
 
-            drawTexture(matrices, 0, 0, 0, 0, backgroundWidth, backgroundHeight, 256, 256);
+        matrices.translate(x, y, 0);
+        matrices.scale(textureScale, textureScale, textureScale);
 
-            this.drawEntity(this.x + 71, this.y + 180, 40, (float)(this.x + 88 - mouseX), (float)(this.y + 45 - 30 - mouseY), ModEntityTypes.Missiles.TATER.getType().create(client.world)); // new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, this.client.world)
+        drawTexture(matrices, 0, 0, 0, 0, backgroundWidth, backgroundHeight, textureWidth, textureHeight);
 
-        }
+        this.drawEntity(this.x + 71, this.y + 180, 40, (float) (this.x + 88 - mouseX), (float) (this.y + 45 - 30 - mouseY), ModEntityTypes.Missiles.TATER.getType().create(client.world)); // new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, this.client.world)
+
+
         matrices.pop();
         matrices.push();
         for (Drawable e : drawables) {
             e.render(matrices, mouseX, mouseY, delta);
         }
+        button.render(matrices, mouseX, mouseY, delta);
+
         matrices.pop();
 
     }
@@ -268,12 +281,12 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         // float g = (float)Math.atan((double)(mouseY / 40.0F));
         MatrixStack matrixStack = RenderSystem.getModelViewStack();
         matrixStack.push();
-        matrixStack.translate((double)x, (double)y, 1050.0D);
+        matrixStack.translate((double) x, (double) y, 1050.0D);
         matrixStack.scale(1.0F, 1.0F, -1.0F);
         RenderSystem.applyModelViewMatrix();
         MatrixStack matrixStack2 = new MatrixStack();
         matrixStack2.translate(0.0D, 0.0D, 1000.0D);
-        matrixStack2.scale((float)size, (float)size, (float)size);
+        matrixStack2.scale((float) size, (float) size, (float) size);
         Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180f);
         // Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0F);
         // quaternion.hamiltonProduct(quaternion2);
