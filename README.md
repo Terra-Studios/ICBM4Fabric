@@ -2,7 +2,7 @@
 
 Ever wanted to hecc your friends and ruin friendships? Well mate, I got just the mod for you.
 
-Craft missles and launch them to any coordanite you like, all from the safety of your ultra HD IMAX cinema (not copyrighted)
+Craft missles and launch them to any coordanite you like, all from the safety of your ultra HD IMAX cinema :tm:
 
 Commit attrocities of war! After all, Genova Convention? More like Genova Suggestion!
 
