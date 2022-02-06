@@ -8,6 +8,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class TaterMissileEntity extends AbstractMissileProjectile {
@@ -39,6 +40,8 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
                 updateMotion = false;
                 break;
             case LIT:
+                this.setPitch(90);
+                this.setVelocity(0,0,0);
                 summonParticles(ParticleTypes.FLAME, 10, 0.1, 0); // get rid of when on launched
                 this.setVelocity(0,0,0);
                 if (timeSinceStage >= 50) { // 200
