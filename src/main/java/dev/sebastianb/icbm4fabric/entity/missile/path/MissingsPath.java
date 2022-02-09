@@ -42,13 +42,13 @@ public class MissingsPath extends AbstractLaunchPath {
 
         double xfactor = groundDistTravelled / (temp1 - temp2); // * by any num to adjust speed.
 
-        double hvel = xfactor * (1 / Math.sqrt(1 + (2 * acc * rocket.timeSinceStage + b) * (2 * acc * rocket.timeSinceStage + b)));
+        double hvel = xfactor * (1 / Math.sqrt(1 + (2 * acc * missile.timeSinceStage + b) * (2 * acc * missile.timeSinceStage + b)));
 
-        rocket.setVelocity(
+        missile.setVelocity(
                 (Math.sin(dYaw) * hvel),
-                (xfactor * ((2 * acc * rocket.timeSinceStage + b) / Math.sqrt(1 + (2 * acc * rocket.timeSinceStage + b) * (2 * acc * rocket.timeSinceStage + b)))),
+                (xfactor * ((2 * acc * missile.timeSinceStage + b) / Math.sqrt(1 + (2 * acc * missile.timeSinceStage + b) * (2 * acc * missile.timeSinceStage + b)))),
                 (Math.cos(dYaw) * hvel)
         );
-        rocket.move(MovementType.SELF, rocket.getVelocity());
+        missile.move(MovementType.SELF, missile.getVelocity());
     }
 }

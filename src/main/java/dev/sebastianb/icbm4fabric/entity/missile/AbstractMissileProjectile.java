@@ -155,7 +155,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         // dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d
         // buffer and I'm lazy
         dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
-        dataTracker.startTracking(FINAL_BLOCK_POS, BlockPos.ORIGIN);
+        dataTracker.startTracking(FINAL_BLOCK_POS, new BlockPos(0, 69, 0));
         dataTracker.startTracking(VELOCITY, this.getPos());
     }
 
@@ -204,9 +204,9 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
                 this.path = new MissingsPath(this);
                 pathType = LaunchPaths.MissingsPath;
                 break;
-            case VaribleHeightPath:
+            case VariableHeightPath:
                 this.path = new VariableHeightPath(this, 120);
-                pathType = LaunchPaths.VaribleHeightPath;
+                pathType = LaunchPaths.VariableHeightPath;
                 break;
             case BezierPath:
                 this.path = new BezierLaunchPath(this, 100);

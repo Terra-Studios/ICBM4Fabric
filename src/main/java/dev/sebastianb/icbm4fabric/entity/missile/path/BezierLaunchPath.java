@@ -34,7 +34,7 @@ public class BezierLaunchPath extends AbstractLaunchPath {
 
     @Override
     public void updateMotion() {
-        double t = rocket.timeSinceStage / timeToTake;
+        double t = missile.timeSinceStage / timeToTake;
 
         if (t >= 1) {
 
@@ -49,12 +49,12 @@ public class BezierLaunchPath extends AbstractLaunchPath {
 
         Vec3d targetPosition = linear1.lerp(linear2, t);
 
-        Vec3d newVelocity = new Vec3d(targetPosition.getX() - rocket.getPos().getX(),
-                targetPosition.getY() - rocket.getPos().getY(),
-                targetPosition.getZ() - rocket.getPos().getZ());
+        Vec3d newVelocity = new Vec3d(targetPosition.getX() - missile.getPos().getX(),
+                targetPosition.getY() - missile.getPos().getY(),
+                targetPosition.getZ() - missile.getPos().getZ());
 
-        rocket.setVelocity(newVelocity);
-        rocket.move(MovementType.SELF, rocket.getVelocity());
+        missile.setVelocity(newVelocity);
+        missile.move(MovementType.SELF, missile.getVelocity());
 
         lastVelocity = newVelocity;
     }
