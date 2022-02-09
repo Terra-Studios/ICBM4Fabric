@@ -58,7 +58,7 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     public GenericMissileLauncherEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MISSILE_LAUNCHER, pos, state);
 
-        target = BlockPos.ORIGIN;
+        target = new BlockPos(0, 60, 0); // set default target on screen init. TODO: maybe have a config option for this later?
     }
 
     @Override
