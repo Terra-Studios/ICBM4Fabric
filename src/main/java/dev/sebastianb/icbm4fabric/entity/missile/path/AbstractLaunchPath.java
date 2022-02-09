@@ -20,8 +20,8 @@ public abstract class AbstractLaunchPath {
         }
         if (missile.prevPitch == 0.0f && missile.prevYaw == 0.0f) {
             double d = vec3d.horizontalLength();
-            missile.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875));
-            missile.setPitch((float) (MathHelper.atan2(vec3d.y, d) * 57.2957763671875));
+            missile.setYaw((float) Math.toRadians(MathHelper.atan2(vec3d.x, vec3d.z)));
+            missile.setPitch((float) Math.toRadians(MathHelper.atan2(vec3d.y, d)));
             missile.prevYaw = missile.getYaw();
             missile.prevPitch = missile.getPitch();
         }
@@ -29,8 +29,8 @@ public abstract class AbstractLaunchPath {
         double f = vec3d.y;
         double g = vec3d.z;
         double l = vec3d.horizontalLength();
-        missile.setYaw((float) (MathHelper.atan2(e, g) * 57.2957763671875));
-        missile.setPitch((float) (MathHelper.atan2(f, l) * 57.2957763671875));
+        missile.setYaw((float) Math.toRadians(MathHelper.atan2(e, g)));
+        missile.setPitch((float) Math.toRadians(MathHelper.atan2(f, l)));
         missile.setPitch(PersistentProjectileEntity.updateRotation(missile.prevPitch, missile.getPitch()));
         missile.setYaw(PersistentProjectileEntity.updateRotation(missile.prevYaw, missile.getYaw()));
 
