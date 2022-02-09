@@ -97,16 +97,16 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     }
 
     public void launchMissile() {
-        if (hasMissile) {
+        if (hasMissile) { // make sure we have a missile to launch
             hasMissile = false;
 
-            AbstractMissileProjectile missileEntity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world);
-            missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+            AbstractMissileProjectile missileEntity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world); // create the missile
+            missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5); // set position of missile
 
             world.spawnEntity(missileEntity);
-            missileEntity.setFinalBlockPos(target);
+            missileEntity.setFinalBlockPos(target); // set target
 
-            missileEntity.setStage(LaunchStage.LIT);
+            missileEntity.setStage(LaunchStage.LIT); // light the rocket
         }
     }
 }

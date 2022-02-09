@@ -65,7 +65,6 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
     ButtonWidget button;
 
-
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
 
@@ -123,17 +122,17 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         this.yMissileInput = yTarget;
 
         button = new ButtonWidget(this.width / 2 + 4, this.height / 2 + 35, 80, 20, new LiteralText("Launch"), btn -> {
-            sendLaunchCords();
+            sendLaunchCords(); // make sure target is updated
 
             PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeBlockPos(handler.getPos());
+            buf.writeBlockPos(handler.getPos()); // add block pos for getting BE on server
 
             ClientPlayNetworking.send(Constants.Packets.LAUNCH_MISSILE, buf);
 
             BlockEntity be = MinecraftClient.getInstance().world.getBlockEntity(handler.getPos());
             if (be instanceof GenericMissileLauncherEntity) {
                 GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) be;
-                launcherEntity.hasMissile = false;
+                launcherEntity.hasMissile = false; // remove missile from entity
             }
         });
         this.addDrawableChild(button);
@@ -146,7 +145,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         addTextedButton(yTarget);
     }
 
-    private void sendLaunchCords() {
+    private void sendLaunchCords() { // sends target cords to the server
 
         PacketByteBuf buf = PacketByteBufs.create();
 
