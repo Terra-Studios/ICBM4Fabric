@@ -66,6 +66,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     // add Y detonator
     NumberFieldWidget yMissileInput = new NumberFieldWidget(textRenderer, this.width / 2 + 8, this.height / 2 - 6, 70, 14, LiteralText.EMPTY);
 
+    // button for launch
     ButtonWidget button;
 
     public LaunchScreen(LaunchScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -81,12 +82,12 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
         BlockPos target = handler.getTarget();
 
-        xMissileInput.setText(String.valueOf(target.getX()));
+        xMissileInput.setText(String.valueOf(target.getX())); // set input texts
         yMissileInput.setText(String.valueOf(target.getY()));
         zMissileInput.setText(String.valueOf(target.getZ()));
     }
 
-    private void runRotationCountdown(float bodyRotate) {
+    private void runRotationCountdown(float bodyRotate) { // wait for time to rotate missile (I think?)
         long openedTime = System.currentTimeMillis();
         Runnable task = () -> {
             while (openedGUI) {
@@ -164,7 +165,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         System.out.println(x + ", " + y + ", " + z);
 
         if (x == null || y == null || z == null) {
-            return;
+            return; // make sure all of the inputs are numbers
         }
 
         BlockPos target = new BlockPos(x, y, z);
@@ -181,7 +182,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         this.openedGUI = false;
 
         if (valuesChanged) {
-            sendLaunchCords();
+            sendLaunchCords(); // if any values changed, update the cords 
         }
     }
 
@@ -189,7 +190,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         valuesChanged = true;
-        if (keyCode == GLFW.GLFW_KEY_E && !(getFocused() == null)) {
+        if (keyCode == GLFW.GLFW_KEY_E && !(getFocused() == null)) { // if nothing has been focused then we don't need to cancel E
             return true;
         } else {
             return super.keyPressed(keyCode, scanCode, modifiers);
@@ -232,7 +233,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         }
         // launch button won't render if there's no missile
         if (handler.hasMissile()) {
-            button.render(matrices, mouseX, mouseY, delta);
+            button.render(matrices, mouseX, mouseY, delta); // TODO: Maybe use an image instead of default mc button
         } else {
             // TODO: replace with a image of the launch button being grayed out
             this.textRenderer.draw(matrices, "No missile", this.width / 2 + 4, this.height / 2 + 35, 0xFFFFFF);

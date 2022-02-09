@@ -23,7 +23,7 @@ public class LauncherBlockEntityRenderer implements BlockEntityRenderer {
         matrices.translate(0.5, .75, 0.5);
 
         if (entity instanceof GenericMissileLauncherEntity launcherEntity) {
-            if (launcherEntity.hasMissile) {
+            if (launcherEntity.hasMissile) { // render missile via item (thanks seba for doing the hard work) TODO: use item saved in inventory to get renderer
                 MinecraftClient.getInstance().getItemRenderer().renderItem(missile, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
             }
         }

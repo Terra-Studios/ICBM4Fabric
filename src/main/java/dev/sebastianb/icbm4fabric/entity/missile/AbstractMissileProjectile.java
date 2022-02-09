@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 
 public abstract class AbstractMissileProjectile extends Entity implements MissileEntity {
 
+    // spawn packet stuff
     @Override
     public Packet<?> createSpawnPacket() {
         return new EntitySpawnS2CPacket(this);
@@ -53,9 +54,9 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         if (!this.isAlive()) {
             return ActionResult.PASS;
         }
-        player.startRiding(this);
+        player.startRiding(this); // riding missile
         if (player.isSneaking()) {
-            setStage(LaunchStage.LIT);
+            setStage(LaunchStage.LIT); // lit the missile (maybe this could be removed at this point?)
         }
 
         return super.interact(player, hand);
@@ -107,44 +108,45 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     @Override
     public void readCustomDataFromNbt(NbtCompound tag) {
         if (tag.contains("Stage")) {
-            this.setStage(LaunchStage.valueOf(tag.getString("Stage")));
+            this.setStage(LaunchStage.valueOf(tag.getString("Stage"))); //read stage from nbt
         }
         if (tag.contains("Time")) {
-            this.timeSinceStage = tag.getDouble("Time");
+            this.timeSinceStage = tag.getDouble("Time"); // read time from nbt
         }
 
         if (tag.contains("Path")) {
-            setPath(LaunchPaths.valueOf(tag.getString("Path")));
+            setPath(LaunchPaths.valueOf(tag.getString("Path"))); // read path form nbt
         }
 
         int x = tag.getInt("iX");
         int y = tag.getInt("iY");
         int z = tag.getInt("iZ");
-        this.setInitialBlockPos(new BlockPos(x, y, z));
+        this.setInitialBlockPos(new BlockPos(x, y, z)); // read initial location from nbt
 
         int fX = tag.getInt("fX");
         int fY = tag.getInt("fY");
         int fZ = tag.getInt("fZ");
-        setFinalBlockPos(new BlockPos(fX, fY, fZ));
+        setFinalBlockPos(new BlockPos(fX, fY, fZ)); // read final location from nbt
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound tag) {
-        tag.putString("Stage", getStage().name());
+        tag.putString("Stage", getStage().name()); // write stage to nbt
 
-        tag.putDouble("Time", this.timeSinceStage);
+        tag.putDouble("Time", this.timeSinceStage); // write time to nbt
 
         // initial block pos
         tag.putInt("iX", initialLocation.getX());
         tag.putInt("iY", initialLocation.getY());
         tag.putInt("iZ", initialLocation.getZ());
 
+        // final block pos
         tag.putInt("fX", getFinalLocation().getX());
         tag.putInt("fY", getFinalLocation().getY());
         tag.putInt("fZ", getFinalLocation().getZ());
 
         if (pathType != null) {
-            tag.putString("Path", pathType.name());
+            tag.putString("Path", pathType.name()); // write path
         }
     }
 
@@ -154,7 +156,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         dataTracker.startTracking(TIME, 0.0);
         // dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d
         // buffer and I'm lazy
-        dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken
+        dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken (Is this still needed/broken?)
         dataTracker.startTracking(FINAL_BLOCK_POS, new BlockPos(0, 69, 0));
         dataTracker.startTracking(VELOCITY, this.getPos());
     }
@@ -163,7 +165,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         TrackedDataHandlerRegistry.register(STAGE.getType());
         TrackedDataHandlerRegistry.register(TIME.getType());
         // TrackedDataHandlerRegistry.register(VELOCITY.getType());
-        TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above
+        TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above 
         TrackedDataHandlerRegistry.register(FINAL_BLOCK_POS.getType());
         TrackedDataHandlerRegistry.register(VELOCITY.getType());
     }
@@ -177,10 +179,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         super.tick();
         if (path != null && updateMotion) {
             if (!world.isClient) {
-                path.updateMotion();
+                path.updateMotion(); // update motion and rotation on server 
                 path.updateRotation();
             } else {
-                this.setVelocity(dataTracker.get(VELOCITY));
+                this.setVelocity(dataTracker.get(VELOCITY)); // set velocity from dataTracker
             }
         }
     }
@@ -198,7 +200,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         }
     }
 
-    public void setPath(LaunchPaths path) {
+    public void setPath(LaunchPaths path) { // might be a better way to do this
         switch (path) {
             case MissingsPath:
                 this.path = new MissingsPath(this);
@@ -227,7 +229,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     @Override
     public boolean damage(DamageSource source, float amount) {
         if (source.equals(DamageSource.OUT_OF_WORLD)) {
-            return super.damage(source, amount);
+            return super.damage(source, amount); // so /kill works
         }
 
         return false;
@@ -239,10 +241,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         super.setVelocity(velocity);
 
         if (!world.isClient) {
-            dataTracker.set(VELOCITY, velocity);
+            dataTracker.set(VELOCITY, velocity); // set dataTracker on the server
         }
 
-        velocityDirty = false;
+        velocityDirty = false; // not really sure about this (maybe )
     }
 
     @Override

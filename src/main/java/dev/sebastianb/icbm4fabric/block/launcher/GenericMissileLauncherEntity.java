@@ -34,6 +34,7 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
     @Override
     public void readNbt(NbtCompound nbt) {
+        // read target and if we have a missile from nbt
         int x = nbt.getInt("targetX");
         int y = nbt.getInt("targetY");
         int z = nbt.getInt("targetZ");
@@ -47,6 +48,7 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
     @Override
     protected void writeNbt(NbtCompound nbt) {
+        // write target and if we have missile to nbt
         nbt.putInt("targetX", target.getX());
         nbt.putInt("targetY", target.getY());
         nbt.putInt("targetZ", target.getZ());
@@ -69,12 +71,12 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     @Nullable
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new LaunchScreenHandler(syncId, inv);
+        return new LaunchScreenHandler(syncId, inv); // create creen handler 
     }
 
     public void setMissile(AbstractMissileProjectile missile) {
-        this.missile = missile;
-        markDirty();
+        this.missile = missile; // set the missile
+        markDirty(); // mark dirty so writeNbt() gets called
     }
 
     public AbstractMissileProjectile getMissile() {
@@ -84,17 +86,17 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
     public void setTarget(BlockPos pos) {
         this.target = pos;
-        markDirty();
+        markDirty(); // mark dirty so writeNbt() gets called
     }
 
     public void setHasMissile(boolean hasMissile) {
         this.hasMissile = hasMissile;
-        markDirty();
+        markDirty(); // mark dirty so writeNbt() gets called
     }
 
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-        buf.writeBlockPos(getPos());
+        buf.writeBlockPos(getPos()); // buf in constructor of LaunchScreenHandler gets written here
         buf.writeBlockPos(target);
         buf.writeBoolean(hasMissile);
     }

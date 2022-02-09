@@ -16,10 +16,11 @@ public abstract class AbstractLaunchPath {
     public void updateRotation() {
         Vec3d vec3d = missile.getVelocity();
         if (Double.isNaN(vec3d.x) || Double.isNaN(vec3d.y) || Double.isNaN(vec3d.z)) {
-            return;
+            return; // make sure all parts of velocity are real
         }
-        if (missile.prevPitch == 0.0f && missile.prevYaw == 0.0f) {
-            double d = vec3d.horizontalLength();
+
+        if (missile.prevPitch == 0.0f && missile.prevYaw == 0.0f) { // honsetly I don't understand most of this
+            double d = vec3d.horizontalLength(); // I think it came from arrows 
             missile.setYaw((float) Math.toDegrees(MathHelper.atan2(vec3d.x, vec3d.z)));
             missile.setPitch((float) Math.toDegrees(MathHelper.atan2(vec3d.y, d)));
             missile.prevYaw = missile.getYaw();

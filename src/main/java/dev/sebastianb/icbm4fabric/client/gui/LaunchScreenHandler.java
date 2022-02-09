@@ -17,7 +17,7 @@ public class LaunchScreenHandler extends ScreenHandler {
     private boolean hasMissile;
 
     public LaunchScreenHandler(int syncID, Inventory inventory, PacketByteBuf buf) {
-        super(ModScreenHandlerRegistry.LAUNCHER_SCREEN, syncID);
+        super(ModScreenHandlerRegistry.LAUNCHER_SCREEN, syncID); // buf writen in GenericMissileLauncherEnitty#writeScreenOpeningData
 
         pos = buf.readBlockPos();
         target = buf.readBlockPos();

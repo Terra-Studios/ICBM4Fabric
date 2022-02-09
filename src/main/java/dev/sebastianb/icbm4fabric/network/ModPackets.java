@@ -15,6 +15,7 @@ public class ModPackets {
 
     public static void register() {
 
+        // maybe not needed?
         ServerPlayNetworking.registerGlobalReceiver(Constants.Packets.SUMMON_MISSILE, ((server, player, handler, buf, responseSender) -> {
             ICBM4Fabric.LOGGER.log(Level.ALL, "HI");
 

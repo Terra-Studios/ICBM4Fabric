@@ -35,7 +35,7 @@ public class GenericMissileLauncher extends BlockWithEntity {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-            if (screenHandlerFactory != null) {
+            if (screenHandlerFactory != null) { 
                 if (!player.isHolding(ModItems.Missiles.TATER.asItem())) {
                     // allow player to open screen handler without missile
                     player.openHandledScreen(screenHandlerFactory);
@@ -49,11 +49,10 @@ public class GenericMissileLauncher extends BlockWithEntity {
 
 //                    world.spawnEntity(missileEntity);
 
-                    BlockEntity blockEntity = world.getBlockEntity(pos);
+                    BlockEntity blockEntity = world.getBlockEntity(pos); // get the block entity 
 
                     if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
-//                        ((GenericMissileLauncherEntity) blockEntity).setMissile(missileEntity);
-                        launcherEntity.hasMissile = true;
+                        launcherEntity.hasMissile = true; // set the missile in the launcher entity TODO: make this actually store the itemstack
                         System.out.println("has missile");
                     }
                 }
@@ -63,7 +62,7 @@ public class GenericMissileLauncher extends BlockWithEntity {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
 
                 if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
-                    launcherEntity.hasMissile = true;
+                    launcherEntity.hasMissile = true; // set the missile on the client too
                 }
             }
         }

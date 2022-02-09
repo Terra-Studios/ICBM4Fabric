@@ -19,7 +19,7 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
     }
 
 
-    public void launch(BlockPos initialLocation, BlockPos finalLocation, double speed) {
+    public void launch(BlockPos initialLocation, BlockPos finalLocation, double speed) { // unused and maybe could be removed
         this.updatePosition(initialLocation.getX(), initialLocation.getY(), initialLocation.getZ());
         super.initialLocation = initialLocation;
     }
@@ -31,13 +31,13 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
 
         vX = this.getVelocity().getX();
         vY = this.getVelocity().getY();
-        vZ = this.getVelocity().getZ();
+        vZ = this.getVelocity().getZ(); // set individual velocity components 
 
         switch (getStage()) {
             case IDLE:
                 this.setPitch(90);
                 this.setVelocity(0,0,0);
-                updateMotion = false;
+                updateMotion = false; // don't move
                 break;
             case LIT:
                 this.setPitch(90);
@@ -76,7 +76,7 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
 
 
     private void summonParticles(ParticleEffect particleEffect, int times, double multiplier, double yVelocity) {
-        for (int x = 0; x < times; x++) {
+        for (int x = 0; x < times; x++) { // TODO: move this to the botton of the missile
             this.world.addImportantParticle(particleEffect, true, getX(),getY(),getZ(), randomDouble(multiplier),yVelocity,randomDouble(multiplier));
         }
     }

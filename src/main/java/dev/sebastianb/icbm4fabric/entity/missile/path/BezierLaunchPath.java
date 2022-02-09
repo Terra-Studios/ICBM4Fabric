@@ -12,8 +12,6 @@ public class BezierLaunchPath extends AbstractLaunchPath {
 
     public static final int BLOCKS_PER_TICK = 1;
 
-    Vec3d lastVelocity;
-
     double timeToTake;
 
     public BezierLaunchPath(AbstractMissileProjectile rocket, double maxHeight) {
@@ -24,12 +22,12 @@ public class BezierLaunchPath extends AbstractLaunchPath {
 
         double height = initialPos.getY() > finalPos.getY() ? initialPos.getY() + maxHeight : finalPos.getY() + maxHeight;
 
-        secondPoint = new Vec3d(initialPos.getX(), height, initialPos.getZ());
+        secondPoint = new Vec3d(initialPos.getX(), height, initialPos.getZ()); // top two points for bezier curve
         thirdPoint = new Vec3d(finalPos.getX(), height, finalPos.getZ());
 
         double distance = finalPos.subtract(initialPos).horizontalLength();
 
-        timeToTake = distance / BLOCKS_PER_TICK;
+        timeToTake = distance / BLOCKS_PER_TICK; // how many ticks it should take us to get there
     }
 
     @Override
@@ -40,6 +38,7 @@ public class BezierLaunchPath extends AbstractLaunchPath {
 
         }
 
+        // lerp between points (this is how bezier curves work)
         Vec3d quad1 = initialPos.lerp(secondPoint, t);
         Vec3d quad2 = secondPoint.lerp(thirdPoint, t);
         Vec3d quad3 = thirdPoint.lerp(finalPos, t);
@@ -49,13 +48,11 @@ public class BezierLaunchPath extends AbstractLaunchPath {
 
         Vec3d targetPosition = linear1.lerp(linear2, t);
 
-        Vec3d newVelocity = new Vec3d(targetPosition.getX() - missile.getPos().getX(),
+        Vec3d newVelocity = new Vec3d(targetPosition.getX() - missile.getPos().getX(), // new position 
                 targetPosition.getY() - missile.getPos().getY(),
                 targetPosition.getZ() - missile.getPos().getZ());
 
         missile.setVelocity(newVelocity);
-        missile.move(MovementType.SELF, missile.getVelocity());
-
-        lastVelocity = newVelocity;
+        missile.move(MovementType.SELF, missile.getVelocity()); // move
     }
 }
