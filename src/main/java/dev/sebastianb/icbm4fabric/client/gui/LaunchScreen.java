@@ -13,6 +13,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.screen.ingame.BookEditScreen;
+import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -23,6 +25,7 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.FurnaceScreenHandler;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -70,7 +73,10 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
         entityGUIRotate = false;
         openedGUI = true; // ik it's redundant but just for readability
-        runRotationCountdown(bodyRotate);
+        // get rid of missile status
+        if (handler.hasMissile()) {
+            runRotationCountdown(bodyRotate);
+        }
         valuesChanged = false;
 
         BlockPos target = handler.getTarget();
@@ -121,24 +127,26 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         yTarget.setText(yMissileInput.getText());
         this.yMissileInput = yTarget;
 
-        button = new ButtonWidget(this.width / 2 + 4, this.height / 2 + 35, 80, 20, new LiteralText("Launch"), btn -> {
-            sendLaunchCords(); // make sure target is updated
+        if (handler.hasMissile()) {
+            button = new ButtonWidget(this.width / 2 + 4, this.height / 2 + 35, 80, 20, new LiteralText("Launch"), btn -> {
+                sendLaunchCords(); // make sure target is updated
 
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeBlockPos(handler.getPos()); // add block pos for getting BE on server
+                PacketByteBuf buf = PacketByteBufs.create();
+                buf.writeBlockPos(handler.getPos()); // add block pos for getting BE on server
+                System.out.println("before " + handler.hasMissile());
+                buf.writeBoolean(false);
+                ClientPlayNetworking.send(Constants.Packets.LAUNCH_MISSILE, buf);
 
-            ClientPlayNetworking.send(Constants.Packets.LAUNCH_MISSILE, buf);
+                BlockEntity be = MinecraftClient.getInstance().world.getBlockEntity(handler.getPos());
+                if (be instanceof GenericMissileLauncherEntity launcherEntity) {
+                    launcherEntity.hasMissile = false; // remove missile from entity on client
+                    System.out.println("after " + handler.hasMissile());
+                }
 
-            BlockEntity be = MinecraftClient.getInstance().world.getBlockEntity(handler.getPos());
-            if (be instanceof GenericMissileLauncherEntity) {
-                GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) be;
-                launcherEntity.hasMissile = false; // remove missile from entity
-            }
-        });
-        this.addDrawableChild(button);
-
-//        drawables.add(launchButton);
-//        this.addSelectableChild(launchButton);
+                // this.client.setScreen(null); // close screen
+            });
+            this.addDrawableChild(button);
+        }
 
         addTextedButton(xTarget);
         addTextedButton(zTarget);
@@ -210,15 +218,25 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
         drawTexture(matrices, 0, 0, 0, 0, backgroundWidth, backgroundHeight, textureWidth, textureHeight);
 
-        this.drawEntity(this.x + 71, this.y + 180, 40, (float) (this.x + 88 - mouseX), (float) (this.y + 45 - 30 - mouseY), ModEntityTypes.Missiles.TATER.getType().create(client.world)); // new TaterMissileEntity(ModEntityTypes.TATER_MISSILE, this.client.world)
+        if (handler.hasMissile()) {
+            // TODO: make this get the entity that's "real" and in the missile for real
+            this.drawEntity(this.x + 71, this.y + 180, 40, (float) (this.x + 88 - mouseX), (float) (this.y + 45 - 30 - mouseY), ModEntityTypes.Missiles.TATER.getType().create(client.world));
+        } else {
 
+        }
 
         matrices.pop();
         matrices.push();
         for (Drawable e : drawables) {
             e.render(matrices, mouseX, mouseY, delta);
         }
-        button.render(matrices, mouseX, mouseY, delta);
+        // launch button won't render if there's no missile
+        if (handler.hasMissile()) {
+            button.render(matrices, mouseX, mouseY, delta);
+        } else {
+            // TODO: replace with a image of the launch button being grayed out
+            this.textRenderer.draw(matrices, "No missile", this.width / 2 + 4, this.height / 2 + 35, 0xFFFFFF);
+        }
 
         matrices.pop();
 

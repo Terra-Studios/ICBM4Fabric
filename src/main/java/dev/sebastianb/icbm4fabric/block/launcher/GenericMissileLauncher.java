@@ -7,6 +7,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.BlockSoundGroup;
@@ -49,10 +51,10 @@ public class GenericMissileLauncher extends BlockWithEntity {
 
                     BlockEntity blockEntity = world.getBlockEntity(pos);
 
-                    if (blockEntity instanceof GenericMissileLauncherEntity) {
+                    if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
 //                        ((GenericMissileLauncherEntity) blockEntity).setMissile(missileEntity);
-                        GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) blockEntity;
                         launcherEntity.hasMissile = true;
+                        System.out.println("has missile");
                     }
                 }
             }
@@ -60,21 +62,19 @@ public class GenericMissileLauncher extends BlockWithEntity {
             if (player.isHolding(ModItems.Missiles.TATER.asItem())) {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
 
-                if (blockEntity instanceof GenericMissileLauncherEntity) {
-                    GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) blockEntity;
+                if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
                     launcherEntity.hasMissile = true;
                 }
             }
         }
-//        if (world.isClient) {
-//            if (hand == Hand.OFF_HAND)
-//                return ActionResult.FAIL;
-//            PacketByteBuf buf = PacketByteBufs.create().writeBlockPos(pos);
-//            ClientPlayNetworking.send(Constants.Packets.SUMMON_MISSILE, buf); // sends where the launcher is to the server
-//        }
         return ActionResult.SUCCESS;
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return GenericMissileLauncherEntity::tick;
+    }
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {

@@ -22,16 +22,11 @@ public class LauncherBlockEntityRenderer implements BlockEntityRenderer {
 
         matrices.translate(0.5, .75, 0.5);
 
-        if (entity instanceof GenericMissileLauncherEntity) {
-            GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) entity;
-
+        if (entity instanceof GenericMissileLauncherEntity launcherEntity) {
             if (launcherEntity.hasMissile) {
                 MinecraftClient.getInstance().getItemRenderer().renderItem(missile, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
             }
-
-//            System.out.println(launcherEntity.hasMissile);
         }
-
         matrices.pop();
     }
 }

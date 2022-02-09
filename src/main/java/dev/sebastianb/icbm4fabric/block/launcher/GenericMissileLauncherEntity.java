@@ -19,6 +19,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class GenericMissileLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory, ExtendedScreenHandlerFactory {
@@ -57,7 +58,6 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
     public GenericMissileLauncherEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MISSILE_LAUNCHER, pos, state);
-
         target = new BlockPos(0, 60, 0); // set default target on screen init. TODO: maybe have a config option for this later?
     }
 
@@ -74,7 +74,6 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
     public void setMissile(AbstractMissileProjectile missile) {
         this.missile = missile;
-
         markDirty();
     }
 
@@ -84,21 +83,24 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     }
 
     public void setTarget(BlockPos pos) {
-        target = pos;
+        this.target = pos;
+        markDirty();
+    }
 
+    public void setHasMissile(boolean hasMissile) {
+        this.hasMissile = hasMissile;
         markDirty();
     }
 
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
         buf.writeBlockPos(getPos());
-
         buf.writeBlockPos(target);
+        buf.writeBoolean(hasMissile);
     }
 
     public void launchMissile() {
         if (hasMissile) { // make sure we have a missile to launch
-            hasMissile = false;
 
             AbstractMissileProjectile missileEntity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world); // create the missile
             missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5); // set position of missile
@@ -109,4 +111,13 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
             missileEntity.setStage(LaunchStage.LIT); // light the rocket
         }
     }
+
+    public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState blockState, T t) {
+//        if (!world.isClient) {
+//            if (t instanceof GenericMissileLauncherEntity launcher) {
+//                System.out.println(launcher.hasMissile);
+//            }
+//        }
+    }
+
 }

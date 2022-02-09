@@ -31,25 +31,24 @@ public class ModPackets {
 
             BlockPos target = buf.readBlockPos();
             BlockPos pos = buf.readBlockPos();
+            // boolean hasMissile = buf.readBoolean();
             ServerWorld serverWorld = player.getWorld();
             server.execute(() -> {
-                if (serverWorld.getBlockEntity(pos) instanceof GenericMissileLauncherEntity) {
-                    GenericMissileLauncherEntity blockEntity = (GenericMissileLauncherEntity) serverWorld.getBlockEntity(pos);
-
+                if (serverWorld.getBlockEntity(pos) instanceof GenericMissileLauncherEntity blockEntity) {
                     blockEntity.setTarget(target);
+                    // blockEntity.setHasMissile(hasMissile);
                 }
             });
         });
 
         ServerPlayNetworking.registerGlobalReceiver(Constants.Packets.LAUNCH_MISSILE, (server, player, handler, buf, responseSender) -> { // when missile should launch
-
             BlockPos pos = buf.readBlockPos();
             ServerWorld serverWorld = player.getWorld();
+            boolean hasMissile = buf.readBoolean();
             server.execute(() -> {
-                if (serverWorld.getBlockEntity(pos) instanceof GenericMissileLauncherEntity) {
-                    GenericMissileLauncherEntity blockEntity = (GenericMissileLauncherEntity) serverWorld.getBlockEntity(pos);
-
+                if (serverWorld.getBlockEntity(pos) instanceof GenericMissileLauncherEntity blockEntity) {
                     blockEntity.launchMissile(); // really logic and code goes here
+                    blockEntity.setHasMissile(hasMissile);
                 }
             });
         });
