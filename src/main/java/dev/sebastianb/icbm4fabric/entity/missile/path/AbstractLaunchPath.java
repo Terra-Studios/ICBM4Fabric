@@ -19,19 +19,19 @@ public abstract class AbstractLaunchPath {
             return; // make sure all parts of velocity are real
         }
 
-        if (missile.prevPitch == 0.0f && missile.prevYaw == 0.0f) { // honsetly I don't understand most of this
-            double d = vec3d.horizontalLength(); // I think it came from arrows 
+        if (missile.prevPitch == 0.0f && missile.prevYaw == 0.0f) { // from arrow code
+            double horizontalVelocityLength = vec3d.horizontalLength();
             missile.setYaw((float) Math.toDegrees(MathHelper.atan2(vec3d.x, vec3d.z)));
-            missile.setPitch((float) Math.toDegrees(MathHelper.atan2(vec3d.y, d)));
+            missile.setPitch((float) Math.toDegrees(MathHelper.atan2(vec3d.y, horizontalVelocityLength)));
             missile.prevYaw = missile.getYaw();
             missile.prevPitch = missile.getPitch();
         }
-        double e = vec3d.x;
-        double f = vec3d.y;
-        double g = vec3d.z;
-        double l = vec3d.horizontalLength();
-        missile.setYaw((float) Math.toDegrees(MathHelper.atan2(e, g)));
-        missile.setPitch((float) Math.toDegrees(MathHelper.atan2(f, l)));
+        double xVel = vec3d.x;
+        double yVel = vec3d.y;
+        double zVel = vec3d.z;
+        double horizontalVelocityLength = vec3d.horizontalLength();
+        missile.setYaw((float) Math.toDegrees(MathHelper.atan2(xVel, zVel)));
+        missile.setPitch((float) Math.toDegrees(MathHelper.atan2(yVel, horizontalVelocityLength)));
         missile.setPitch(PersistentProjectileEntity.updateRotation(missile.prevPitch, missile.getPitch()));
         missile.setYaw(PersistentProjectileEntity.updateRotation(missile.prevYaw, missile.getYaw()));
 
