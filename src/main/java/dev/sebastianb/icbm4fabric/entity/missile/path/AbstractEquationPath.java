@@ -30,16 +30,16 @@ public abstract class AbstractEquationPath extends AbstractLaunchPath{
     }
 
     @Override
-    public void updateMotion() {
+    public void updateMotion() {// TODO: I think there's a slight inaccuracy in this
         // get distance traveled 
         double groundDistanceTraveled = Math.sqrt((initialPosVec.getX() - missile.getPos().getX()) * (initialPosVec.getX() - missile.getPos().getX()) + (initialPosVec.getZ() - missile.getPos().getZ()) * (initialPosVec.getZ() - missile.getPos().getZ()));
 
-        double heightAtPos = evaluateFunctionAtValue(groundDistanceTraveled); // where we should be at this potition
+        double heightAtPos = evaluateFunctionAtValue(groundDistanceTraveled); // where we should be at this position
         double heightForDerivative = evaluateFunctionAtValue(groundDistanceTraveled + CHANGE_FOR_DERIVATIVE); // where we should be in a tiny bit
 
         double slope = (heightForDerivative - heightAtPos) / CHANGE_FOR_DERIVATIVE; // get slope at our position
 
-        double groundChange = Math.sqrt(SPEED * SPEED / (slope * slope + 1)); // get how far we should travel horiztonally 
+        double groundChange = Math.sqrt(SPEED * SPEED / (slope * slope + 1)); // get how far we should travel horizontally
 
         double targetHeight = evaluateFunctionAtValue(groundDistanceTraveled + groundChange); // where we should be at our target location
 
