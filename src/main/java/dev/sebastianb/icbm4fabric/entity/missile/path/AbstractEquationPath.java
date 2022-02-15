@@ -11,7 +11,7 @@ public abstract class AbstractEquationPath extends AbstractLaunchPath{
 
     Vec3d change;
 
-    public final double SPEED = 5;
+    public final double SPEED = 3;
     private final double CHANGE_FOR_DERIVATIVE  = .00001;
 
     double dYaw;

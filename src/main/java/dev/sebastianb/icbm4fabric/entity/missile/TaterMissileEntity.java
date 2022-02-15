@@ -76,8 +76,10 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
 
 
     private void summonParticles(ParticleEffect particleEffect, int times, double multiplier, double yVelocity) {
-        for (int x = 0; x < times; x++) { // TODO: move this to the botton of the missile
-            this.world.addImportantParticle(particleEffect, true, getX(),getY(),getZ(), randomDouble(multiplier),yVelocity,randomDouble(multiplier));
+        Vec3d pos = getPos().subtract(getVelocity());
+
+        for (int x = 0; x < times; x++) {
+            this.world.addImportantParticle(particleEffect, true, pos.getX(), pos.getY(), pos.getZ(), randomDouble(multiplier) ,yVelocity, randomDouble(multiplier));
         }
     }
 

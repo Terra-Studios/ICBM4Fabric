@@ -213,6 +213,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
             case BezierPath:
                 this.path = new BezierLaunchPath(this, 120);
                 pathType = LaunchPaths.BezierPath;
+                break;
         }
     }
 
