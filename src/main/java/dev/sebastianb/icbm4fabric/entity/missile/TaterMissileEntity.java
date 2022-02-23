@@ -70,7 +70,6 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
             default:
         }
 
-        //Vec3d currentPos = this.getPos();
         timeSinceStage++;
     }
 

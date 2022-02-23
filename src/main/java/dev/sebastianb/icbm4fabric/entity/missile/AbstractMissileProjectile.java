@@ -114,10 +114,6 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
             this.timeSinceStage = tag.getDouble("Time"); // read time from nbt
         }
 
-        if (tag.contains("Path")) {
-            setPath(LaunchPaths.valueOf(tag.getString("Path"))); // read path form nbt
-        }
-
         int x = tag.getInt("iX");
         int y = tag.getInt("iY");
         int z = tag.getInt("iZ");
@@ -127,6 +123,10 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         int fY = tag.getInt("fY");
         int fZ = tag.getInt("fZ");
         setFinalBlockPos(new BlockPos(fX, fY, fZ)); // read final location from nbt
+
+        if (tag.contains("Path")) {
+            setPath(LaunchPaths.valueOf(tag.getString("Path"))); // read path form nbt
+        }
     }
 
     @Override
@@ -254,9 +254,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     }
 
     public void setFinalBlockPos(BlockPos target) {
-        if (dataTracker.get(STAGE) == LaunchStage.IDLE) {
-            dataTracker.set(FINAL_BLOCK_POS, target);
-        }
+        dataTracker.set(FINAL_BLOCK_POS, target);
     }
 
     public BlockPos getFinalLocation() {
