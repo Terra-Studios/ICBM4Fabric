@@ -55,22 +55,12 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
             return ActionResult.PASS;
         }
         player.startRiding(this); // riding missile
-        if (player.isSneaking()) {
-            setStage(LaunchStage.LIT); // lit the missile (maybe this could be removed at this point?)
-        }
-
         return super.interact(player, hand);
-    }
-
-    @Override
-    public void setCustomNameVisible(boolean visible) {
-        super.setCustomNameVisible(true);
     }
 
     public double timeSinceStage = 0;
 
     public BlockPos initialLocation = new BlockPos(0, 0, 0);
-//    public BlockPos finalLocation = new BlockPos(0, 69, 0); // nice
 
     public double vX;
     public double vY;
@@ -154,18 +144,15 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     protected void initDataTracker() {
         dataTracker.startTracking(STAGE, LaunchStage.IDLE);
         dataTracker.startTracking(TIME, 0.0);
-        // dataTracker.startTracking(VELOCITY, BlockPos.ORIGIN); // there's no Vec3d
-        // buffer and I'm lazy
-        dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN); // TODO: Get block pos saved, this code is broken (Is this still needed/broken?)
-        dataTracker.startTracking(FINAL_BLOCK_POS, new BlockPos(0, 69, 0));
+        dataTracker.startTracking(INITIAL_BLOCK_POS, BlockPos.ORIGIN);
+        dataTracker.startTracking(FINAL_BLOCK_POS, new BlockPos(0, 69, 0)); // the funny number
         dataTracker.startTracking(VELOCITY, this.getPos());
     }
 
     static {
         TrackedDataHandlerRegistry.register(STAGE.getType());
         TrackedDataHandlerRegistry.register(TIME.getType());
-        // TrackedDataHandlerRegistry.register(VELOCITY.getType());
-        TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType()); // TODO: Related to code above 
+        TrackedDataHandlerRegistry.register(INITIAL_BLOCK_POS.getType());
         TrackedDataHandlerRegistry.register(FINAL_BLOCK_POS.getType());
         TrackedDataHandlerRegistry.register(VELOCITY.getType());
     }
@@ -200,21 +187,16 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         }
     }
 
-    public void setPath(LaunchPaths path) { // might be a better way to do this
-        switch (path) {
-            case MissingsPath:
-                this.path = new MissingsPath(this);
-                pathType = LaunchPaths.MissingsPath;
-                break;
-            case VariableHeightPath:
-                this.path = new VariableHeightPath(this, 120);
-                pathType = LaunchPaths.VariableHeightPath;
-                break;
-            case BezierPath:
-                this.path = new BezierLaunchPath(this, 120);
-                pathType = LaunchPaths.BezierPath;
-                break;
-        }
+    @Override
+    public void setPath(LaunchPaths path) {
+        setPath(path, 0);
+    }
+
+    // Sets path, which holds the max height rocket can reach
+    @Override
+    public void setPath(LaunchPaths path, double maxHeight) {
+        this.path = path.getLaunchPath(this, path, maxHeight);
+        this.pathType = path;
     }
 
     public void setInitialBlockPos(BlockPos blockPos) {
@@ -232,9 +214,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         if (source.equals(DamageSource.OUT_OF_WORLD)) {
             return super.damage(source, amount); // so /kill works
         }
-
         return false;
-        // return super.damage(source, amount);
     }
 
     @Override

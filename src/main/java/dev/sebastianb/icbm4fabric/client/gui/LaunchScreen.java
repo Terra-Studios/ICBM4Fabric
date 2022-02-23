@@ -220,7 +220,6 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         drawTexture(matrices, 0, 0, 0, 0, backgroundWidth, backgroundHeight, textureWidth, textureHeight);
 
         if (handler.hasMissile()) {
-            // TODO: make this get the entity that's "real" and in the missile for real
             this.drawEntity(this.x + 71, this.y + 180, 40, (float) (this.x + 88 - mouseX), (float) (this.y + 45 - 30 - mouseY), ModEntityTypes.Missiles.TATER.getType().create(client.world));
         } else {
 

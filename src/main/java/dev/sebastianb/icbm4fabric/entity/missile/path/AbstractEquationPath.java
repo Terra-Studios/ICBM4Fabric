@@ -4,7 +4,7 @@ import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
 
-public abstract class AbstractEquationPath extends AbstractLaunchPath{
+public abstract class AbstractEquationPath extends AbstractLaunchPath {
 
     Vec3d initialPosVec;
     Vec3d finalPosVec;

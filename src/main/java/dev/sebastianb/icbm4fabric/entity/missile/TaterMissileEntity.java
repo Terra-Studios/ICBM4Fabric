@@ -48,7 +48,7 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
                     // this.setVelocity(0,8,0);
                     setInitialBlockPos(this.getBlockPos());
                     this.setNoGravity(true);
-                    setPath(LaunchPaths.BezierPath);
+                    setPath(LaunchPaths.BezierPath, 120);
                     setStage(LaunchStage.LAUNCHED);
                 }
                 break;

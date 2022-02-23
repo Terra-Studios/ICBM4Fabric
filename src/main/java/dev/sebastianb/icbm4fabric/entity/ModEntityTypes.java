@@ -15,7 +15,7 @@ import net.minecraft.entity.SpawnGroup;
 
 public class ModEntityTypes {
 
-    public static enum Missiles {
+    public enum Missiles {
         TATER(TaterMissileEntity::new, 0.75f, 2.5f);
 
         private final String name;
