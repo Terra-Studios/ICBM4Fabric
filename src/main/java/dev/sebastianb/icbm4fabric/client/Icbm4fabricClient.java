@@ -4,6 +4,7 @@ import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.client.init.ModClientEntityRegister;
 import dev.sebastianb.icbm4fabric.client.renderer.block.entity.ModBlockEntityRenderer;
 import dev.sebastianb.icbm4fabric.item.ModItems;
+import dev.sebastianb.icbm4fabric.network.ClientPackets;
 import dev.sebastianb.icbm4fabric.registries.ModScreenHandlerRegistry;
 import dev.sebastianb.icbm4fabric.registries.ModScreenRegistry;
 import net.fabricmc.api.ClientModInitializer;
@@ -24,6 +25,7 @@ public class Icbm4fabricClient implements ClientModInitializer {
         ModScreenHandlerRegistry.register();
 
         ModBlockEntityRenderer.register();
+        ClientPackets.register();
 
         BuiltinItemRendererRegistry.INSTANCE.register(ModItems.Missiles.TATER, new MissileItemRenderer());
     }

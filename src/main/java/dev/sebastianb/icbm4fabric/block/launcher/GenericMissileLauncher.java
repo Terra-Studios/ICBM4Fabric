@@ -52,7 +52,7 @@ public class GenericMissileLauncher extends BlockWithEntity {
                     BlockEntity blockEntity = world.getBlockEntity(pos); // get the block entity 
 
                     if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
-                        launcherEntity.hasMissile = true; // set the missile in the launcher entity TODO: make this actually store the itemstack
+                        launcherEntity.setMissile(player.getStackInHand(hand)); // set the missile in the launcher entity
                         System.out.println("has missile");
                     }
                 }
@@ -62,7 +62,7 @@ public class GenericMissileLauncher extends BlockWithEntity {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
 
                 if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
-                    launcherEntity.hasMissile = true; // set the missile on the client too
+                    launcherEntity.setMissile(player.getStackInHand(hand)); // set the missile on the client too
                 }
             }
         }
@@ -79,5 +79,7 @@ public class GenericMissileLauncher extends BlockWithEntity {
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
+
+
 
 }

@@ -200,6 +200,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
         }
     }
 
+    //TODO: Iterate over enum instead. We're repeating ourselves here.
     public void setPath(LaunchPaths path) { // might be a better way to do this
         switch (path) {
             case MissingsPath:
