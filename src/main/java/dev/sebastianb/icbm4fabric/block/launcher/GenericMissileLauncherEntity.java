@@ -115,8 +115,11 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
             missileEntity.setFinalBlockPos(target); // set target
 
             missileEntity.setStage(LaunchStage.LIT); // light the rocket
+
+            setMissile(ItemStack.EMPTY); // remove missile from launcher
         }
     }
+
 
     public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState blockState, T t) {
         if (!world.isClient) {
