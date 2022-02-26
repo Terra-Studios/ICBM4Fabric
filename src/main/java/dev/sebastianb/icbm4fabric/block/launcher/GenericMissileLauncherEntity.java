@@ -7,6 +7,7 @@ import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -17,12 +18,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -64,6 +70,8 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
         super.writeNbt(nbt);
     }
 
+
+
     public GenericMissileLauncherEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MISSILE_LAUNCHER, pos, state);
         target = new BlockPos(0, 60, 0); // set default target on screen init. TODO: maybe have a config option for this later?
@@ -83,6 +91,7 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     public void setMissile(ItemStack missile) {
         this.missileItemStack = missile; // set the missile
         markDirty(); // mark dirty so writeNbt() gets called
+        assert world != null;
     }
 
     public ItemStack getMissile() {
@@ -116,43 +125,23 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
             missileEntity.setStage(LaunchStage.LIT); // light the rocket
 
-            setMissile(ItemStack.EMPTY); // remove missile from launcher
+            this.setMissile(ItemStack.EMPTY); // remove missile from launcher
         }
     }
 
+    // sync data between client and server
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
+    }
 
     public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState blockState, T t) {
-        if (!world.isClient) {
-            if (!(t instanceof GenericMissileLauncherEntity)) return;
 
-            GenericMissileLauncherEntity be = (GenericMissileLauncherEntity) world.getBlockEntity(pos);
-
-            var playerList = PlayerLookup.tracking(be);
-
-            Collection<ServerPlayerEntity> playersToUpdate = new ArrayList<>();
-
-            if (be.lastPlayersTracking == null) {
-                playersToUpdate.addAll(playerList);
-            } else {
-                for (ServerPlayerEntity player : playerList) {
-                    if (!be.lastPlayersTracking.contains(player)) {
-                        playersToUpdate.add(player);
-                    }
-                }
-            }
-
-            if (playersToUpdate.isEmpty()) return;
-
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeItemStack(be.getMissile());
-            buf.writeBlockPos(pos);
-
-            for (ServerPlayerEntity player : playersToUpdate) {
-                ServerPlayNetworking.send(player, Constants.Packets.LAUNCHER_STATUS, buf);
-            }
-
-            be.lastPlayersTracking = playerList;
-        }
     }
 
 
