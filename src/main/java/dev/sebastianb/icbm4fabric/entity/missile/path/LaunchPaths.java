@@ -5,7 +5,6 @@ import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 
 public enum LaunchPaths {
 
-    // All values inside the path ARE temporary values that get replaced on rocket set path
     MissingsPath(),
     VariableHeightPath(),
     BezierPath();
