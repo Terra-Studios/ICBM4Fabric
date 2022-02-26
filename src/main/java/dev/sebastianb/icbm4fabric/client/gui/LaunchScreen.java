@@ -13,8 +13,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.screen.ingame.BookEditScreen;
-import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -24,8 +22,8 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.FurnaceScreenHandler;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -140,7 +138,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
                 BlockEntity be = MinecraftClient.getInstance().world.getBlockEntity(handler.getPos());
                 if (be instanceof GenericMissileLauncherEntity launcherEntity) {
-                    launcherEntity.hasMissile = false; // remove missile from entity on client
+                    launcherEntity.setMissile(ItemStack.EMPTY); // remove missile from entity on client
                     System.out.println("after " + handler.hasMissile());
                 }
 

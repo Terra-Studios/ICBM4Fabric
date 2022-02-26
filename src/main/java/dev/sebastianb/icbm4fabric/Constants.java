@@ -21,6 +21,7 @@ public class Constants {
         Identifier SUMMON_MISSILE = new Identifier(Constants.MOD_ID, "summon_missile");
         Identifier NEW_LAUNCH_CORDS = new Identifier(Constants.MOD_ID, "launch_cords");
         Identifier LAUNCH_MISSILE = new Identifier(Constants.MOD_ID, "launch_missile");
+        Identifier LAUNCHER_STATUS = new Identifier(Constants.MOD_ID, "launcher_status");
     }
 
 }

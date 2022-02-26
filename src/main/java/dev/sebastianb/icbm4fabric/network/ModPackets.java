@@ -49,7 +49,6 @@ public class ModPackets {
             server.execute(() -> {
                 if (serverWorld.getBlockEntity(pos) instanceof GenericMissileLauncherEntity blockEntity) {
                     blockEntity.launchMissile(); // really logic and code goes here
-                    blockEntity.setHasMissile(hasMissile);
                 }
             });
         });

@@ -31,9 +31,9 @@ public class MissileItem extends Item {
                     if (blockEntity instanceof GenericMissileLauncherEntity) {
                         GenericMissileLauncherEntity launcherEntity = (GenericMissileLauncherEntity) blockEntity;
 
-                        if (!launcherEntity.hasMissile) {
+                        if (!launcherEntity.hasMissile()) {
                             context.getStack().decrement(1);
-                            launcherEntity.hasMissile = true;
+                            launcherEntity.setMissile(context.getStack());
                             return ActionResult.CONSUME;
                         }
                     }
