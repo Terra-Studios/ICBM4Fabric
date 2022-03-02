@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class DesertBlast extends Blast {
 
-
     private final Random random = new Random();
 
     private final HashSet<Block> blocksSetToSand = new HashSet<>(

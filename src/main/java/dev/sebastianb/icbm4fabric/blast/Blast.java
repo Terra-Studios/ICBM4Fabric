@@ -53,7 +53,4 @@ public abstract class Blast {
         }
     }
 
-
-
-
 }

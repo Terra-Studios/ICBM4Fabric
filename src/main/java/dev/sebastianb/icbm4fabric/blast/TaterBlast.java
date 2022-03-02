@@ -10,7 +10,6 @@ import java.util.Random;
 
 public class TaterBlast extends Blast {
 
-
     private final Random random = new Random();
 
     public TaterBlast(World world, BlockPos blockPos) {
@@ -28,4 +27,5 @@ public class TaterBlast extends Blast {
             }
         }
     }
+    
 }

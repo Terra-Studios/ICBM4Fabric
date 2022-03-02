@@ -11,7 +11,4 @@ public class TNTBlast extends Blast {
 
     }
 
-
-
-
 }
