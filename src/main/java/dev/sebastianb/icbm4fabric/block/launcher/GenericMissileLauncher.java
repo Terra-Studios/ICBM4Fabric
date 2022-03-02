@@ -1,6 +1,10 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
+import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.item.ModItems;
+import dev.sebastianb.icbm4fabric.item.missile.MissileItem;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -10,7 +14,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -35,34 +43,19 @@ public class GenericMissileLauncher extends BlockWithEntity {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-            if (screenHandlerFactory != null) { 
-                if (!player.isHolding(ModItems.Missiles.TATER.asItem())) {
-                    // allow player to open screen handler without missile
-                    player.openHandledScreen(screenHandlerFactory);
-                } else {
-
-//                    return ActionResult.PASS;
-                    // sets the missile launcher should be holding
-//                    MissileItem missileItem = (MissileItem) player.getStackInHand(hand).getItem();
-//                    AbstractMissileProjectile missileEntity = missileItem.getMissile(world);
-//                    missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-
-//                    world.spawnEntity(missileEntity);
-
-                    BlockEntity blockEntity = world.getBlockEntity(pos); // get the block entity 
+            if (screenHandlerFactory != null) {
+                ItemStack missile = player.getStackInHand(hand);
+                if (missile.getItem() instanceof MissileItem) {
+                    BlockEntity blockEntity = world.getBlockEntity(pos); // get the block entity
 
                     if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
                         launcherEntity.setMissile(player.getStackInHand(hand)); // set the missile in the launcher entity
-                        System.out.println("has missile");
+                        launcherEntity.updateListener(); // update the listener
                     }
-                }
-            }
-        } else {
-            if (player.isHolding(ModItems.Missiles.TATER.asItem())) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
 
-                if (blockEntity instanceof GenericMissileLauncherEntity launcherEntity) {
-                    launcherEntity.setMissile(player.getStackInHand(hand)); // set the missile on the client too
+                } else {
+                    // allow player to open screen handler without missile
+                    player.openHandledScreen(screenHandlerFactory);
                 }
             }
         }

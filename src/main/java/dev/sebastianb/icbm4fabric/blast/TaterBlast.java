@@ -27,5 +27,5 @@ public class TaterBlast extends Blast {
             }
         }
     }
-    
+
 }

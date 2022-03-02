@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,8 +54,9 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
         target = new BlockPos(x, y, z);
 
+        System.out.println(missileItemStack);
         missileItemStack = ItemStack.fromNbt(nbt.getCompound("missileItemStack"));
-
+        System.out.println(missileItemStack);
         super.readNbt(nbt);
     }
 
@@ -127,6 +129,11 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
             this.setMissile(ItemStack.EMPTY); // remove missile from launcher
         }
+    }
+
+    // syncs the missile to the client
+    public void updateListener() {
+        this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
     }
 
     // sync data between client and server
