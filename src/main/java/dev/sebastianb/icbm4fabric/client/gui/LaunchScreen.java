@@ -175,8 +175,8 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
     }
 
     @Override
-    public void onClose() {
-        super.onClose();
+    public void close() {
+        super.close();
         this.openedGUI = false;
 
         if (valuesChanged) {
