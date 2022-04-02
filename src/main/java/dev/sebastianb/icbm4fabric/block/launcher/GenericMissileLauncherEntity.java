@@ -1,16 +1,11 @@
 package dev.sebastianb.icbm4fabric.block.launcher;
 
-import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
 import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
-import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,18 +18,15 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class GenericMissileLauncherEntity extends BlockEntity implements NamedScreenHandlerFactory, ExtendedScreenHandlerFactory {
@@ -121,6 +113,7 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
             AbstractMissileProjectile missileEntity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world); // create the missile
             missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5); // set position of missile
+            missileEntity.setRotation(-90, 90);
 
             world.spawnEntity(missileEntity);
             missileEntity.setFinalBlockPos(target); // set target
@@ -150,6 +143,4 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState blockState, T t) {
 
     }
-
-
 }
