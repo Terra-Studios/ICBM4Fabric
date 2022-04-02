@@ -142,6 +142,8 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
                     System.out.println("after " + handler.hasMissile());
                 }
 
+                handler.setHasMissile(false);
+
                 // this.client.setScreen(null); // close screen
             });
             this.addDrawableChild(button);

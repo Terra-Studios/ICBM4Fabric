@@ -5,9 +5,7 @@ import dev.sebastianb.icbm4fabric.registries.ModScreenHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 
 public class LaunchScreenHandler extends ScreenHandler {
@@ -49,4 +47,7 @@ public class LaunchScreenHandler extends ScreenHandler {
         return hasMissile;
     }
 
+    public void setHasMissile(boolean hasMissile) {
+        this.hasMissile = hasMissile;
+    }
 }
