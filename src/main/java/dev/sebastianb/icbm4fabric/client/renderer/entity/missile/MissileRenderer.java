@@ -27,12 +27,15 @@ abstract class MissileRenderer<T extends AbstractMissileProjectile> extends Enti
 
     @Override
     public void render(T entity, float yaw, float delta, MatrixStack matrices, VertexConsumerProvider vertices, int light) {
-        float pitch = entity.getStage() == LaunchStage.IDLE ? 90 : MathHelper.lerp(delta, entity.prevPitch, entity.getPitch());
+        boolean isLitOrIdle = entity.getStage() == LaunchStage.LIT || entity.getStage() == LaunchStage.IDLE;
+
+        float pitch = isLitOrIdle ? 90 : MathHelper.lerp(delta, entity.prevPitch, entity.getPitch());
+        yaw = isLitOrIdle ? -90 : yaw;
 
         matrices.push();
         matrices.translate(0, 1.25, 0);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.lerp(delta, entity.prevYaw, entity.getYaw()) - 90.0f));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion( pitch + 90.f));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yaw - 90.0f));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(pitch + 90.f));
         matrices.translate(0, -.25, 0);
         VertexConsumer buffer = vertices.getBuffer(RenderLayer.getEntitySolid(getTexture(entity)));
         model.render(matrices, buffer, light, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
