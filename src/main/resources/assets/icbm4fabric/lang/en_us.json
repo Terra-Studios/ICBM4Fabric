@@ -1,11 +1,11 @@
 {
-    "itemGroup.icbm4fabric.block": "ICBM Blocks",
+    "itemGroup.icbm4fabric.blocks": "ICBM Blocks",
 
-    "block.icbm4fabric.tier1_missle_launcer": "Tier 1 Missle Launcher",
-    "block.icbm4fabric.tier2_missle_launcer": "Tier 2 Missle Launcher",
-    "block.icbm4fabric.tier3_missle_launcer": "Tier 3 Missle Launcher",
+    "block.icbm4fabric.tier1_missile_launcher": "Tier 1 Missile Launcher",
+    "block.icbm4fabric.tier2_missile_launcher": "Tier 2 Missile Launcher",
+    "block.icbm4fabric.tier3_missile_launcher": "Tier 3 Missile Launcher",
 
     "itemGroup.icbm4fabric.items": "ICBM Items",
 
-    "item.icbm4fabric.tater_missle": "Tater Missle"
+    "item.icbm4fabric.tater_missile": "Tater Missile"
 }
