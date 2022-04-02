@@ -20,7 +20,7 @@ public class LauncherBlockEntityRenderer implements BlockEntityRenderer {
     public void render(BlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
 
-        matrices.translate(0.5, .75, 0.5);
+        matrices.translate(0.5, 1, 0.5);
 
         if (entity instanceof GenericMissileLauncherEntity launcherEntity) {
 //            if (launcherEntity.hasMissile()) { // render missile via item (thanks seba for doing the hard work)

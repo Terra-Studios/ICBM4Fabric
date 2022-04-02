@@ -164,6 +164,7 @@ public abstract class AbstractMissileProjectile extends Entity implements Missil
     @Override
     public void tick() {
         super.tick();
+
         if (path != null && updateMotion) {
             if (!world.isClient) {
                 path.updateMotion(); // update motion and rotation on server 
