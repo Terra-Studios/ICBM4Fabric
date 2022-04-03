@@ -19,6 +19,10 @@ public class BezierLaunchPath extends AbstractEquationPath {
 
         double maxHeight = evaluateFunctionAtValue(groundChange * (height - Math.sqrt(height * height - yChange * height)) / yChange);
 
+        if (yChange == 0) {
+            maxHeight = evaluateFunctionAtValue(groundChange / 2);
+        }
+
         this.height *= height / maxHeight;
     }
 
