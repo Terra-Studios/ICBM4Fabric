@@ -22,7 +22,8 @@ public class ModBlocks {
             .icon(() -> new ItemStack(MissileLaunchers.TIER1.block)).build();
 
     public static enum MissileLaunchers implements BlockRegistry {
-        TIER1, TIER2, TIER3;
+        TIER1;
+//        , TIER2, TIER3;
 
         private final String name;
         private final Block block;
