@@ -1,5 +1,6 @@
 package dev.sebastianb.icbm4fabric.entity.missile;
 
+import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.blast.TaterBlast;
 import dev.sebastianb.icbm4fabric.entity.missile.path.LaunchPaths;
@@ -10,6 +11,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.logging.Level;
 
 public class TaterMissileEntity extends AbstractMissileProjectile {
 
@@ -62,8 +65,8 @@ public class TaterMissileEntity extends AbstractMissileProjectile {
                 }
                 break;
             case EXPLODED:
-                System.out.println("EXPLOSION!");
-                System.out.println("LOCATION = " + getBlockPos());
+                ICBM4Fabric.LOGGER.log(Level.INFO, "EXPLOSION!");
+                ICBM4Fabric.LOGGER.log(Level.INFO, "LOCATION = " + getBlockPos());
                 new TaterBlast(world, getBlockPos());
                 this.remove(RemovalReason.DISCARDED);
                 break;

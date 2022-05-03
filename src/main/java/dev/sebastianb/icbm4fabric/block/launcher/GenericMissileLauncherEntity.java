@@ -46,9 +46,8 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
 
         target = new BlockPos(x, y, z);
 
-        System.out.println(missileItemStack);
         missileItemStack = ItemStack.fromNbt(nbt.getCompound("missileItemStack"));
-        System.out.println(missileItemStack);
+
         super.readNbt(nbt);
     }
 

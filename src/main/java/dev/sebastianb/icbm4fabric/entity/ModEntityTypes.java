@@ -11,6 +11,7 @@ import net.minecraft.entity.SpawnGroup;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.logging.Level;
 
 public class ModEntityTypes {
 
@@ -37,6 +38,6 @@ public class ModEntityTypes {
 
     public static void register() {
         // Make sure everything is initialized
-        Arrays.stream(Missiles.values()).forEach(v -> System.out.println(v.name));
+        Arrays.stream(Missiles.values()).forEach(v -> ICBM4Fabric.LOGGER.log(Level.INFO, v.name));
     }
 }

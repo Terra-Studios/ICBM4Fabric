@@ -132,14 +132,13 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
 
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBlockPos(handler.getPos()); // add block pos for getting BE on server
-                System.out.println("before " + handler.hasMissile());
+
                 buf.writeBoolean(false);
                 ClientPlayNetworking.send(Constants.Packets.LAUNCH_MISSILE, buf);
 
                 BlockEntity be = MinecraftClient.getInstance().world.getBlockEntity(handler.getPos());
                 if (be instanceof GenericMissileLauncherEntity launcherEntity) {
                     launcherEntity.setMissile(ItemStack.EMPTY); // remove missile from entity on client
-                    System.out.println("after " + handler.hasMissile());
                 }
 
                 handler.setHasMissile(false);
@@ -162,7 +161,7 @@ public class LaunchScreen extends HandledScreen<LaunchScreenHandler> {
         Integer y = yMissileInput.getInt();
         Integer z = zMissileInput.getInt();
 
-        System.out.println(x + ", " + y + ", " + z);
+//        ICBM4Fabric.LOGGER.log(Level.INFO, x + ", " + y + ", " + z);
 
         if (x == null || y == null || z == null) {
             return; // make sure all of the inputs are numbers

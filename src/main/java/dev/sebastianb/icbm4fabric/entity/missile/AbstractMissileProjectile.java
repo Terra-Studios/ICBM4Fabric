@@ -2,7 +2,8 @@ package dev.sebastianb.icbm4fabric.entity.missile;
 
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.api.missile.MissileEntity;
-import dev.sebastianb.icbm4fabric.entity.missile.path.*;
+import dev.sebastianb.icbm4fabric.entity.missile.path.AbstractLaunchPath;
+import dev.sebastianb.icbm4fabric.entity.missile.path.LaunchPaths;
 import dev.sebastianb.icbm4fabric.utils.TrackedDataHandlers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

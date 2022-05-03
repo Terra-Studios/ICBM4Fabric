@@ -1,8 +1,11 @@
 package dev.sebastianb.icbm4fabric.entity.missile.path;
 
-import dev.sebastianb.icbm4fabric.utils.SebaUtils;
+import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
+import dev.sebastianb.icbm4fabric.utils.SebaUtils;
 import net.minecraft.entity.MovementType;
+
+import java.util.logging.Level;
 
 public class MissingsPath extends AbstractLaunchPath {
     double acc;
@@ -18,7 +21,7 @@ public class MissingsPath extends AbstractLaunchPath {
     public MissingsPath(AbstractMissileProjectile rocket) {
         super(rocket);
         if (!rocket.world.isClient)
-            System.out.println("Rocket Travel Distance: " + rocket.getFinalLocation().getManhattanDistance(rocket.initialLocation));
+            ICBM4Fabric.LOGGER.log(Level.INFO, "Rocket Travel Distance: " + rocket.getFinalLocation().getManhattanDistance(rocket.initialLocation));
 
         arcModifier = 1; // need to figure out a way to take in the angle wanted and distance traveled. Then calc how high it should be
 

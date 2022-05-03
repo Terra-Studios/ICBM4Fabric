@@ -1,8 +1,5 @@
 package dev.sebastianb.icbm4fabric.block;
 
-import java.util.Arrays;
-import java.util.Locale;
-
 import dev.sebastianb.icbm4fabric.Constants;
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.block.launcher.GenericMissileLauncher;
@@ -13,6 +10,10 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import rs.neko.mc.BlockRegistry;
+
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.logging.Level;
 
 public class ModBlocks {
     // ITEM GROUPS
@@ -44,6 +45,6 @@ public class ModBlocks {
 
     public static void register() {
         // Make sure everything is initialized
-        Arrays.stream(MissileLaunchers.values()).forEach(v -> System.out.println(v.name));
+        Arrays.stream(MissileLaunchers.values()).forEach(v -> ICBM4Fabric.LOGGER.log(Level.INFO, v.name));
     }
 }
