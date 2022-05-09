@@ -24,4 +24,8 @@ public class Constants {
         Identifier LAUNCHER_STATUS = new Identifier(Constants.MOD_ID, "launcher_status");
     }
 
+    public interface Data {
+        String MISSILE_DATA = MOD_ID + ":missile_data";
+    }
+
 }

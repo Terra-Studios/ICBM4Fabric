@@ -1,16 +1,17 @@
 package dev.sebastianb.icbm4fabric;
 
-import java.util.logging.Logger;
-
 import dev.sebastianb.icbm4fabric.block.ModBlocks;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.item.ModItems;
+import dev.sebastianb.icbm4fabric.missile.MissileManager;
 import dev.sebastianb.icbm4fabric.network.ModPackets;
 import dev.sebastianb.icbm4fabric.registries.ModScreenHandlerRegistry;
 import dev.sebastianb.icbm4fabric.server.command.ModCommands;
 import net.fabricmc.api.ModInitializer;
 import rs.neko.mc.ModRegistry;
+
+import java.util.logging.Logger;
 
 public class ICBM4Fabric implements ModInitializer {
 
@@ -27,5 +28,6 @@ public class ICBM4Fabric implements ModInitializer {
         ModItems.register();
         ModPackets.register();
         ModScreenHandlerRegistry.register();
+        MissileManager.register();
     }
 }

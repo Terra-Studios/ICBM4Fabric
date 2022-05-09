@@ -1,15 +1,12 @@
 package dev.sebastianb.icbm4fabric.server.command;
 
-import java.util.logging.Level;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.sebastianb.icbm4fabric.ICBM4Fabric;
 import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
 import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
-import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
+import dev.sebastianb.icbm4fabric.missile.MissileManager;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
@@ -17,6 +14,8 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.logging.Level;
 
 public class ModCommands {
 
@@ -28,6 +27,11 @@ public class ModCommands {
             dispatcher.register(
                     CommandManager.literal("summontestexplosion")
                     .executes(ModCommands::summonExplosion)
+            );
+
+            dispatcher.register(
+                    CommandManager.literal("clear_missiles")
+                            .executes(ModCommands::clearMissiles)
             );
 
         }));
@@ -50,6 +54,12 @@ public class ModCommands {
         } catch (CommandSyntaxException e) {
             ICBM4Fabric.LOGGER.log(Level.WARNING, e.getMessage());
         }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int clearMissiles(CommandContext<ServerCommandSource> commandContext) { // add a command to clear the missiles
+        MissileManager.missileManager.clearMissiles();
+
         return Command.SINGLE_SUCCESS;
     }
 

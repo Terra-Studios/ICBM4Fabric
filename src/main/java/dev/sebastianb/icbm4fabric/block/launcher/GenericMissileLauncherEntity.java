@@ -3,9 +3,8 @@ package dev.sebastianb.icbm4fabric.block.launcher;
 import dev.sebastianb.icbm4fabric.api.missile.LaunchStage;
 import dev.sebastianb.icbm4fabric.client.gui.LaunchScreenHandler;
 import dev.sebastianb.icbm4fabric.entity.ModBlockEntities;
-import dev.sebastianb.icbm4fabric.entity.ModEntityTypes;
-import dev.sebastianb.icbm4fabric.entity.missile.AbstractMissileProjectile;
-import dev.sebastianb.icbm4fabric.entity.missile.TaterMissileEntity;
+import dev.sebastianb.icbm4fabric.missile.Missile;
+import dev.sebastianb.icbm4fabric.missile.MissileManager;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -21,9 +20,11 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,7 +85,7 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     public void setMissile(ItemStack missile) {
         this.missileItemStack = missile; // set the missile
         markDirty(); // mark dirty so writeNbt() gets called
-        assert world != null;
+//        assert world != null;
     }
 
     public ItemStack getMissile() {
@@ -110,16 +111,24 @@ public class GenericMissileLauncherEntity extends BlockEntity implements NamedSc
     public void launchMissile() {
         if (hasMissile()) { // make sure we have a missile to launch
 
-            AbstractMissileProjectile missileEntity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world); // create the missile
-            missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5); // set position of missile
-            missileEntity.setRotation(-90, 90);
+//            AbstractMissileProjectile missileEntity = new TaterMissileEntity(ModEntityTypes.Missiles.TATER.getType(), world); // create the missile
+//            missileEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5); // set position of missile
+//            missileEntity.setRotation(-90, 90);
 
-            world.spawnEntity(missileEntity);
-            missileEntity.setFinalBlockPos(target); // set target
+//            world.spawnEntity(missileEntity);
+//            missileEntity.setFinalBlockPos(target); // set target
 
-            missileEntity.setStage(LaunchStage.LIT); // light the rocket
+//            missileEntity.setStage(LaunchStage.LIT); // light the rocket
 
             this.setMissile(ItemStack.EMPTY); // remove missile from launcher
+
+
+
+            Missile missile = new Missile((ServerWorld) world, Vec3d.ofCenter(pos)); // new missile
+            missile.getMissileData().setTargetPos(target);
+            missile.getMissileData().setStage(LaunchStage.LIT);
+
+            MissileManager.missileManager.addMissile(missile); // add missile to the list of missiles
         }
     }
 
