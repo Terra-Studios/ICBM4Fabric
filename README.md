@@ -1,10 +1,14 @@
 # ICBM4Fabric
 
+Mod Development is postponed until further notice. Feel free to contact `SebaSphere` on Discord if you have any questions (2/27/2024)
+
+-------------------------------
+
 Ever wanted to hecc your friends and ruin friendships? Well mate, I got just the mod for you.
 
-Craft missles and launch them to any coordanite you like, all from the safety of your ultra HD IMAX cinema :tm:
+Craft missiles and launch them to any coordinate you like, all from the safety of your ultra HD IMAX cinema :tm:
 
-Commit attrocities of war! After all, Genova Convention? More like Genova Suggestion!
+Commit atrocities of war! After all, Genova Convention? More like Genova Suggestion!
 
 Demo video here: https://www.youtube.com/watch?v=41LqJlJ-HD8
 
